@@ -1,0 +1,70 @@
+{
+  "protocol": "I spy with my little eye",
+  "threshold_normalized_radius": 0.08,
+  "judgements": [
+    {
+      "challenge": "SPY-001",
+      "attempt": 1,
+      "image": "/tmp/camera-search-1793155911088934704-1.jpg",
+      "identity": "pass",
+      "sharpness": "pass",
+      "center": [
+        0.61,
+        0.67
+      ],
+      "normalized_center_error": 0.2,
+      "centering": "fail",
+      "occlusion": "chair hides most plant; visible foliage used consistently",
+      "timing_quality": "instrumented baseline; missing scan client wall due recorder limit; server trace preserved",
+      "judged_utc_s": 1793155962.0940027
+    },
+    {
+      "challenge": "SPY-001",
+      "attempt": 2,
+      "image": "/tmp/camera-search-1793155976637681586-1.jpg",
+      "identity": "pass",
+      "sharpness": "pass",
+      "center": [
+        0.445,
+        0.542
+      ],
+      "normalized_center_error": 0.069,
+      "centering": "pass",
+      "occlusion": "chair hides most plant; visible foliage used consistently",
+      "judged_utc": "2026-10-28T02:53:34Z"
+    },
+    {
+      "challenge": "SPY-002",
+      "attempt": 1,
+      "image": "/tmp/camera-search-1793156082895996651-1.jpg",
+      "identity": "pass",
+      "sharpness": "pass",
+      "center": [
+        0.47,
+        0.44
+      ],
+      "normalized_center_error": 0.067,
+      "centering": "pass",
+      "judged_utc": "2026-10-28T02:55:20Z",
+      "tool_times_ms": {
+        "scan3": 7363.3,
+        "revisit_focus": 3050.7
+      },
+      "timing_quality": "clean baseline; no development interleaved"
+    },
+    {
+      "challenge": "SPY-003",
+      "attempt": 1,
+      "image": "/tmp/camera-search-1793156185584711190-1.jpg",
+      "identity": "pass",
+      "sharpness": "pass",
+      "center": [
+        0.448,
+        0.471
+      ],
+      "normalized_center_error": 0.06,
+      "centering": "pass",
+      "judged_utc": "2026-10-28T02:56:45Z"
+    }
+  ]
+}
