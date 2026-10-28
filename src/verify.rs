@@ -45,7 +45,7 @@ async fn call(
             _ => {}
         }
     }
-    if name != "camera_metrics" && name != "camera_see" && crate::metrics::enabled() {
+    if name != "camera_metrics" && name != "camera_snapshot" && crate::metrics::enabled() {
         let id = trace_id.ok_or_else(|| anyhow::anyhow!("Missing request trace ID"))?;
         let trace = client
             .call_tool(
@@ -76,7 +76,7 @@ async fn call(
                 .any(|s| s["stage"] == "transport.response_write"),
             "Missing wire timing"
         );
-        if name == "camera_focus"
+        if name == "camera_center"
             && metadata
                 .first()
                 .is_some_and(|m| m["focus_status"] == "aimed")
@@ -136,8 +136,8 @@ pub async fn run(moving: bool) -> Result<()> {
         ))?)
         .await?;
     let tools = client.list_tools(None).await?;
-    ensure!(tools.tools.len() == 9, "Expected all nine camera tools");
-    let (meta, images) = call(&client, "camera_see", json!({})).await?;
+    ensure!(tools.tools.len() == 11, "Expected all eleven camera tools");
+    let (meta, images) = call(&client, "camera_snapshot", json!({})).await?;
     ensure!(
         meta[0]["width"].as_u64() == Some(640) && meta[0]["height"].as_u64() == Some(360),
         "Expected native JPEG preview"
@@ -154,7 +154,7 @@ pub async fn run(moving: bool) -> Result<()> {
     let mut timings = vec![];
     for _ in 0..20 {
         let start = Instant::now();
-        let (metadata, _) = call(&client, "camera_see", json!({})).await?;
+        let (metadata, _) = call(&client, "camera_snapshot", json!({})).await?;
         timings.push(start.elapsed().as_secs_f64() * 1000.);
         ensure!(
             metadata[0]["frame_age_ms"].as_f64().unwrap_or(1000.) < 400.,
@@ -164,20 +164,20 @@ pub async fn run(moving: bool) -> Result<()> {
     }
     timings.sort_by(f64::total_cmp);
     eprintln!(
-        "Warm MCP camera_see: median {:0.2}ms; p95 {:0.2}ms",
+        "Warm MCP camera_snapshot: median {:0.2}ms; p95 {:0.2}ms",
         timings[10], timings[18]
     );
-    let (metadata, images) = call(&client, "camera_see", json!({"detail":true})).await?;
+    let (metadata, images) = call(&client, "camera_snapshot", json!({"detail":true})).await?;
     ensure!(
         metadata[0]["width"].as_u64().unwrap_or(0) > 640,
         "Full detail unavailable"
     );
     std::fs::write("/tmp/rust-camera-detail.jpg", &images[0])?;
     let old = metadata[0]["frame_id"].clone();
-    call(&client, "camera_see", json!({})).await?;
+    call(&client, "camera_snapshot", json!({})).await?;
     let (stale, _) = call(
         &client,
-        "camera_focus",
+        "camera_center",
         json!({"x":0.5,"y":0.5,"frame_id":old}),
     )
     .await?;
@@ -191,12 +191,12 @@ pub async fn run(moving: bool) -> Result<()> {
         let test = async {
             goto(&onvif, [0.045, -0.5]).await?;
             tokio::time::sleep(Duration::from_millis(200)).await;
-            let (seen, images) = call(&client, "camera_see", json!({})).await?;
+            let (seen, images) = call(&client, "camera_snapshot", json!({})).await?;
             std::fs::write("/tmp/rust-focus-before.jpg", &images[0])?;
             let start = Instant::now();
             let (focused, images) = call(
                 &client,
-                "camera_focus",
+                "camera_center",
                 json!({"x":0.65,"y":0.65,"frame_id":seen[0]["frame_id"],"precise":true}),
             )
             .await?;
@@ -213,7 +213,7 @@ pub async fn run(moving: bool) -> Result<()> {
             let start = Instant::now();
             let (rough, images) = call(
                 &client,
-                "camera_focus",
+                "camera_center",
                 json!({"x":0.6,"y":0.6,"frame_id":focused[0]["frame_id"],"rough":true}),
             )
             .await?;
@@ -252,7 +252,7 @@ pub async fn run(moving: bool) -> Result<()> {
             let start = Instant::now();
             let (revisited, _) = call(
                 &client,
-                "camera_focus",
+                "camera_center",
                 json!({"x":0.5,"y":0.5,"frame_id":views[0]["frame_id"]}),
             )
             .await?;

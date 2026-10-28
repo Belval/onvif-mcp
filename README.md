@@ -40,12 +40,12 @@ refresh for loaded threads; no full app restart is needed.
 
 ## Fast operation
 
-- `camera_see(detail=false)`: a 640px JPEG from the persistent H.264 buffer,
+- `camera_snapshot(detail=false)`: a 640px JPEG from the persistent H.264 buffer,
   with `frame_id`, dimensions, sequence number, frame age and request time.
   `detail=true` opens a short-lived main-stream H.264 connection and returns
   up to 1280×960. It closes after the capture so occasional detail requests do
   not keep decoding video or compete with PTZ and preview traffic.
-- `camera_focus(x,y,frame_id,precise=false,rough=false)`: center a selected image point and
+- `camera_center(x,y,frame_id,precise=false,rough=false)`: center a selected image point and
   return the resulting image in one call. Coordinates are fractions from the
   top-left: `(0,0)` top-left, `(0.5,0.5)` center. Use `rough=true` for one calibrated
   move, two arrival confirmations, and no visual corrections; status is `aimed`, not
@@ -57,10 +57,15 @@ refresh for loaded threads; no full app restart is needed.
   **one call**, starting with the current view. Use `left` or `right`, 2–6 views,
   and a step of 0.05–0.35 ONVIF position units. Default step is about 40° on this
   C210. Pick a point in any returned image and pass its `frame_id` to
-  `camera_focus`; it returns to that view automatically before centering.
-- `camera_remember(name)`: save the currently framed object as a local named view.
-- `camera_look(name)`: move directly to a remembered view and return an image.
+  `camera_center`; it returns to that view automatically before centering.
+- `camera_save_view(name)`: save the currently framed object as a local named view.
+- `camera_goto_view(name)`: move directly to a remembered view and return an image.
   Prefer this for stationary objects such as the printer, clock or microphone.
+- `camera_delete_view(name)`: delete one saved pan/tilt position; missing names return `deleted=false`.
+- `camera_clear_views()`: clear all saved views after physically relocating the camera.
+  Both commands work offline and do not move the camera. Saved-view reads and
+  writes share a file lock across processes; other running instances observe
+  changes on their next saved-view operation, with no restart needed.
 - `camera_status`: model, profiles, position, named views and streaming metrics.
 - `camera_move(pan,tilt,seconds)`: raw velocities in -1..1, positive right/up,
   duration greater than zero and at most two seconds. Always attempts Stop.
@@ -210,3 +215,9 @@ Measured C210 tuning and rejected alternatives are documented in
 geometry passes in each block. Three independent held-out targets passed their
 first submitted final image. These measurements separate tool time from assistant
 search/judging time and do not claim to measure sensor exposure latency.
+
+Tool names were clarified: `camera_see`→`camera_snapshot`, `camera_focus`→
+`camera_center`, `camera_remember`→`camera_save_view`, and `camera_look`→
+`camera_goto_view`. Old names are no longer advertised. `camera_scan` returns
+images for the caller to inspect; it does not perform object recognition.
+Saved views contain pan/tilt positions only; saving an existing name replaces it.

@@ -8,7 +8,7 @@ use nalgebra::{Matrix2, Vector2};
 use serde::Deserialize;
 use serde_json::{Value, json};
 use std::{
-    collections::{HashMap, VecDeque},
+    collections::VecDeque,
     path::Path,
     sync::{
         Arc,
@@ -54,7 +54,6 @@ pub struct Camera {
     pub motion: Mutex<()>,
     cancelled: AtomicBool,
     calibration: Matrix2<f64>,
-    views: Mutex<HashMap<String, [f64; 2]>>,
     views_path: std::path::PathBuf,
 }
 async fn stop_barrier<T>(
@@ -243,13 +242,6 @@ impl Camera {
                 "Invalid camera calibration"
             );
             let views_path = root.join("views.json");
-            let views = crate::metrics::sync_result("config.views_load", || -> Result<_> {
-                Ok(if views_path.exists() {
-                    serde_json::from_slice(&std::fs::read(&views_path)?)?
-                } else {
-                    HashMap::new()
-                })
-            })?;
             onvif.position().await?;
             let weak = Arc::downgrade(&onvif);
             let pose_poller = tokio::spawn(async move {
@@ -280,7 +272,6 @@ impl Camera {
                 motion: Mutex::new(()),
                 cancelled: AtomicBool::new(false),
                 calibration,
-                views: Mutex::new(views),
                 views_path,
             }))
         })
@@ -295,7 +286,7 @@ impl Camera {
             "video":{"transport":"persistent RTSP/TCP","encoding":self.preview_encoding,"buffered_frames":1,
                 "connected":self.preview.metrics.connected.load(Ordering::Relaxed),"frames_received":self.preview.metrics.frames.load(Ordering::Relaxed),
                 "reconnects":self.preview.metrics.reconnects.load(Ordering::Relaxed),"frame_age_ms":self.preview.age_ms()},
-            "remembered_views":crate::metrics::timed("lock.views_wait",self.views.lock()).await.keys().cloned().collect::<Vec<_>>()}),
+            "remembered_views":crate::views::names(&self.views_path)?}),
         )
 
 }).await
@@ -679,24 +670,14 @@ impl Camera {
                 "Use a short view name with letters, digits, spaces, hyphens or underscores"
             );
             let pose = self.onvif.position().await?;
-            let mut views = crate::metrics::timed("lock.views_wait", self.views.lock()).await;
-            views.insert(name.to_owned(), pose);
-            crate::metrics::sync_result("views.persist", || -> Result<()> {
-                let temp = self.views_path.with_extension("tmp");
-                std::fs::write(&temp, serde_json::to_vec_pretty(&*views)?)?;
-                std::fs::rename(temp, &self.views_path)?;
-                Ok(())
-            })?;
+            crate::views::save(&self.views_path, name, pose)?;
             Ok(json!({"name":name,"pose":pose,"saved":true}))
         })
         .await
     }
     pub async fn look(&self, name: &str) -> Result<ObservationResult> {
         crate::metrics::result("camera.look", async {
-            let pose = *crate::metrics::timed("lock.views_wait", self.views.lock())
-                .await
-                .get(name)
-                .ok_or_else(|| anyhow::anyhow!("Unknown remembered view"))?;
+            let pose = crate::views::get(&self.views_path, name)?;
             self.begin_motion().await;
             self.goto(pose).await?;
             self.observe(false, json!({"view":name}), false).await

@@ -10,3 +10,6 @@ captures/
 views.json
 
 /metrics/
+
+/views.lock
+/views.tmp

@@ -169,7 +169,7 @@ mod tests {
         let (mut r, mut w) = instrument((r, w));
         let (mut br, mut bw) = tokio::io::split(b);
         let request =
-            b"{\"id\":8341,\"method\":\"tools/call\",\"params\":{\"name\":\"camera_see\"}}\n";
+            b"{\"id\":8341,\"method\":\"tools/call\",\"params\":{\"name\":\"camera_snapshot\"}}\n";
         bw.write_all(&request[..17]).await.unwrap();
         let mut first = vec![0; 17];
         r.read_exact(&mut first).await.unwrap();

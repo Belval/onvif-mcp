@@ -129,15 +129,17 @@ fn registry() -> &'static Mutex<Registry> {
 }
 fn tool_name(name: &str) -> &'static str {
     match name {
-        "camera_see" => "camera_see",
-        "camera_focus" => "camera_focus",
+        "camera_snapshot" => "camera_snapshot",
+        "camera_center" => "camera_center",
         "camera_scan" => "camera_scan",
         "camera_status" => "camera_status",
         "camera_stop" => "camera_stop",
         "camera_move" => "camera_move",
-        "camera_look" => "camera_look",
-        "camera_remember" => "camera_remember",
+        "camera_goto_view" => "camera_goto_view",
+        "camera_save_view" => "camera_save_view",
         "camera_metrics" => "camera_metrics",
+        "camera_delete_view" => "camera_delete_view",
+        "camera_clear_views" => "camera_clear_views",
         _ => "unknown_tool",
     }
 }
@@ -899,7 +901,7 @@ mod tests {
     }
     #[tokio::test]
     async fn tool_errors_and_cancelled_requests_finalize_truthfully() {
-        let failed = request(&RequestId::Number(912345), "camera_see", async {
+        let failed = request(&RequestId::Number(912345), "camera_snapshot", async {
             Err(rmcp::ErrorData::internal_error("failure", None))
         })
         .await;
@@ -910,7 +912,7 @@ mod tests {
             .requests
             .iter()
             .rev()
-            .find(|t| t.tool == "camera_see" && !t.wire_observed)
+            .find(|t| t.tool == "camera_snapshot" && !t.wire_observed)
             .unwrap()
             .clone();
         assert_eq!(trace_json(&trace, true, None)["outcome"], "error");
@@ -978,7 +980,7 @@ mod tests {
     }
     #[test]
     fn request_arguments_and_external_ids_are_not_exported() {
-        let message=br#"{"id":"secret-rpc-id","method":"tools/call","params":{"name":"camera_see","arguments":{"password":"secret-credential"}}}"#;
+        let message=br#"{"id":"secret-rpc-id","method":"tools/call","params":{"name":"camera_snapshot","arguments":{"password":"secret-credential"}}}"#;
         inbound(message, Instant::now(), Instant::now());
         let trace = trace_for_response("\"secret-rpc-id\"").unwrap();
         let value = trace_json(&trace, true, None).to_string();

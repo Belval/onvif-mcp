@@ -136,9 +136,9 @@ fn picture(result: Result<ObservationResult>, started: Instant) -> CallToolResul
 #[tool_router]
 impl CameraServer {
     #[tool(
-        description = "See a fresh 640x360 camera preview from a persistent H264 stream. Returns frame_id, dimensions and frame age. detail=true starts an H264 detail connection and returns up to 1280px. Use camera_focus for centering, camera_scan for searching, and camera_look for remembered objects."
+        description = "See a fresh 640x360 camera preview from a persistent H264 stream. Returns frame_id, dimensions and frame age. detail=true starts an H264 detail connection and returns up to 1280px. Use camera_center for centering, camera_scan for searching, and camera_goto_view for remembered objects."
     )]
-    async fn camera_see(&self, Parameters(args): Parameters<SeeArgs>) -> CallToolResult {
+    async fn camera_snapshot(&self, Parameters(args): Parameters<SeeArgs>) -> CallToolResult {
         let started = Instant::now();
         let camera = match self.connected_camera().await {
             Ok(camera) => camera,
@@ -157,9 +157,9 @@ impl CameraServer {
         )
     }
     #[tool(
-        description = "Center a point from a camera image and return the new view in one call. x,y are normalized 0..1 from top-left; center=.5,.5. Supply frame_id from camera_see or any image in camera_scan. Scan views can be revisited automatically. Use rough=true for a quick single calibrated move with no visual corrections; result is aimed, not verified centered. Otherwise fast framing allows two corrections; precise=true allows three. Do not combine rough and precise. Check focus_status: centered, tracking_lost, mechanical_limit, iteration_limit, stale_frame. This aims the camera, not the lens."
+        description = "Center a point from a camera image and return the new view in one call. x,y are normalized 0..1 from top-left; center=.5,.5. Supply frame_id from camera_snapshot or any image in camera_scan. Scan views can be revisited automatically. Use rough=true for a quick single calibrated move with no visual corrections; result is aimed, not verified centered. Otherwise fast framing allows two corrections; precise=true allows three. Do not combine rough and precise. Check focus_status: centered, tracking_lost, mechanical_limit, iteration_limit, stale_frame. This aims the camera, not the lens."
     )]
-    async fn camera_focus(&self, Parameters(args): Parameters<FocusArgs>) -> CallToolResult {
+    async fn camera_center(&self, Parameters(args): Parameters<FocusArgs>) -> CallToolResult {
         let started = Instant::now();
         let camera = match self.connected_camera().await {
             Ok(camera) => camera,
@@ -174,7 +174,7 @@ impl CameraServer {
         )
     }
     #[tool(
-        description = "Search several overlapping camera views in ONE call. direction=left/right, views=2..6 (default 4), step=.05.. .35 (default .25, about 40 degrees). Returns an image and frame_id per view, starting at the current view. Choose a target in any returned image and call camera_focus with its frame_id; it automatically returns there. Prefer this over repeated velocity moves when searching."
+        description = "Capture several overlapping views for the caller to inspect; does not detect objects or accept an object name. direction=left/right, views=2..6 (default 4), step=.05.. .35 (default .25, about 40 degrees). Returns an image and frame_id per view, starting at the current view. Choose a target in any returned image and call camera_center with its frame_id; it automatically returns there. Prefer this over repeated velocity moves when searching."
     )]
     async fn camera_scan(&self, Parameters(args): Parameters<ScanArgs>) -> CallToolResult {
         let started = Instant::now();
@@ -204,7 +204,7 @@ impl CameraServer {
         plain(camera.status().await)
     }
     #[tool(
-        description = "Raw pan/tilt velocity -1..1, seconds >0 and <=2. Positive right/up. Stops automatically. Prefer camera_focus to frame an image point or camera_scan to search several views."
+        description = "Raw pan/tilt velocity -1..1, seconds >0 and <=2. Positive right/up. Stops automatically. Prefer camera_center to frame an image point or camera_scan to search several views."
     )]
     async fn camera_move(&self, Parameters(args): Parameters<MoveArgs>) -> CallToolResult {
         let camera = match self.connected_camera().await {
@@ -225,9 +225,9 @@ impl CameraServer {
         plain(camera.stop().await.map(|_| json!({"stopped":true})))
     }
     #[tool(
-        description = "Remember the current camera position under a short name such as printer, clock or microphone. Saved locally across sessions. Frame the object first; later camera_look(name) returns directly without scanning."
+        description = "Save the current pan/tilt position under a short name such as printer, clock or microphone. Saved locally across sessions; overwrites the same name. Physically relocating the camera invalidates saved views; use camera_clear_views afterwards. Frame the object first; later camera_goto_view(name) returns directly without scanning."
     )]
-    async fn camera_remember(&self, Parameters(args): Parameters<NameArgs>) -> CallToolResult {
+    async fn camera_save_view(&self, Parameters(args): Parameters<NameArgs>) -> CallToolResult {
         let camera = match self.connected_camera().await {
             Ok(camera) => camera,
             Err(error) => return failure(error),
@@ -235,10 +235,18 @@ impl CameraServer {
         let _lock = crate::metrics::timed("lock.motion_wait", camera.motion.lock()).await;
         plain(camera.remember(&args.name).await)
     }
+    #[tool(description = "Delete one saved view by exact name without moving or connecting to the camera. Returns deleted=false if absent. Other running instances see the change on their next saved-view operation.")]
+    async fn camera_delete_view(&self, Parameters(args): Parameters<NameArgs>) -> CallToolResult {
+        plain(crate::views::delete(&self.root.join("views.json"), &args.name))
+    }
+    #[tool(description = "Clear ALL saved pan/tilt views without moving or connecting to the camera. Use after physically relocating the camera. Returns the number cleared. Other running instances see the change on their next saved-view operation.")]
+    async fn camera_clear_views(&self) -> CallToolResult {
+        plain(crate::views::clear(&self.root.join("views.json")))
+    }
     #[tool(
-        description = "Look directly at a previously remembered named view and return a fresh image, without searching. Use camera_status to list names and camera_remember to save the current view."
+        description = "Move to a saved pan/tilt position by name and return a fresh image, without searching. Use camera_status to list names and camera_save_view to save the current view."
     )]
-    async fn camera_look(&self, Parameters(args): Parameters<NameArgs>) -> CallToolResult {
+    async fn camera_goto_view(&self, Parameters(args): Parameters<NameArgs>) -> CallToolResult {
         let started = Instant::now();
         let camera = match self.connected_camera().await {
             Ok(camera) => camera,
@@ -280,7 +288,7 @@ impl ServerHandler for CameraServer {
     }
     fn get_info(&self) -> ServerConfig {
         ServerConfig::new(ServerCapabilities::builder().enable_tools().build()).with_instructions(
-            "Use rough=true for ordinary quick framing; precise=true only when tight centering is needed. Use camera_see for a quick current view; camera_scan batches a search into one call; camera_focus frames an object from any returned image. Save stationary objects with camera_remember and use camera_look to avoid future searches. Coordinates are normalized from image top-left. Frames come from a persistent, latest-only H264 preview buffer; never infer success if focus_status reports otherwise.")
+            "Use rough=true for ordinary quick framing; precise=true only when tight centering is needed. Use camera_snapshot for a quick current view; camera_scan batches a search into one call; camera_center frames an object from any returned image. Save stationary objects with camera_save_view and use camera_goto_view to avoid future searches. Coordinates are normalized from image top-left. Frames come from a persistent, latest-only H264 preview buffer; never infer success if focus_status reports otherwise.")
     }
 }
 
@@ -290,19 +298,30 @@ mod tests {
     use rmcp::ServiceExt;
     #[tokio::test]
     async fn mcp_discovery_does_not_open_a_camera_connection() {
-        let server = CameraServer::new(PathBuf::from("/definitely-not-a-camera-config"));
+        let root = std::env::temp_dir().join(format!("onvif-schema-{}",rand::random::<u64>()));
+        std::fs::create_dir(&root).unwrap();
+        crate::views::save(&root.join("views.json"), "printer", [0.,0.]).unwrap();
+        let server = CameraServer::new(root.clone());
         let slot = server.camera.clone();
         let (server_io, client_io) = tokio::io::duplex(64 * 1024);
         let serving = tokio::spawn(async move { server.serve(server_io).await.unwrap() });
         let client = ().serve(client_io).await.unwrap();
         let server = serving.await.unwrap();
         let tools = client.list_tools(None).await.unwrap();
-        assert_eq!(tools.tools.len(), 9);
+        assert_eq!(tools.tools.len(), 11);
         assert!(
             slot.get().is_none(),
             "Schema discovery must work without camera credentials or network"
         );
+        let deleted=client.call_tool(CallToolRequestParams::new("camera_delete_view").with_arguments(json!({"name":"printer"}).as_object().unwrap().clone())).await.unwrap();
+        assert_ne!(deleted.is_error,Some(true));
+        crate::views::save(&root.join("views.json"),"clock",[0.,0.]).unwrap();
+        let cleared=client.call_tool(CallToolRequestParams::new("camera_clear_views")).await.unwrap();
+        assert_ne!(cleared.is_error,Some(true));
+        assert!(crate::views::names(&root.join("views.json")).unwrap().is_empty());
+        assert!(slot.get().is_none(),"Deleting/clearing views must work offline");
         client.cancel().await.unwrap();
         server.waiting().await.unwrap();
+        std::fs::remove_dir_all(root).unwrap();
     }
 }

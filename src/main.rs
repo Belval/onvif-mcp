@@ -8,6 +8,7 @@ mod transport_metrics;
 mod verify;
 mod video;
 mod vision;
+mod views;
 use anyhow::Result;
 use rmcp::ServiceExt;
 use std::{path::PathBuf, time::Instant};
