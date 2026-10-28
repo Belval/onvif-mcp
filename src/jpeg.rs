@@ -51,6 +51,11 @@ pub struct NativeJpeg {
     data: Vec<u8>,
 }
 impl NativeJpeg {
+    pub fn reset(&mut self) {
+        self.timestamp = None;
+        self.data.clear();
+        self.next_offset = 0;
+    }
     pub fn push(
         &mut self,
         timestamp: i64,
@@ -58,7 +63,7 @@ impl NativeJpeg {
         marker: bool,
         payload: &[u8],
     ) -> Result<Option<Vec<u8>>> {
-        crate::metrics::sync_result("jpeg.packet_assembly", || {
+        let result = crate::metrics::sync_result("jpeg.packet_assembly", || {
             ensure!(payload.len() >= 8, "Short camera RTP/JPEG packet");
             let offset =
                 ((payload[1] as usize) << 16) | ((payload[2] as usize) << 8) | payload[3] as usize;
@@ -100,7 +105,11 @@ impl NativeJpeg {
                 return Ok(Some(std::mem::take(&mut self.data)));
             }
             Ok(None)
-        })
+        });
+        if result.is_err() {
+            self.reset();
+        }
+        result
     }
 }
 
@@ -150,6 +159,30 @@ mod tests {
         ];
         p.extend_from_slice(body);
         p
+    }
+    #[test]
+    fn malformed_frame_does_not_poison_the_next_frame() {
+        let valid = fixture();
+        let mut assembler = NativeJpeg::default();
+        assert!(assembler.push(1, 10, false, &packet(&[0; 80], 0)).is_err());
+        assert!(
+            assembler
+                .push(1, 11, true, &packet(&[0xff, 0xd9], 80))
+                .unwrap()
+                .is_none()
+        );
+        let recovered = assembler
+            .push(2, 12, true, &packet(&valid, 0))
+            .unwrap()
+            .unwrap();
+        assert!(image::load_from_memory(&recovered).is_ok());
+        assert!(assembler.push(3, 13, true, &[0; 3]).is_err());
+        assert!(
+            assembler
+                .push(4, 14, true, &packet(&valid, 0))
+                .unwrap()
+                .is_some()
+        );
     }
     #[test]
     fn reconstructs_native_jpeg_losslessly() {

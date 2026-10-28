@@ -82,6 +82,7 @@ impl Video {
         let task = tokio::spawn(async move {
             let mut delay = Duration::from_millis(250);
             loop {
+                let frames_before = counters.frames.load(Ordering::Relaxed);
                 let _ = Self::receive(
                     url.clone(),
                     config.clone(),
@@ -92,6 +93,9 @@ impl Video {
                     source_id,
                 )
                 .await;
+                if counters.frames.load(Ordering::Relaxed) > frames_before {
+                    delay = Duration::from_millis(250);
+                }
                 counters.connected.store(false, Ordering::Relaxed);
                 tx.send_replace(None); // A disconnected stream must never serve an old picture.
                 counters.reconnects.fetch_add(1, Ordering::Relaxed);
@@ -243,14 +247,22 @@ impl Video {
             .await?
             {
                 crate::metrics::counter("video.received_packets", 1);
-                if let PacketItem::Rtp(packet) = packet?
-                    && let Some(data) = assembler.push(
+                if let PacketItem::Rtp(packet) = packet? {
+                    let data = match assembler.push(
                         packet.timestamp().timestamp(),
                         packet.sequence_number(),
                         packet.mark(),
                         packet.payload(),
-                    )?
-                {
+                    ) {
+                        Ok(Some(data)) => data,
+                        Ok(None) => continue,
+                        Err(_) => {
+                            // A damaged frame is not a dead RTSP connection. Resume at the
+                            // next frame boundary; never publish guessed or partial pixels.
+                            crate::metrics::counter("jpeg.malformed_packets", 1);
+                            continue;
+                        }
+                    };
                     let now = Instant::now();
                     if let Some(last) = last_frame.replace(now) {
                         crate::metrics::observe(
