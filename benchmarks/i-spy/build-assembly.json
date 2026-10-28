@@ -1,0 +1,22 @@
+{
+  "utc": "2026-10-28T04:32:32.205556+00:00",
+  "archive": "target/release/build/openh264-sys2-ae59c10c0eb73f9b/out/libopenh264_common.a",
+  "defined_simd_symbols": [
+    "IdctResAddPred_sse2",
+    "WelsDctFourT4_sse2",
+    "WelsDctT4_sse2",
+    "WelsIDctFourT4Rec_sse2",
+    "WelsIDctRecI16x16Dc_sse2",
+    "WelsIDctT4Rec_sse2",
+    "WelsI16x16LumaPredH_sse2",
+    "WelsI16x16LumaPredV_sse2",
+    "McCopyWidthEq16_sse2",
+    "PixelAvgWidthEq16_sse2",
+    "UpdateMbMv_sse2",
+    "WelsCopy16x16NotAligned_sse2"
+  ],
+  "nasm_version": "NASM version 2.15.05",
+  "previous_build": "OpenH264 release build output explicitly reported failed NASM and no assembly",
+  "action": "cargo clean --release -p openh264-sys2 then cargo build --release --locked -j2",
+  "release_build_log": "/tmp/spy-release-asm-rebuild.log"
+}

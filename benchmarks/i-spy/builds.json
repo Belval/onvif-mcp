@@ -19,5 +19,12 @@
     "local_binary": "/tmp/onvif-h264-prototype",
     "base_revision": "3847e1b6db35b02eb35442ac490ec34eae82abdf",
     "prototype_uncommitted": true
+  },
+  {
+    "label": "978d768-stop-barrier-simd-resize",
+    "binary_sha256": "5a2809269e72a554ae1a3aa9c1e65aadebdd90b22edcf3fd60997a68241db40d",
+    "source_revision": "978d768",
+    "local_binary": "target/release/onvif-sight",
+    "openh264_release_assembly": true
   }
 ]

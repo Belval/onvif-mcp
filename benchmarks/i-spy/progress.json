@@ -1,5 +1,5 @@
 {
-  "updated_utc": "2026-10-28T04:30:24.801345+00:00",
+  "updated_utc": "2026-10-28T04:30:41.488431+00:00",
   "goal_status": "active; not at proven practical plateau",
   "objective": "Push the C210 to the maximum hardware usefully permits via independent I-spy challenges from the second camera, record each challenge metrics, optimize and replay, stop only after an evidenced practical minimum.",
   "repository": "/mnt/main/Git/onvif-mcp",
@@ -55,7 +55,8 @@
     "stdout": "/tmp/spy-framing-main50-stdout.log",
     "stderr": "/tmp/spy-framing-main50-progress.jsonl",
     "artifact": "benchmarks/i-spy/framing-main50.json",
-    "next_action": "Poll same session or inspect authoritative process before restarting. Main preview uses unchanged high-resolution main source and SIMD downsizing; no main settings writes."
+    "next_action": "Analyze completed main50 artifact and obtain independent worst-frame image judgement; do not restart this run",
+    "status": "completed, exit0; polled authoritative handle"
   },
   "outstanding": [
     "Compare main-source vs minor-source first-frame sharpness and latency; ask independent judge on worst paired frames. Main has higher default quality/bitrate; optional CAMERA_PREVIEW=h264-main is compiled.",
