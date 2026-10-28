@@ -1,0 +1,5 @@
+[mcp_servers.camera]
+command = "/mnt/main/Git/onvif-mcp/.venv/bin/python"
+args = ["/mnt/main/Git/onvif-mcp/camera_mcp.py"]
+startup_timeout_sec = 20
+tool_timeout_sec = 45

@@ -54,7 +54,7 @@ class Camera:
         try:
             self.ptz.ContinuousMove({'ProfileToken': self.profile.token,
                 'Velocity': {'PanTilt': {'x': pan, 'y': tilt}},
-                'Timeout': timedelta(seconds=seconds)})
+                'Timeout': timedelta(seconds=max(1, math.ceil(seconds)))})
             time.sleep(seconds)
         finally:
             self.stop()
