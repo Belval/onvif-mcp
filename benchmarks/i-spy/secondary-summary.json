@@ -1,0 +1,157 @@
+{
+  "camera_role": "independent secondary camera",
+  "model": "Tapo C210",
+  "firmware": "1.1.1 Build 241224 Rel.56667n",
+  "stationary_sample": {
+    "started_utc": "2026-10-28T03:08:00.510022+00:00",
+    "finished_utc": "2026-10-28T03:08:30.610448+00:00",
+    "sample_count": 357,
+    "duration_s": 30.059189897030592,
+    "tool_errors": 0,
+    "max_tool_ms": 284.4089660793543,
+    "jpeg_frame_starts": 2533,
+    "jpeg_completed_frames": 2531,
+    "jpeg_header_errors": 0,
+    "jpeg_assembly_errors": 0,
+    "discarded_fragments": 76,
+    "reconnects": 1,
+    "failure_categories": {
+      "video.failure.framing": 1
+    },
+    "first_session_ms": 15025.615495
+  },
+  "advertised_encoder_options": {
+    "jpeg": {
+      "resolution": [
+        640,
+        360
+      ],
+      "frame_rate_range": [
+        1,
+        1
+      ],
+      "quality_range": [
+        1,
+        1
+      ],
+      "bitrate_range_kbps": [
+        512,
+        512
+      ]
+    },
+    "h264_minor": {
+      "current_resolution": [
+        1280,
+        720
+      ],
+      "supported_resolutions": [
+        [
+          1280,
+          720
+        ],
+        [
+          640,
+          360
+        ]
+      ],
+      "frame_rate_range": [
+        15,
+        15
+      ],
+      "gov_length_range": [
+        25,
+        25
+      ],
+      "quality_range": [
+        1,
+        5
+      ],
+      "bitrate_range_kbps": [
+        64,
+        512
+      ],
+      "profile": "Main"
+    }
+  },
+  "rtsp_method_evidence": [
+    {
+      "method": "OPTIONS",
+      "status": 200,
+      "sent_cseq": 1,
+      "returned_cseq": 1,
+      "advertised_methods": [
+        "OPTIONS",
+        "DESCRIBE",
+        "SETUP",
+        "TEARDOWN",
+        "PLAY",
+        "PAUSE",
+        "GET_PARAMETER",
+        "SET_PARAMETER"
+      ]
+    },
+    {
+      "method": "DESCRIBE",
+      "status": 200,
+      "sent_cseq": 3,
+      "returned_cseq": 3
+    },
+    {
+      "method": "SETUP",
+      "status": 200,
+      "sent_cseq": 4,
+      "returned_cseq": 4
+    },
+    {
+      "method": "PLAY",
+      "status": 200,
+      "sent_cseq": 5,
+      "returned_cseq": 5
+    },
+    {
+      "method": "GET_PARAMETER",
+      "status": 200,
+      "sent_cseq": 6,
+      "returned_cseq": 6
+    },
+    {
+      "method": "SET_PARAMETER",
+      "status": 400,
+      "sent_cseq": 7,
+      "returned_cseq": 6
+    },
+    {
+      "method": "GET_PARAMETER",
+      "status": 200,
+      "sent_cseq": 8,
+      "returned_cseq": 8
+    },
+    {
+      "method": "OPTIONS",
+      "status": 200,
+      "sent_cseq": 9,
+      "returned_cseq": 9,
+      "advertised_methods": [
+        "OPTIONS",
+        "DESCRIBE",
+        "SETUP",
+        "TEARDOWN",
+        "PLAY",
+        "PAUSE",
+        "GET_PARAMETER",
+        "SET_PARAMETER"
+      ]
+    },
+    {
+      "method": "TEARDOWN",
+      "status": 200,
+      "sent_cseq": 10,
+      "returned_cseq": 10
+    }
+  ],
+  "interpretation_limits": [
+    "Advertised JPEG1fps and high host publication count require duplicate-image/actual-refresh confirmation; receipt freshness is not exposure freshness.",
+    "SET_PARAMETER previous-CSeq bug is confirmed, but first15s framing failure is not proven to use that method; initial OPTIONS should succeed in direct immediate probes.",
+    "No encoder settings were modified on secondary. All diagnostic sessions closed after their runs."
+  ]
+}

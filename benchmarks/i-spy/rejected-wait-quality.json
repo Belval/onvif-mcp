@@ -1,0 +1,25 @@
+{
+  "judged_utc": "2026-10-28T03:48:23.065532+00:00",
+  "judge": "independent spy agent",
+  "criteria": "Do not count geometric near-centering as success when material motion smear remains.",
+  "pairs": [
+    {
+      "trial": "diagonal-1",
+      "early_image": "/tmp/spy-framing-fast-zero-2-diagonal-1-early.jpg",
+      "late_image": "/tmp/spy-framing-fast-zero-2-diagonal-1-late.jpg",
+      "early_sharpness": "fail-material-motion-smear",
+      "late_sharpness": "pass",
+      "verdict": "reject zero-settle speed gain",
+      "details": "Strong vertical/diagonal motion smear on case fans, internals, window edge and keyboard in early frame; late frame crisp."
+    },
+    {
+      "trial": "pan--1",
+      "early_image": "/tmp/spy-framing-fast-zero-2-pan--1-early.jpg",
+      "late_image": "/tmp/spy-framing-fast-zero-2-pan--1-late.jpg",
+      "early_sharpness": "fail-material-motion-smear",
+      "late_sharpness": "pass",
+      "verdict": "reject zero-settle speed gain",
+      "details": "Strong horizontal motion smear/ghosting on keyboard, case internals and monitor/window edges in early frame; late frame crisp."
+    }
+  ]
+}

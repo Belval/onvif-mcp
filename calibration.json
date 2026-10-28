@@ -1,20 +1,20 @@
 {
-  "model": "Tapo C210",
+  "coordinate_system": "image normalized from top-left; PTZ position as reported by ONVIF",
   "firmware": "1.1.1 Build 241224 Rel.56667n",
   "image_shift_per_pose_unit": [
     [
-      1.2647788846409036,
-      -0.0027230351688162804
+      2.086055736490214,
+      0.19068507047915345
     ],
     [
-      0.01580331745030116,
-      0.7936772337800424
+      -0.026246826720379625,
+      0.8048649243510344
     ]
   ],
-  "method": "Median local ORB/RANSAC point displacement per absolute ONVIF position unit",
+  "method": "Rust FAST/BRIEF local affine RANSAC finite differences on H264 preview decoded to640px JPEG",
+  "model": "Tapo C210",
   "samples_per_axis": [
     9,
     9
-  ],
-  "coordinate_system": "image normalized from top-left; PTZ position as reported by ONVIF"
+  ]
 }

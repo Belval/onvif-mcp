@@ -16,7 +16,7 @@ use std::{
     },
     time::{Duration, Instant},
 };
-use tokio::sync::Mutex;
+use tokio::sync::{Mutex, OwnedMutexGuard};
 
 #[derive(Clone)]
 struct Observation {
@@ -49,30 +49,68 @@ pub struct Camera {
     pose_poller: tokio::task::JoinHandle<()>,
     detail_token: String,
     detail_dimensions: (u32, u32),
-    state: Mutex<State>,
+    state: Arc<Mutex<State>>,
+    command_gate: Arc<Mutex<()>>,
     pub motion: Mutex<()>,
     cancelled: AtomicBool,
     calibration: Matrix2<f64>,
     views: Mutex<HashMap<String, [f64; 2]>>,
     views_path: std::path::PathBuf,
 }
+async fn stop_barrier<T>(
+    gate: Arc<Mutex<()>>,
+    stop: impl std::future::Future<Output = T>,
+) -> (OwnedMutexGuard<()>, T) {
+    tokio::join!(biased;
+        crate::metrics::timed("lock.stop_cleanup_wait",gate.lock_owned()),
+        stop
+    )
+}
+fn durable_stop<T: Send + 'static>(
+    lease: Option<OwnedMutexGuard<()>>,
+    work: impl std::future::Future<Output = T> + Send + 'static,
+) -> tokio::task::JoinHandle<(T, Option<OwnedMutexGuard<()>>)> {
+    let context = crate::metrics::capture();
+    tokio::spawn(async move {
+        let result = crate::metrics::with_context_async(context, work).await;
+        (result, lease)
+    })
+}
 struct StopGuard {
     onvif: Arc<Onvif>,
+    state: Arc<Mutex<State>>,
+    lease: Option<OwnedMutexGuard<()>>,
     armed: bool,
 }
 impl StopGuard {
     async fn finish(&mut self) -> Result<()> {
-        let result = self.onvif.stop().await;
+        // The critical Stop RPC must survive cancellation of its caller. The
+        // owned lease also survives, so no later move can overtake this Stop.
         self.armed = false;
-        result
+        let onvif = self.onvif.clone();
+        let lease = self.lease.take();
+        crate::metrics::result("motion.stop_wait", async {
+            let (result, lease) = durable_stop(lease, async move { onvif.stop().await }).await?;
+            self.lease = lease;
+            result
+        })
+        .await
     }
 }
 impl Drop for StopGuard {
     fn drop(&mut self) {
         if self.armed {
             let onvif = self.onvif.clone();
+            let state = self.state.clone();
+            let lease = self.lease.take();
             tokio::spawn(async move {
-                let _ = onvif.stop().await;
+                let _lease = lease;
+                let _ = crate::metrics::background("motion.cancel_cleanup", 0, async {
+                    let result = onvif.stop().await;
+                    state.lock().await.barrier = Some(Instant::now() + Duration::from_millis(100));
+                    result
+                })
+                .await;
             });
         }
     }
@@ -86,8 +124,15 @@ fn norm(point: [f64; 2]) -> f64 {
 fn can_compensate_pose_cache(pose_delta: f64, original: [f64; 2], tracked: [f64; 2]) -> bool {
     pose_delta <= 0.05 && (original[0] - tracked[0]).hypot(original[1] - tracked[1]) <= 0.02
 }
+fn focus_gain() -> f64 {
+    std::env::var("CAMERA_FOCUS_GAIN")
+        .ok()
+        .and_then(|s| s.parse::<f64>().ok())
+        .filter(|n| n.is_finite() && (0.5..=1.1).contains(n))
+        .unwrap_or(0.8)
+}
 fn calibrated_delta(matrix: Matrix2<f64>, point: [f64; 2]) -> Result<Vector2<f64>> {
-    Ok(-0.8
+    Ok(-focus_gain()
         * matrix
             .try_inverse()
             .ok_or_else(|| anyhow::anyhow!("Invalid calibration"))?
@@ -109,11 +154,23 @@ fn clip(point: [f64; 2]) -> [f64; 2] {
     [point[0].clamp(-1., 1.), point[1].clamp(-1., 1.)]
 }
 
+fn parameter(name: &str, fallback: u64, min: u64, max: u64) -> u64 {
+    std::env::var(name)
+        .ok()
+        .and_then(|s| s.parse().ok())
+        .filter(|n| (min..=max).contains(n))
+        .unwrap_or(fallback)
+}
+fn delay(name: &str, fallback: u64) -> Duration {
+    Duration::from_millis(parameter(name, fallback, 0, 1000))
+}
+
 impl Camera {
     pub async fn connect(root: &Path) -> Result<Arc<Self>> {
         crate::metrics::result("camera.initialize", async {
             let onvif = Arc::new(Onvif::connect(Config::load()?).await?);
-            let h264_preview = std::env::var("CAMERA_PREVIEW").is_ok_and(|s| s == "h264");
+            let preview_mode = std::env::var("CAMERA_PREVIEW").unwrap_or_default();
+            let h264_preview = preview_mode.starts_with("h264");
             let profile = onvif
                 .profiles
                 .iter()
@@ -124,7 +181,13 @@ impl Camera {
                         p.encoding == "JPEG" && p.width == 640
                     }
                 })
-                .min_by_key(|p| p.width)
+                .min_by_key(|p| {
+                    if preview_mode == "h264-main" {
+                        u32::MAX - p.width
+                    } else {
+                        p.width
+                    }
+                })
                 .ok_or_else(|| anyhow::anyhow!("Requested preview profile unavailable"))?;
             let preview_url = onvif.stream_url(&profile.token).await?;
             let preview = if h264_preview {
@@ -200,10 +263,11 @@ impl Camera {
                 pose_poller,
                 detail_token,
                 detail_dimensions,
-                state: Mutex::new(State {
+                state: Arc::new(Mutex::new(State {
                     epoch: rand::random(),
                     ..State::default()
-                }),
+                })),
+                command_gate: Arc::new(Mutex::new(())),
                 motion: Mutex::new(()),
                 cancelled: AtomicBool::new(false),
                 calibration,
@@ -252,6 +316,7 @@ impl Camera {
         revisit: bool,
     ) -> Result<ObservationResult> {
         crate::metrics::result("camera.observe", async {
+            self.await_cleanup().await;
             let barrier = crate::metrics::timed("lock.state_wait", self.state.lock())
                 .await
                 .barrier;
@@ -308,7 +373,10 @@ impl Camera {
     pub async fn stop(&self) -> Result<()> {
         crate::metrics::result("camera.stop", async {
             self.cancelled.store(true, Ordering::SeqCst);
-            let result = self.onvif.stop().await;
+            // Queue the barrier before issuing Stop, while issuing Stop without
+            // waiting for the active motion lease. This preserves immediate Stop
+            // and prevents later moves from passing outstanding stop requests.
+            let (_lease, result) = stop_barrier(self.command_gate.clone(), self.onvif.stop()).await;
             crate::metrics::timed("lock.state_wait", self.state.lock())
                 .await
                 .barrier = Some(Instant::now() + Duration::from_millis(100));
@@ -316,8 +384,27 @@ impl Camera {
         })
         .await
     }
-    pub fn begin_motion(&self) {
+    async fn await_cleanup(&self) {
+        let _lease =
+            crate::metrics::timed("lock.motion_cleanup_wait", self.command_gate.lock()).await;
+    }
+    pub async fn begin_motion(&self) {
+        self.await_cleanup().await;
         self.cancelled.store(false, Ordering::SeqCst);
+    }
+    async fn stop_guard(&self) -> Result<StopGuard> {
+        let lease = crate::metrics::timed(
+            "lock.motion_cleanup_wait",
+            self.command_gate.clone().lock_owned(),
+        )
+        .await;
+        self.check_cancelled()?;
+        Ok(StopGuard {
+            onvif: self.onvif.clone(),
+            state: self.state.clone(),
+            lease: Some(lease),
+            armed: true,
+        })
     }
     fn check_cancelled(&self) -> Result<()> {
         ensure!(
@@ -328,75 +415,71 @@ impl Camera {
     }
     pub async fn goto(&self, target: [f64; 2]) -> Result<[f64; 2]> {
         crate::metrics::result("motion.goto", async {
-            self.goto_with_settle(target, Duration::from_millis(300))
+            self.goto_with_settle(target, delay("CAMERA_SETTLE_MS", 300))
                 .await
         })
         .await
     }
     async fn goto_with_settle(&self, target: [f64; 2], settle: Duration) -> Result<[f64; 2]> {
-        crate::metrics::result("motion.goto_with_settle", async {
-        self.check_cancelled()?;
-        let target = clip(target);
-        let mut guard = StopGuard {
-            onvif: self.onvif.clone(),
-            armed: true,
-        };
-        let started = Instant::now();
-        crate::metrics::event("motion.target",json!({"target":target,"settle_ms":settle.as_secs_f64()*1000.}));
-        self.onvif.absolute(target).await?;
-        let commanded = Instant::now();
-        let mut polls = 0;
-        let deadline = Instant::now() + Duration::from_secs(6);
-        let mut stable = 0;
-        let pose = loop {
+        crate::metrics::result("motion.goto_with_settle",async {
             self.check_cancelled()?;
-            ensure!(
-                Instant::now() < deadline,
-                "Camera did not reach target position"
-            );
-            crate::metrics::sleep("motion.poll_interval",Duration::from_millis(60)).await;
-            let actual = self.onvif.position().await?;
-            polls += 1;
-            stable = if max_delta(actual, target) < 0.002 {
-                stable + 1
-            } else {
-                0
-            };
-            crate::metrics::event("motion.poll",json!({"actual":actual,"target":target,"max_error":max_delta(actual,target),"stable_readings":stable,"poll":polls}));
-            if stable >= 2 {
-                crate::metrics::event("motion.reported_arrival",json!({"actual":actual,"polls":polls}));
-                break actual;
-            }
-        };
-        let arrived = Instant::now();
-        // The device position can lead optical arrival; hold briefly, then require a new video frame.
-        crate::metrics::sleep("motion.settling_wait",settle).await;
-        self.check_cancelled()?;
-        guard.finish().await?;
-        let mut state = crate::metrics::timed("lock.state_wait",self.state.lock()).await;
-        state.barrier = Some(Instant::now());
-        state.last_move = json!({"command_ms":commanded.duration_since(started).as_secs_f64()*1000.,"arrival_ms":arrived.duration_since(commanded).as_secs_f64()*1000.,"settle_stop_ms":arrived.elapsed().as_secs_f64()*1000.,"polls":polls});
-        Ok(pose)
-
-}).await
+            let poll_delay=delay("CAMERA_POLL_MS",60);
+            let confirmations=parameter("CAMERA_STABLE_SAMPLES",2,1,3);
+            let target=clip(target);
+            let mut guard=self.stop_guard().await?;
+            let started=Instant::now();
+            crate::metrics::event("motion.target",json!({"target":target,"settle_ms":settle.as_secs_f64()*1000.,"poll_ms":poll_delay.as_secs_f64()*1000.,"confirmations":confirmations}));
+            let movement=async {
+                self.onvif.absolute(target).await?;
+                let commanded=Instant::now();
+                let deadline=Instant::now()+Duration::from_secs(6);
+                let mut stable=0;let mut polls=0;
+                let pose=loop {
+                    self.check_cancelled()?;
+                    ensure!(Instant::now()<deadline,"Camera did not reach target position");
+                    crate::metrics::sleep("motion.poll_interval",poll_delay).await;
+                    let actual=self.onvif.position().await?;polls+=1;
+                    stable=if max_delta(actual,target)<0.002 {stable+1}else{0};
+                    crate::metrics::event("motion.poll",json!({"actual":actual,"target":target,"max_error":max_delta(actual,target),"stable_readings":stable,"poll":polls}));
+                    if stable>=confirmations {crate::metrics::event("motion.reported_arrival",json!({"actual":actual,"polls":polls}));break actual;}
+                };
+                let arrived=Instant::now();
+                crate::metrics::sleep("motion.settling_wait",settle).await;
+                self.check_cancelled()?;
+                Ok::<_,anyhow::Error>((pose,commanded,arrived,polls))
+            }.await;
+            // Logical errors/explicit cancellation stop before returning. Drop
+            // cleanup is reserved for an abruptly dropped future or a panic.
+            let stopped=guard.finish().await;
+            let mut state=crate::metrics::timed("lock.state_wait",self.state.lock()).await;
+            state.barrier=Some(Instant::now()+if movement.is_err(){Duration::from_millis(100)}else{Duration::ZERO});
+            let (pose,commanded,arrived,polls)=movement?;
+            stopped?;
+            state.last_move=json!({"command_ms":commanded.duration_since(started).as_secs_f64()*1000.,"arrival_ms":arrived.duration_since(commanded).as_secs_f64()*1000.,"settle_stop_ms":arrived.elapsed().as_secs_f64()*1000.,"polls":polls});
+            Ok(pose)
+        }).await
     }
     pub async fn movement(&self, pan: f64, tilt: f64, seconds: f64) -> Result<Value> {
         crate::metrics::result("motion.velocity", async {
-            self.begin_motion();
-            let mut guard = StopGuard {
-                onvif: self.onvif.clone(),
-                armed: true,
-            };
-            self.onvif.velocity(pan, tilt, seconds).await?;
-            let deadline = Instant::now() + Duration::from_secs_f64(seconds);
-            while Instant::now() < deadline {
-                self.check_cancelled()?;
-                crate::metrics::sleep("motion.velocity_interval", Duration::from_millis(20)).await;
+            self.begin_motion().await;
+            let mut guard = self.stop_guard().await?;
+            let movement = async {
+                self.onvif.velocity(pan, tilt, seconds).await?;
+                let deadline = Instant::now() + Duration::from_secs_f64(seconds);
+                while Instant::now() < deadline {
+                    self.check_cancelled()?;
+                    crate::metrics::sleep("motion.velocity_interval", Duration::from_millis(20))
+                        .await;
+                }
+                Ok::<_, anyhow::Error>(())
             }
-            guard.finish().await?;
+            .await;
+            let stopped = guard.finish().await;
             crate::metrics::timed("lock.state_wait", self.state.lock())
                 .await
                 .barrier = Some(Instant::now() + Duration::from_millis(100));
+            movement?;
+            stopped?;
             Ok(json!({"stopped":true}))
         })
         .await
@@ -419,6 +502,7 @@ impl Camera {
     ) -> Result<ObservationResult> {
         crate::metrics::result("camera.focus", async {
         ensure!(!(rough && precise), "Choose rough or precise, not both");
+        crate::metrics::event("focus.calibration",json!({"gain":focus_gain(),"matrix":[[self.calibration[(0,0)],self.calibration[(0,1)]],[self.calibration[(1,0)],self.calibration[(1,1)]]]}));
         ensure!(
             [x, y]
                 .iter()
@@ -437,7 +521,7 @@ impl Camera {
         else {
             return self.observe(false,json!({"focus_status":"stale_frame","detail":"Choose a point in this new image"}),false).await;
         };
-        self.begin_motion();
+        self.begin_motion().await;
         let mut pose = self.onvif.position().await?;
         let mut pose_changed = max_delta(pose, old.pose) > 0.003;
         if pose_changed && old.revisit {
@@ -480,7 +564,7 @@ impl Camera {
                 return self.record(frame,pose,json!({"focus_status":"mechanical_limit","rough":true,"iterations":0,"target":null}),false).await;
             }
             let actual = self
-                .goto_with_settle(target, Duration::from_millis(100))
+                .goto_with_settle(target, delay("CAMERA_ROUGH_SETTLE_MS",100))
                 .await?;
             frame = self.preview.frame(crate::metrics::timed("lock.state_wait",self.state.lock()).await.barrier).await?;
             let timing = crate::metrics::timed("lock.state_wait",self.state.lock()).await.last_move.clone();
@@ -554,7 +638,7 @@ impl Camera {
                 && (0.05..=0.35).contains(&step),
             "Invalid scan: direction left/right, 2..6 views, step 0.05.. 0.35"
         );
-        self.begin_motion();
+        self.begin_motion().await;
         let origin = self.onvif.position().await?;
         let sign = if direction == "left" { 1. } else { -1. };
         let mut result = vec![];
@@ -576,6 +660,7 @@ impl Camera {
     }
     pub async fn remember(&self, name: &str) -> Result<Value> {
         crate::metrics::result("camera.remember", async {
+            self.await_cleanup().await;
             ensure!(
                 !name.is_empty()
                     && name.len() <= 64
@@ -603,7 +688,7 @@ impl Camera {
                 .await
                 .get(name)
                 .ok_or_else(|| anyhow::anyhow!("Unknown remembered view"))?;
-            self.begin_motion();
+            self.begin_motion().await;
             self.goto(pose).await?;
             self.observe(false, json!({"view":name}), false).await
         })
@@ -615,7 +700,7 @@ impl Camera {
     pub async fn recalibrate(&self, root: &Path) -> Result<Value> {
         crate::metrics::result("camera.calibrate", async {
         let _lock = crate::metrics::timed("lock.motion_wait",self.motion.lock()).await;
-        self.begin_motion();
+        self.begin_motion().await;
         let origin = self.onvif.position().await?;
         let baseline = self.preview.frame(None).await?;
         let measured=async {
@@ -638,7 +723,7 @@ impl Camera {
             ensure!(matrix.iter().all(|v|v.is_finite()) && matrix.determinant().abs()>0.01,"Unreliable calibration; previous file retained");
             Ok::<_,anyhow::Error>(json!({"model":self.onvif.model,"firmware":self.onvif.firmware,
                 "image_shift_per_pose_unit":[[matrix[(0,0)],matrix[(0,1)]],[matrix[(1,0)],matrix[(1,1)]]],
-                "method":"Rust FAST/BRIEF local affine RANSAC finite differences on native JPEG stream",
+                "method":format!("Rust FAST/BRIEF local affine RANSAC finite differences on {}",self.preview_encoding),
                 "samples_per_axis":counts,"coordinate_system":"image normalized from top-left; PTZ position as reported by ONVIF"}))
         }.await;
         let restored = self.goto(origin).await;
@@ -665,6 +750,67 @@ impl Drop for Camera {
 #[cfg(test)]
 mod tests {
     use super::*;
+    #[tokio::test]
+    async fn stop_bypasses_active_move_but_later_moves_wait_for_ack() {
+        use tokio::sync::oneshot;
+        let gate = Arc::new(Mutex::new(()));
+        let active = gate.clone().lock_owned().await;
+        let (started_tx, started_rx) = oneshot::channel();
+        let (release_tx, release_rx) = oneshot::channel();
+        let copy = gate.clone();
+        let stopping = tokio::spawn(async move {
+            stop_barrier(copy, async {
+                started_tx.send(()).unwrap();
+                release_rx.await.unwrap();
+            })
+            .await
+        });
+        tokio::time::timeout(Duration::from_secs(1), started_rx)
+            .await
+            .unwrap()
+            .unwrap();
+        let copy = gate.clone();
+        let mut later = tokio::spawn(async move { copy.lock_owned().await });
+        drop(active);
+        assert!(
+            tokio::time::timeout(Duration::from_millis(20), &mut later)
+                .await
+                .is_err()
+        );
+        release_tx.send(()).unwrap();
+        let (stop_lease, ()) = stopping.await.unwrap();
+        drop(stop_lease);
+        let _ = tokio::time::timeout(Duration::from_secs(1), later)
+            .await
+            .unwrap()
+            .unwrap();
+    }
+    #[tokio::test]
+    async fn cancelled_stop_waiter_keeps_motion_lease_until_rpc_completes() {
+        use tokio::sync::oneshot;
+        let gate = Arc::new(Mutex::new(()));
+        let lease = gate.clone().lock_owned().await;
+        let (started_tx, started_rx) = oneshot::channel();
+        let (release_tx, release_rx) = oneshot::channel();
+        let waiting = tokio::spawn(async move {
+            durable_stop(Some(lease), async {
+                started_tx.send(()).unwrap();
+                release_rx.await.unwrap();
+            })
+            .await
+        });
+        started_rx.await.unwrap();
+        waiting.abort();
+        let _ = waiting.await;
+        assert!(
+            gate.try_lock().is_err(),
+            "Cancelling the caller must not release a pending Stop lease"
+        );
+        release_tx.send(()).unwrap();
+        let _ = tokio::time::timeout(Duration::from_secs(1), gate.lock())
+            .await
+            .unwrap();
+    }
     #[test]
     fn point_geometry_and_limits() {
         assert_eq!(clip([2., -2.]), [1., -1.]);

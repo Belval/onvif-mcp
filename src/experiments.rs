@@ -18,7 +18,8 @@ pub async fn motor() -> Result<()> {
     let config = Config::load()?;
     let onvif = Onvif::connect(config.clone()).await?;
     let origin = onvif.position().await?;
-    let h264 = std::env::var("CAMERA_PREVIEW").is_ok_and(|s| s == "h264");
+    let preview_mode = std::env::var("CAMERA_PREVIEW").unwrap_or_default();
+    let h264 = preview_mode.starts_with("h264");
     let p = onvif
         .profiles
         .iter()
@@ -29,7 +30,13 @@ pub async fn motor() -> Result<()> {
                 p.encoding == "JPEG" && p.width == 640
             }
         })
-        .min_by_key(|p| p.width)
+        .min_by_key(|p| {
+            if preview_mode == "h264-main" {
+                u32::MAX - p.width
+            } else {
+                p.width
+            }
+        })
         .ok_or_else(|| anyhow::anyhow!("JPEG profile unavailable"))?;
     let url = onvif.stream_url(&p.token).await?;
     let video = if h264 {
@@ -163,5 +170,107 @@ pub async fn motor() -> Result<()> {
     )?;
     result?;
     restore?;
+    Ok(())
+}
+
+fn sharpness(bytes: &[u8]) -> Result<f64> {
+    let image = image::load_from_memory(bytes)?.to_luma8();
+    let mut sum = 0.;
+    let mut count = 0u64;
+    for y in 1..image.height() - 1 {
+        for x in 1..image.width() - 1 {
+            let lap = image.get_pixel(x - 1, y)[0] as f64
+                + image.get_pixel(x + 1, y)[0] as f64
+                + image.get_pixel(x, y - 1)[0] as f64
+                + image.get_pixel(x, y + 1)[0] as f64
+                - 4. * image.get_pixel(x, y)[0] as f64;
+            sum += lap * lap;
+            count += 1;
+        }
+    }
+    Ok(sum / count as f64)
+}
+
+/// Real controller calls with matched endpoints and delayed optical references.
+pub async fn framing() -> Result<()> {
+    let root = PathBuf::from(
+        std::env::var("CAMERA_CONFIG_DIR").unwrap_or_else(|_| env!("CARGO_MANIFEST_DIR").into()),
+    );
+    let camera = crate::camera::Camera::connect(&root).await?;
+    let origin = camera.onvif.position().await?;
+    let warm = camera.preview.frame(None).await?;
+    let repeats = std::env::var("CAMERA_BENCH_REPEATS")
+        .ok()
+        .and_then(|s| s.parse::<u32>().ok())
+        .unwrap_or(3);
+    let label = std::env::var("CAMERA_BENCH_LABEL").unwrap_or_else(|_| "framing".into());
+    ensure!(
+        label
+            .chars()
+            .all(|c| c.is_ascii_alphanumeric() || c == '-' || c == '_'),
+        "Invalid benchmark label"
+    );
+    let output = root.join(format!("benchmarks/i-spy/{label}.json"));
+    let mut rows = vec![];
+    let result=async {
+        for repeat in 0..repeats {
+            for axis in ["pan","tilt","diagonal"] {
+                let mut other=origin;
+                if axis!="tilt" {other[0]+=if origin[0]>0.7 {-0.1}else{0.1};}
+                if axis!="pan" {other[1]+=if origin[1]>0.7 {-0.2}else{0.2};}
+                for (direction,target) in [(1,other),(-1,origin)] {
+                    camera.begin_motion().await;
+                    let began=Instant::now();
+                    let (_,early)=crate::metrics::background("bench.framing",warm.source_id,async {
+                        camera.goto(target).await?;
+                        camera.observe(false,json!({}),false).await
+                    }).await?;
+                    let wall_ms=began.elapsed().as_secs_f64()*1000.;
+                    let stats=crate::metrics::snapshot(None,false,8);
+                    let id=stats["recent_background"].as_array().unwrap().iter().find(|r|r["tool"]=="bench.framing").unwrap()["request_id"].as_str().unwrap();
+                    let trace=crate::metrics::snapshot(Some(id),true,1);
+                    let early_path=format!("/tmp/spy-{label}-{repeat}-{axis}-{direction}-early.jpg");
+                    std::fs::write(&early_path,early.jpeg.as_slice())?;
+                    tokio::time::sleep(Duration::from_millis(400)).await;
+                    let late=camera.preview.frame(Some(Instant::now())).await?;
+                    let late_path=format!("/tmp/spy-{label}-{repeat}-{axis}-{direction}-late.jpg");
+                    std::fs::write(&late_path,late.jpeg.as_slice())?;
+                    let shifts=tokio::task::spawn_blocking(move || -> Result<_> {
+                        let shifts=[[0.3,0.3],[0.5,0.3],[0.7,0.3],[0.3,0.5],[0.5,0.5],[0.7,0.5],[0.3,0.7],[0.5,0.7],[0.7,0.7]].into_iter().filter_map(|p|vision::track(&early.jpeg,&late.jpeg,p).map(|q|(q[0]-p[0]).hypot(q[1]-p[1]))).collect::<Vec<_>>();
+                        let ratio=sharpness(&early.jpeg)?/sharpness(&late.jpeg)?.max(1e-9);
+                        Ok((shifts,ratio))
+                    }).await??;
+                    let max_residual=shifts.0.iter().copied().reduce(f64::max);
+                    let row=json!({"repeat":repeat,"axis":axis,"direction":direction,"target":target,"wall_ms":wall_ms,"optical_matches":shifts.0.len(),"max_residual":max_residual,"sharpness_ratio":shifts.1,"geometry_pass":shifts.0.len()>=3 && max_residual.is_some_and(|d|d<=0.01),"early_image":early_path,"late_image":late_path,"trace":trace});
+                    eprintln!("{}",json!({"axis":axis,"direction":direction,"wall_ms":wall_ms,"geometry_pass":row["geometry_pass"],"max_residual":max_residual,"sharpness_ratio":shifts.1}));
+                    rows.push(row);
+                    std::fs::write(&output,serde_json::to_vec(&json!({"label":label,"origin":origin,"samples":rows}))?)?;
+                }
+            }
+        }
+        Ok::<_,anyhow::Error>(())
+    }.await;
+    camera.begin_motion().await;
+    let restored = camera.goto(origin).await;
+    let stopped = camera.stop().await;
+    let parameters = [
+        "CAMERA_PREVIEW",
+        "CAMERA_SETTLE_MS",
+        "CAMERA_ROUGH_SETTLE_MS",
+        "CAMERA_POLL_MS",
+        "CAMERA_STABLE_SAMPLES",
+    ]
+    .into_iter()
+    .map(|s| (s, std::env::var(s).ok()))
+    .collect::<std::collections::BTreeMap<_, _>>();
+    std::fs::write(
+        &output,
+        serde_json::to_vec(
+            &json!({"label":label,"origin":origin,"parameters":parameters,"description":"Native production-controller goto+observe call; timing excludes delayed reference/tracking; separate MCP game checks validate complete tool behavior","samples":rows,"metrics":crate::metrics::snapshot(None,false,0),"completed":result.is_ok(),"failure":result.as_ref().err().map(ToString::to_string),"restored":restored.is_ok(),"stopped":stopped.is_ok()}),
+        )?,
+    )?;
+    result?;
+    restored?;
+    stopped?;
     Ok(())
 }

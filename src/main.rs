@@ -30,6 +30,9 @@ async fn run() -> Result<()> {
     let root = root();
     let _ = dotenvy::from_path(root.join(".env"));
     metrics::init();
+    if std::env::args().any(|a| a == "--measure-framing") {
+        return experiments::framing().await;
+    }
     if std::env::args().any(|a| a == "--measure-motor") {
         return experiments::motor().await;
     }

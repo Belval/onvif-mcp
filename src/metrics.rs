@@ -360,7 +360,12 @@ pub fn event(name: &'static str, values: Value) {
     }
 }
 pub async fn sleep(name: &'static str, duration: Duration) {
-    timed(name, tokio::time::sleep(duration)).await
+    timed(name, async {
+        if !duration.is_zero() {
+            tokio::time::sleep(duration).await;
+        }
+    })
+    .await
 }
 pub async fn blocking<T: Send + 'static>(
     work: impl FnOnce() -> T + Send + 'static,
@@ -595,7 +600,9 @@ pub async fn background<T, E>(
         parent: None,
     };
     let output = with_context_async(Some(context), async {
-        event("video.source", json!({"source_id":source_id}));
+        if source_id != 0 {
+            event("video.source", json!({"source_id":source_id}));
+        }
         result(name, work).await
     })
     .await;

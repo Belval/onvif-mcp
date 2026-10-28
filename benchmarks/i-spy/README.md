@@ -96,3 +96,48 @@ image already within the requested size. RGB conversion is retained to preserve
 OpenH264's color interpretation. Geometry/color-channel tests cover preview and
 detail sizes. The first live MCP check passed precise/rough focus, scan, revisit
 and concurrent Stop. Further wait/poll tuning and fresh game challenges remain.
+
+Game-wall bookkeeping uses the independent judge's UTC for actual start-to-verdict
+and prompt-to-verdict durations when available. Recording-close timestamps are
+retained separately: later bookkeeping can occur well after the verdict and must
+not be presented as response latency. Prompt times are second-resolution agent
+records, and SPY-001's precise issue time is unavailable. Missing tool timing stays
+explicit. The fresh H264/SIMD headphones challenge passed first attempt with918.85ms
+of camera calls; its delivery-to-verdict time was51s, mostly assistant coordination.
+
+Zero-settle/15ms polling/one-confirmation returned matched moves350–400ms sooner,
+but3/18 exceeded the .01 optical-stability criterion, and the independent judge
+confirmed material smear in both submitted worst pairs. Rejected despite speed.
+Secondary-only bounded continuous probes found that simultaneous nonzero pan/tilt
+velocities prioritize pan: tilt never progressed. No concurrent-axis win was
+shown; encoder signs are velocity pan=-absolute sign, tilt=+absolute sign.
+
+Current wait sweep (18 matched pan/tilt/diagonal calls per setting) is retained in
+framing-*.json. Baseline median927ms;15ms poll/one report/50ms settle median622ms;
+15ms poll/two reports/no extra settle median596ms. Geometry passed18/18 for these
+short-wait variants, but independent early/late image inspection still found
+softening, so no new default has been promoted solely on geometry. Polling without
+sleep gave no useful median gain and a worse maximum (1085ms vs888ms).
+
+Encoder escape-hatch checks were bounded and reversible: bitrate2048, GOV1,
+quality5, and JPEG15fps all failed complete-config verification and were rolled
+back. The minor retained640x360/15fps/512kbps/quality3/GOV25. Reported option ranges
+are not sufficient evidence of an applied setting. Vendor local-account auth on
+the second camera failed read-only discovery; no credential guessing followed.
+
+OpenH264 was previously cached without assembly. After installing NASM, its
+**release** dependency was cleaned explicitly (`cargo clean --release -p
+openh264-sys2`) and rebuilt. Defined SSE2 symbols in libopenh264_common.a confirm
+assembly is now present. Installing NASM without rebuilding a previously cached
+scalar dependency is insufficient.
+
+A fresh-H264 calibration at the printer measured pan coefficient2.0861 versus the
+old1.2648 and reduced one precise verification run2.14s→1.64s. This calibration is
+still under review: the old algorithm reuses its initial baseline after returning
+from the pan probe, which can contaminate the tilt cross term with return offset.
+Gain1.0 did not beat .8 in the current calibration and was not promoted. One test
+restore timed out after concurrent Stop; code inspection found deferred cleanup
+Stops could overtake later commands. New owned motion leases, immediate Stop with
+a queued completion barrier, and cancellation-durable Stop tasks address this;
+two deterministic concurrency tests plus the full29-test unit suite passed.
+Live stress verification of the new Stop path is still required.

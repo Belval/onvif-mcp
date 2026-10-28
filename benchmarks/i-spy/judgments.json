@@ -101,6 +101,27 @@
       "judged_utc": "2026-10-28T03:05:43Z",
       "runtime": "3847e1b",
       "notes": "settled refresh; delay includes coordination, cannot infer minimum settling time"
+    },
+    {
+      "challenge": "SPY-H02",
+      "attempt": 1,
+      "image": "/tmp/camera-search-1793158419498737293-1.jpg",
+      "identity": "pass",
+      "sharpness": "pass",
+      "center": [
+        0.484,
+        0.554
+      ],
+      "normalized_center_error": 0.056,
+      "centering": "pass",
+      "judged_utc": "2026-10-28T03:33:50Z",
+      "runtime": "abef2b0",
+      "tool_times_ms": {
+        "fresh_see": 0.943,
+        "rough_focus": 917.905
+      },
+      "tool_sum_ms": 918.848,
+      "notes": "first submitted frame; H264+SIMD preview; baseline motion waits unchanged"
     }
   ]
 }

@@ -19,28 +19,47 @@ type EncodedPicture = (Vec<u8>, u32, u32);
 struct H264Worker {
     decoder: openh264::decoder::Decoder,
     jpeg: turbojpeg::Compressor,
+    resize: fast_image_resize::Resizer,
 }
 impl H264Worker {
     fn new() -> Result<Self> {
         Ok(Self {
             decoder: openh264::decoder::Decoder::new()?,
             jpeg: turbojpeg::Compressor::new()?,
+            resize: fast_image_resize::Resizer::new(),
         })
     }
 }
 fn encode_picture(
     jpeg: &mut turbojpeg::Compressor,
+    resize: &mut fast_image_resize::Resizer,
     image: DynamicImage,
     max_width: u32,
 ) -> Result<EncodedPicture> {
-    let image = crate::metrics::sync("video.resize", || {
-        if image.width() > max_width || image.height() > max_width * 3 / 4 {
-            image.thumbnail(max_width, max_width * 3 / 4)
-        } else {
-            image
+    let image = crate::metrics::sync_result("video.resize", || -> Result<_> {
+        let image = image.into_rgb8();
+        if image.width() <= max_width && image.height() <= max_width * 3 / 4 {
+            return Ok(image);
         }
-    })
-    .into_rgb8();
+        let scale = (max_width as f64 / image.width() as f64)
+            .min((max_width * 3 / 4) as f64 / image.height() as f64);
+        let w = (image.width() as f64 * scale).round().max(1.) as u32;
+        let h = (image.height() as f64 * scale).round().max(1.) as u32;
+        let source = fast_image_resize::images::Image::from_vec_u8(
+            image.width(),
+            image.height(),
+            image.into_raw(),
+            fast_image_resize::PixelType::U8x3,
+        )?;
+        let mut dest =
+            fast_image_resize::images::Image::new(w, h, fast_image_resize::PixelType::U8x3);
+        let options = fast_image_resize::ResizeOptions::new().resize_alg(
+            fast_image_resize::ResizeAlg::Convolution(fast_image_resize::FilterType::Box),
+        );
+        resize.resize(&source, &mut dest, &options)?;
+        image::RgbImage::from_raw(w, h, dest.into_vec())
+            .ok_or_else(|| anyhow::anyhow!("Invalid resized image"))
+    })?;
     let (w, h) = image.dimensions();
     jpeg.set_quality(if max_width <= 640 { 75 } else { 85 })?;
     jpeg.set_subsamp(turbojpeg::Subsamp::Sub2x2)?;
@@ -77,7 +96,12 @@ fn decode_picture(
                     ImageBuffer::from_raw(w as u32, h as u32, rgb)
                         .ok_or_else(|| anyhow::anyhow!("Invalid video size"))?,
                 );
-                Some(encode_picture(&mut decoder.jpeg, image, max_width)?)
+                Some(encode_picture(
+                    &mut decoder.jpeg,
+                    &mut decoder.resize,
+                    image,
+                    max_width,
+                )?)
             } else {
                 None
             }
@@ -321,6 +345,7 @@ impl Video {
                     let encode = encoded_at.elapsed() >= encode_interval;
                     let rtp_timestamp = Some(frame.timestamp().timestamp());
                     let packet = frame.into_data();
+                    crate::metrics::counter("video.h264_bytes", packet.len() as u64);
                     // CPU-heavy detail work must not block the RTSP/PTZ/MCP I/O runtime.
                     let (next, picture) = crate::metrics::blocking(move || {
                         decode_picture(decoder, packet, encode, max_width)
@@ -467,6 +492,7 @@ mod tests {
     #[test]
     fn simd_jpeg_preserves_geometry_and_color_channels() {
         let mut jpeg = turbojpeg::Compressor::new().unwrap();
+        let mut resize = fast_image_resize::Resizer::new();
         for (width, height, max_width, expected) in [
             (640, 360, 640, (640, 360)),
             (1280, 720, 640, (640, 360)),
@@ -479,8 +505,13 @@ mod tests {
                     image::Rgb([20, 20, 220])
                 }
             });
-            let (bytes, w, h) =
-                encode_picture(&mut jpeg, DynamicImage::ImageRgb8(image), max_width).unwrap();
+            let (bytes, w, h) = encode_picture(
+                &mut jpeg,
+                &mut resize,
+                DynamicImage::ImageRgb8(image),
+                max_width,
+            )
+            .unwrap();
             assert_eq!((w, h), expected);
             let decoded = image::load_from_memory(&bytes).unwrap().into_rgb8();
             assert_eq!(decoded.dimensions(), expected);

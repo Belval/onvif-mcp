@@ -1,0 +1,28 @@
+{
+  "started_utc": "2026-10-28T03:54:38.304936+00:00",
+  "camera": "secondary-only",
+  "source_commit": "088d14fc9873351ab0e1bb86267b57d51451ecb2",
+  "transport_requested": "legacy pytapo HTTPS",
+  "extra_login_retries": 0,
+  "authenticated": false,
+  "failure_type": "Exception",
+  "failure_category": "authentication_rejected",
+  "safe_http_outcomes": [
+    {
+      "http_method": "POST",
+      "http_status": 200,
+      "top_error_code": -40413,
+      "result_data_code": -40401,
+      "encrypted_login_offered": true
+    },
+    {
+      "http_method": "POST",
+      "http_status": 200,
+      "top_error_code": -40413,
+      "result_data_code": -40401,
+      "encrypted_login_offered": true
+    }
+  ],
+  "elapsed_ms": 476.81250516325235,
+  "finished_utc": "2026-10-28T03:54:38.781754+00:00"
+}
