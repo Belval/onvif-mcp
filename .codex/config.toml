@@ -1,8 +1,8 @@
 [mcp_servers.camera]
-command = "/mnt/main/Git/onvif-mcp/.venv/bin/python"
-args = ["/mnt/main/Git/onvif-mcp/camera_mcp.py"]
+command = "/mnt/main/Git/onvif-mcp/target/release/onvif-sight"
 startup_timeout_sec = 20
 tool_timeout_sec = 45
 
 [mcp_servers.camera.env]
-CAMERA_MCP_REVISION = "preview-640-v1"
+CAMERA_CONFIG_DIR = "/mnt/main/Git/onvif-mcp"
+CAMERA_MCP_REVISION = "rust-native-v2-lazy"

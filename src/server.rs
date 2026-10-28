@@ -10,11 +10,27 @@ use rmcp::{
 use schemars::JsonSchema;
 use serde::Deserialize;
 use serde_json::{Value, json};
-use std::{sync::Arc, time::Instant};
+use std::{path::PathBuf, sync::Arc, time::Instant};
+use tokio::sync::OnceCell;
 
 #[derive(Clone)]
 pub struct CameraServer {
-    pub camera: Arc<Camera>,
+    pub camera: Arc<OnceCell<Arc<Camera>>>,
+    root: PathBuf,
+}
+impl CameraServer {
+    pub fn new(root: PathBuf) -> Self {
+        Self {
+            camera: Arc::new(OnceCell::new()),
+            root,
+        }
+    }
+    async fn connected_camera(&self) -> Result<Arc<Camera>> {
+        self.camera
+            .get_or_try_init(|| Camera::connect(&self.root))
+            .await
+            .cloned()
+    }
 }
 #[derive(Deserialize, JsonSchema)]
 pub struct SeeArgs {
@@ -93,9 +109,13 @@ impl CameraServer {
     )]
     async fn camera_see(&self, Parameters(args): Parameters<SeeArgs>) -> CallToolResult {
         let started = Instant::now();
-        let _lock = self.camera.motion.lock().await;
+        let camera = match self.connected_camera().await {
+            Ok(camera) => camera,
+            Err(error) => return failure(error),
+        };
+        let _lock = camera.motion.lock().await;
         picture(
-            self.camera
+            camera
                 .observe(
                     args.detail,
                     json!({"detail":if args.detail{"full"}else{"preview"}}),
@@ -110,9 +130,13 @@ impl CameraServer {
     )]
     async fn camera_focus(&self, Parameters(args): Parameters<FocusArgs>) -> CallToolResult {
         let started = Instant::now();
-        let _lock = self.camera.motion.lock().await;
+        let camera = match self.connected_camera().await {
+            Ok(camera) => camera,
+            Err(error) => return failure(error),
+        };
+        let _lock = camera.motion.lock().await;
         picture(
-            self.camera
+            camera
                 .focus(args.x, args.y, &args.frame_id, args.precise)
                 .await,
             started,
@@ -123,12 +147,12 @@ impl CameraServer {
     )]
     async fn camera_scan(&self, Parameters(args): Parameters<ScanArgs>) -> CallToolResult {
         let started = Instant::now();
-        let _lock = self.camera.motion.lock().await;
-        match self
-            .camera
-            .scan(&args.direction, args.views, args.step)
-            .await
-        {
+        let camera = match self.connected_camera().await {
+            Ok(camera) => camera,
+            Err(error) => return failure(error),
+        };
+        let _lock = camera.motion.lock().await;
+        match camera.scan(&args.direction, args.views, args.step).await {
             Ok(observations) => CallToolResult::success(
                 observations
                     .into_iter()
@@ -142,39 +166,55 @@ impl CameraServer {
         description = "Read camera model, profiles, PTZ position, remembered views, and persistent video connection metrics."
     )]
     async fn camera_status(&self) -> CallToolResult {
-        plain(self.camera.status().await)
+        let camera = match self.connected_camera().await {
+            Ok(camera) => camera,
+            Err(error) => return failure(error),
+        };
+        plain(camera.status().await)
     }
     #[tool(
         description = "Raw pan/tilt velocity -1..1, seconds >0 and <=2. Positive right/up. Stops automatically. Prefer camera_focus to frame an image point or camera_scan to search several views."
     )]
     async fn camera_move(&self, Parameters(args): Parameters<MoveArgs>) -> CallToolResult {
-        let _lock = self.camera.motion.lock().await;
-        plain(
-            self.camera
-                .movement(args.pan, args.tilt, args.seconds)
-                .await,
-        )
+        let camera = match self.connected_camera().await {
+            Ok(camera) => camera,
+            Err(error) => return failure(error),
+        };
+        let _lock = camera.motion.lock().await;
+        plain(camera.movement(args.pan, args.tilt, args.seconds).await)
     }
     #[tool(
         description = "Immediately stop movement, including an ongoing scan or focus. Bypasses the motion lock."
     )]
     async fn camera_stop(&self) -> CallToolResult {
-        plain(self.camera.stop().await.map(|_| json!({"stopped":true})))
+        let camera = match self.connected_camera().await {
+            Ok(camera) => camera,
+            Err(error) => return failure(error),
+        };
+        plain(camera.stop().await.map(|_| json!({"stopped":true})))
     }
     #[tool(
         description = "Remember the current camera position under a short name such as printer, clock or microphone. Saved locally across sessions. Frame the object first; later camera_look(name) returns directly without scanning."
     )]
     async fn camera_remember(&self, Parameters(args): Parameters<NameArgs>) -> CallToolResult {
-        let _lock = self.camera.motion.lock().await;
-        plain(self.camera.remember(&args.name).await)
+        let camera = match self.connected_camera().await {
+            Ok(camera) => camera,
+            Err(error) => return failure(error),
+        };
+        let _lock = camera.motion.lock().await;
+        plain(camera.remember(&args.name).await)
     }
     #[tool(
         description = "Look directly at a previously remembered named view and return a fresh image, without searching. Use camera_status to list names and camera_remember to save the current view."
     )]
     async fn camera_look(&self, Parameters(args): Parameters<NameArgs>) -> CallToolResult {
         let started = Instant::now();
-        let _lock = self.camera.motion.lock().await;
-        picture(self.camera.look(&args.name).await, started)
+        let camera = match self.connected_camera().await {
+            Ok(camera) => camera,
+            Err(error) => return failure(error),
+        };
+        let _lock = camera.motion.lock().await;
+        picture(camera.look(&args.name).await, started)
     }
 }
 #[tool_handler]
@@ -182,5 +222,28 @@ impl ServerHandler for CameraServer {
     fn get_info(&self) -> ServerConfig {
         ServerConfig::new(ServerCapabilities::builder().enable_tools().build()).with_instructions(
             "Use camera_see for a quick current view; camera_scan batches a search into one call; camera_focus frames an object from any returned image. Save stationary objects with camera_remember and use camera_look to avoid future searches. Coordinates are normalized from image top-left. Frames come from a persistent, latest-only native JPEG buffer; never infer success if focus_status reports otherwise.")
+    }
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+    use rmcp::ServiceExt;
+    #[tokio::test]
+    async fn mcp_discovery_does_not_open_a_camera_connection() {
+        let server = CameraServer::new(PathBuf::from("/definitely-not-a-camera-config"));
+        let slot = server.camera.clone();
+        let (server_io, client_io) = tokio::io::duplex(64 * 1024);
+        let serving = tokio::spawn(async move { server.serve(server_io).await.unwrap() });
+        let client = ().serve(client_io).await.unwrap();
+        let server = serving.await.unwrap();
+        let tools = client.list_tools(None).await.unwrap();
+        assert_eq!(tools.tools.len(), 8);
+        assert!(
+            slot.get().is_none(),
+            "Schema discovery must work without camera credentials or network"
+        );
+        client.cancel().await.unwrap();
+        server.waiting().await.unwrap();
     }
 }

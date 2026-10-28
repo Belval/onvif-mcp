@@ -27,13 +27,13 @@ async fn run() -> Result<()> {
     if std::env::args().any(|a| a == "--verify-live" || a == "--verify-motion") {
         return verify::run(std::env::args().any(|a| a == "--verify-motion")).await;
     }
-    let started = Instant::now();
-    let camera = camera::Camera::connect(&root).await?;
-    if std::env::args().any(|a| a == "--calibrate") {
-        eprintln!("{}", camera.recalibrate(&root).await?);
-        return Ok(());
-    }
-    if std::env::args().any(|a| a == "--probe") {
+    if std::env::args().any(|a| a == "--calibrate" || a == "--probe") {
+        let started = Instant::now();
+        let camera = camera::Camera::connect(&root).await?;
+        if std::env::args().any(|a| a == "--calibrate") {
+            eprintln!("{}", camera.recalibrate(&root).await?);
+            return Ok(());
+        }
         let (metadata, frame) = camera.observe(false, serde_json::json!({}), false).await?;
         eprintln!(
             "First picture: {:.3}s; {}",
@@ -43,25 +43,26 @@ async fn run() -> Result<()> {
         std::fs::write("/tmp/rust-camera-preview.jpg", frame.jpeg.as_slice())?;
         for _ in 0..10 {
             let start = Instant::now();
-            let (meta, _) = camera.observe(false, serde_json::json!({}), false).await?;
+            let (metadata, _) = camera.observe(false, serde_json::json!({}), false).await?;
             eprintln!(
                 "Observe: {:.3}ms, frame age {}ms",
                 start.elapsed().as_secs_f64() * 1000.,
-                meta["frame_age_ms"]
+                metadata["frame_age_ms"]
             );
             tokio::time::sleep(std::time::Duration::from_millis(100)).await;
         }
         return Ok(());
     }
-    let server = server::CameraServer {
-        camera: camera.clone(),
-    };
+    let server = server::CameraServer::new(root);
+    let camera_slot = server.camera.clone();
     let service = server.serve(rmcp::transport::stdio_pipes()).await?;
     let result = tokio::select! {
         result=service.waiting()=>result.map(|_|()),
         _=tokio::signal::ctrl_c()=>Ok(()),
     };
-    let _ = camera.stop().await;
+    if let Some(camera) = camera_slot.get() {
+        let _ = camera.stop().await;
+    }
     result?;
     Ok(())
 }

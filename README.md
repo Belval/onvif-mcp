@@ -17,7 +17,8 @@ chmod 600 .env
 
 Fill in `.env` with the **local Camera Account** configured in the Tapo app under
 Advanced Settings → Camera Account. This may differ from the Tapo cloud login.
-Credentials are excluded from Git. Environment variables override `.env`.
+Credentials are excluded from Git. If `cargo` is not yet on PATH on this machine,
+source `~/.cargo/env` before building. Environment variables override `.env`.
 The default ONVIF endpoint is `192.168.0.62:2020`; RTSP endpoints are discovered.
 The executable loads `.env`, `calibration.json` and local `views.json` from this
 checkout, regardless of its working directory. Set `CAMERA_CONFIG_DIR` to relocate
@@ -59,6 +60,10 @@ refresh for loaded threads; no full app restart is needed.
 - `camera_move(pan,tilt,seconds)`: raw velocities in -1..1, positive right/up,
   duration greater than zero and at most two seconds. Always attempts Stop.
 - `camera_stop`: cancel active movement immediately, bypassing the motion lock.
+
+MCP startup and tool discovery do not open the camera. A connection is created
+on the first camera call, then shared by that server for subsequent calls. This
+avoids unused streams in other projects and allows schema discovery while offline.
 
 The buffer holds **only the newest frame**. New frames overwrite old ones;
 requests share frame bytes using `Arc`. A bounded history of up to 12 returned
@@ -115,3 +120,21 @@ Rust migration. Comparisons must distinguish network/stream startup, buffered
 frame access, complete MCP calls and physical motor travel. Fast tool calls do
 not eliminate the assistant's time to inspect images and choose the next action;
 batched scans and remembered views remove many of those round trips.
+
+## Measured performance
+
+Live measurements on this LAN, with the release binary and native CPU flags:
+
+| Operation | Measurement |
+| --- | --- |
+| First valid MCP preview, including process startup | 0.12–0.16 s |
+| Warm MCP preview, 20-call sample | about 1.5–1.6 ms median, 1.8–2.2 ms p95 |
+| Precise centering, two visual corrections | 2.2–2.8 s |
+| Preview-only three-view scan, 0.10 step | 1.97 s |
+| Wider three-view scan, 0.15 step, full verification run | 7–11 s |
+
+These are request timings, not sensor exposure latency or assistant thinking time.
+Motor angle, network load and camera scheduling affect movement substantially.
+The previous Python implementation reopened the stream for each snapshot and
+measured about 2.5 seconds per stationary capture. The architectural change,
+not simply compiling the same loop in Rust, removes most of that cost.
