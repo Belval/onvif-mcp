@@ -34,11 +34,15 @@ struct State {
     latest: String,
     barrier: Option<Instant>,
     last_move: Value,
+    last_motion_pose: Option<[f64; 2]>,
+    last_direction: [i8; 2],
 }
 #[derive(Deserialize)]
 struct Calibration {
     model: Option<String>,
     image_shift_per_pose_unit: [[f64; 2]; 2],
+    #[serde(default)]
+    backlash_pose_units: [f64; 2],
 }
 pub type ObservationResult = (Value, Arc<Frame>);
 
@@ -54,6 +58,7 @@ pub struct Camera {
     pub motion: Mutex<()>,
     cancelled: AtomicBool,
     calibration: Matrix2<f64>,
+    backlash: [f64; 2],
     views: Mutex<HashMap<String, [f64; 2]>>,
     views_path: std::path::PathBuf,
 }
@@ -114,6 +119,30 @@ impl Drop for StopGuard {
             });
         }
     }
+}
+fn backlash_target(
+    pose: [f64; 2],
+    target: [f64; 2],
+    directions: [i8; 2],
+    backlash: [f64; 2],
+) -> ([f64; 2], [f64; 2]) {
+    let mut adjusted = target;
+    for axis in 0..2 {
+        let delta = target[axis] - pose[axis];
+        if delta.abs() > 0.002 {
+            let sign = if delta > 0. { 1 } else { -1 };
+            let fraction = if directions[axis] == 0 {
+                0.5
+            } else if directions[axis] != sign {
+                1.
+            } else {
+                0.
+            };
+            adjusted[axis] += delta.signum() * backlash[axis] * fraction;
+        }
+    }
+    let adjusted = clip(adjusted);
+    (adjusted, [adjusted[0] - target[0], adjusted[1] - target[1]])
 }
 fn max_delta(a: [f64; 2], b: [f64; 2]) -> f64 {
     (a[0] - b[0]).abs().max((a[1] - b[1]).abs())
@@ -227,6 +256,13 @@ impl Camera {
                 calibration.model.as_ref().is_none_or(|m| m == &onvif.model),
                 "Calibration belongs to a different camera model"
             );
+            let backlash = calibration.backlash_pose_units;
+            ensure!(
+                backlash
+                    .iter()
+                    .all(|b| b.is_finite() && (0.0..=0.03).contains(b)),
+                "Invalid backlash calibration"
+            );
             let data = calibration.image_shift_per_pose_unit;
             let calibration = Matrix2::new(data[0][0], data[0][1], data[1][0], data[1][1]);
             ensure!(
@@ -271,6 +307,7 @@ impl Camera {
                 motion: Mutex::new(()),
                 cancelled: AtomicBool::new(false),
                 calibration,
+                backlash,
                 views: Mutex::new(views),
                 views_path,
             }))
@@ -377,9 +414,10 @@ impl Camera {
             // waiting for the active motion lease. This preserves immediate Stop
             // and prevents later moves from passing outstanding stop requests.
             let (_lease, result) = stop_barrier(self.command_gate.clone(), self.onvif.stop()).await;
-            crate::metrics::timed("lock.state_wait", self.state.lock())
-                .await
-                .barrier = Some(Instant::now() + Duration::from_millis(100));
+            let mut state = crate::metrics::timed("lock.state_wait", self.state.lock()).await;
+            state.barrier = Some(Instant::now() + Duration::from_millis(100));
+            state.last_motion_pose = None;
+            state.last_direction = [0, 0];
             result
         })
         .await
@@ -426,6 +464,7 @@ impl Camera {
             let poll_delay=delay("CAMERA_POLL_MS",60);
             let confirmations=parameter("CAMERA_STABLE_SAMPLES",2,1,3);
             let target=clip(target);
+            let before_pose=self.onvif.cached_position().map(|(p,_)|p);
             let mut guard=self.stop_guard().await?;
             let started=Instant::now();
             crate::metrics::event("motion.target",json!({"target":target,"settle_ms":settle.as_secs_f64()*1000.,"poll_ms":poll_delay.as_secs_f64()*1000.,"confirmations":confirmations}));
@@ -453,7 +492,12 @@ impl Camera {
             let stopped=guard.finish().await;
             let mut state=crate::metrics::timed("lock.state_wait",self.state.lock()).await;
             state.barrier=Some(Instant::now()+if movement.is_err(){Duration::from_millis(100)}else{Duration::ZERO});
+            if movement.is_err() {state.last_motion_pose=None;state.last_direction=[0,0];}
             let (pose,commanded,arrived,polls)=movement?;
+            if let Some(before)=before_pose {
+                for axis in 0..2 {if (pose[axis]-before[axis]).abs()>0.002 {state.last_direction[axis]=if pose[axis]>before[axis] {1}else{-1};}}
+            } else {state.last_direction=[0,0];}
+            state.last_motion_pose=Some(pose);
             stopped?;
             state.last_move=json!({"command_ms":commanded.duration_since(started).as_secs_f64()*1000.,"arrival_ms":arrived.duration_since(commanded).as_secs_f64()*1000.,"settle_stop_ms":arrived.elapsed().as_secs_f64()*1000.,"polls":polls});
             Ok(pose)
@@ -475,9 +519,10 @@ impl Camera {
             }
             .await;
             let stopped = guard.finish().await;
-            crate::metrics::timed("lock.state_wait", self.state.lock())
-                .await
-                .barrier = Some(Instant::now() + Duration::from_millis(100));
+            let mut state = crate::metrics::timed("lock.state_wait", self.state.lock()).await;
+            state.barrier = Some(Instant::now() + Duration::from_millis(100));
+            state.last_motion_pose = None;
+            state.last_direction = [0, 0];
             movement?;
             stopped?;
             Ok(json!({"stopped":true}))
@@ -491,6 +536,31 @@ impl Camera {
                 .map_err(Into::into)
         })
         .await
+    }
+    async fn compensated_target(
+        &self,
+        pose: [f64; 2],
+        target: [f64; 2],
+        precise: bool,
+    ) -> ([f64; 2], [f64; 2]) {
+        if !precise || !std::env::var("CAMERA_BACKLASH").is_ok_and(|s| s == "1") {
+            return (target, [0., 0.]);
+        }
+        let state = crate::metrics::timed("lock.state_wait", self.state.lock()).await;
+        let directions = if state
+            .last_motion_pose
+            .is_some_and(|p| max_delta(p, pose) < 0.002)
+        {
+            state.last_direction
+        } else {
+            [0, 0]
+        };
+        let (adjusted, compensation) = backlash_target(pose, target, directions, self.backlash);
+        crate::metrics::event(
+            "focus.backlash",
+            json!({"directions":directions,"calibrated_gap":self.backlash,"compensation":compensation}),
+        );
+        (adjusted, compensation)
     }
     pub async fn focus(
         &self,
@@ -582,6 +652,7 @@ impl Camera {
             }
             self.check_cancelled()?;
             let target = aim_target(matrix, pose, point)?;
+            let (target,compensation)=self.compensated_target(pose,target,precise).await;
             if max_delta(target, pose) < 0.002 {
                 status = "mechanical_limit";
                 break;
@@ -594,10 +665,10 @@ impl Camera {
                 status = "tracking_lost";
                 break;
             };
-            let movement = Vector2::new(actual[0] - pose[0], actual[1] - pose[1]);
+            let movement = Vector2::new(actual[0] - pose[0]-compensation[0], actual[1] - pose[1]-compensation[1]);
             let shift = Vector2::new(tracked[0] - point[0], tracked[1] - point[1]);
             corrections
-                .push(json!({"before":point,"after":tracked,"pose_delta":movement.as_slice(),"move_timing":crate::metrics::timed("lock.state_wait",self.state.lock()).await.last_move.clone()}));
+                .push(json!({"before":point,"after":tracked,"pose_delta":[actual[0]-pose[0],actual[1]-pose[1]],"backlash_compensation":compensation,"move_timing":crate::metrics::timed("lock.state_wait",self.state.lock()).await.last_move.clone()}));
             if movement.norm_squared() > 1e-6 {
                 let candidate = matrix
                     + (shift - matrix * movement) * movement.transpose() / movement.norm_squared();
@@ -697,47 +768,84 @@ impl Camera {
 }
 
 impl Camera {
-    pub async fn recalibrate(&self, root: &Path) -> Result<Value> {
-        crate::metrics::result("camera.calibrate", async {
-        let _lock = crate::metrics::timed("lock.motion_wait",self.motion.lock()).await;
-        self.begin_motion().await;
-        let origin = self.onvif.position().await?;
-        let baseline = self.preview.frame(None).await?;
-        let measured=async {
-            let mut matrix=Matrix2::zeros();let mut counts=vec![];
-            for (axis,amount) in [(0,0.04),(1,0.12)] {
-                let mut target=origin;target[axis]+=if origin[axis]+amount<0.95 {amount}else{-amount};
-                let actual=self.goto(target).await?;
-                let after=self.preview.frame(crate::metrics::timed("lock.state_wait",self.state.lock()).await.barrier).await?;
-                let mut shifts=vec![];
-                for x in [0.3,0.5,0.7] {for y in [0.3,0.5,0.7] {
-                    if let Some(point)=Self::track(baseline.clone(),after.clone(),[x,y]).await? {
-                        shifts.push([(point[0]-x)/(actual[axis]-origin[axis]),(point[1]-y)/(actual[axis]-origin[axis])]);
-                    }
-                }}
-                ensure!(shifts.len()>=4,"Not enough stationary texture for calibration; aim at the desk");
-                counts.push(shifts.len());
-                for row in 0..2 {let mut values:Vec<_>=shifts.iter().map(|v|v[row]).collect();values.sort_by(f64::total_cmp);matrix[(row,axis)]=values[values.len()/2];}
-                self.goto(origin).await?;
+    async fn calibration_shifts(before: Arc<Frame>, after: Arc<Frame>) -> Result<Vec<[f64; 2]>> {
+        let mut shifts = vec![];
+        for x in [0.3, 0.5, 0.7] {
+            for y in [0.3, 0.5, 0.7] {
+                if let Some(point) = Self::track(before.clone(), after.clone(), [x, y]).await? {
+                    shifts.push([point[0] - x, point[1] - y]);
+                }
             }
-            ensure!(matrix.iter().all(|v|v.is_finite()) && matrix.determinant().abs()>0.01,"Unreliable calibration; previous file retained");
-            Ok::<_,anyhow::Error>(json!({"model":self.onvif.model,"firmware":self.onvif.firmware,
-                "image_shift_per_pose_unit":[[matrix[(0,0)],matrix[(0,1)]],[matrix[(1,0)],matrix[(1,1)]]],
-                "method":format!("Rust FAST/BRIEF local affine RANSAC finite differences on {}",self.preview_encoding),
-                "samples_per_axis":counts,"coordinate_system":"image normalized from top-left; PTZ position as reported by ONVIF"}))
-        }.await;
-        let restored = self.goto(origin).await;
-        restored?;
-        let value = measured?;
-        let path = root.join("calibration.json");
-        let temp = root.join("calibration.tmp");
-        crate::metrics::sync_result("config.calibration_persist", || -> Result<()> {
-            std::fs::write(&temp, serde_json::to_vec_pretty(&value)?)?;
-            std::fs::rename(temp, path)?; Ok(())
-        })?;
-        Ok(value)
-
-}).await
+        }
+        Ok(shifts)
+    }
+    pub async fn recalibrate(&self, root: &Path) -> Result<Value> {
+        crate::metrics::result("camera.calibrate",async {
+            let _lock=crate::metrics::timed("lock.motion_wait",self.motion.lock()).await;
+            self.begin_motion().await;
+            let origin=self.onvif.position().await?;
+            let anchor=[origin[0].clamp(-0.8,0.8),origin[1].clamp(-0.7,0.7)];
+            let settle=Duration::from_millis(400);
+            let measured=async {
+                let mut matrix=Matrix2::zeros();
+                let mut counts=vec![];let mut samples=vec![];let mut return_offsets=vec![];let mut image_gaps=[0.;2];
+                for (axis,amount) in [(0,0.04),(1,0.08)] {
+                    let mut derivatives=vec![];
+                    let mut first_origin:Option<Arc<Frame>>=None;
+                    for direction in [1.,-1.] {
+                        // Engage the gears in the measurement direction before BOTH
+                        // baseline and sample; recapture baseline for every excursion.
+                        let mut approach=anchor;approach[axis]-=direction*amount;
+                        self.goto_with_settle(approach,settle).await?;
+                        let before_pose=self.goto_with_settle(anchor,settle).await?;
+                        let baseline=self.preview.frame(Some(Instant::now())).await?;
+                        if let Some(first)=&first_origin {
+                            let offsets=Self::calibration_shifts(first.clone(),baseline.clone()).await?;
+                            if offsets.len()>=4 {let mut values:Vec<_>=offsets.iter().map(|v|v[axis]).collect();values.sort_by(f64::total_cmp);image_gaps[axis]=values[values.len()/2].abs();}
+                            return_offsets.push(json!({"axis":axis,"samples":offsets}));
+                        } else {first_origin=Some(baseline.clone());}
+                        let mut target=anchor;target[axis]+=direction*amount;
+                        let actual=self.goto_with_settle(target,settle).await?;
+                        let after=self.preview.frame(Some(Instant::now())).await?;
+                        let delta=actual[axis]-before_pose[axis];
+                        ensure!(delta.abs()>0.005,"Calibration excursion too small");
+                        let shifts=Self::calibration_shifts(baseline.clone(),after.clone()).await?;
+                        ensure!(shifts.len()>=4,"Not enough stationary texture for calibration; choose a textured view");
+                        let mut derivative=[0.;2];
+                        for row in 0..2 {
+                            let mut values:Vec<_>=shifts.iter().map(|v|v[row]/delta).collect();
+                            values.sort_by(f64::total_cmp);derivative[row]=values[values.len()/2];
+                        }
+                        let before_path=format!("/tmp/rust-calibration-{axis}-{direction}-before.jpg");
+                        let after_path=format!("/tmp/rust-calibration-{axis}-{direction}-after.jpg");
+                        std::fs::write(&before_path,baseline.jpeg.as_slice())?;
+                        std::fs::write(&after_path,after.jpeg.as_slice())?;
+                        samples.push(json!({"axis":axis,"direction":direction,"before_pose":before_pose,"after_pose":actual,"delta":delta,"matched_points":shifts.len(),"derivative":derivative,"before_image":before_path,"after_image":after_path}));
+                        derivatives.push((derivative,shifts.len()));
+                    }
+                    counts.push(derivatives.iter().map(|(_,n)|n).sum::<usize>());
+                    let a=derivatives[0].0[axis];let b=derivatives[1].0[axis];
+                    ensure!(a*b>0. && (a-b).abs()/a.abs().max(b.abs())<0.35,"Directional calibration disagrees; previous file retained");
+                    for row in 0..2 {matrix[(row,axis)]=(derivatives[0].0[row]+derivatives[1].0[row])/2.;}
+                }
+                ensure!(matrix.iter().all(|v|v.is_finite()) && matrix.determinant().abs()>0.01,"Unreliable calibration; previous file retained");
+                Ok::<_,anyhow::Error>(json!({"model":self.onvif.model,"firmware":self.onvif.firmware,
+                    "image_shift_per_pose_unit":[[matrix[(0,0)],matrix[(0,1)]],[matrix[(1,0)],matrix[(1,1)]]],
+                    "method":format!("Symmetric Rust FAST/BRIEF affine finite differences; matched approach direction and fresh baselines on {}",self.preview_encoding),
+                    "backlash_pose_units":[(image_gaps[0]/matrix[(0,0)].abs()).min(0.03),(image_gaps[1]/matrix[(1,1)].abs()).min(0.03)],
+                    "samples_per_axis":counts,"directional_samples":samples,"origin_return_offsets":return_offsets,
+                    "coordinate_system":"image normalized from top-left; PTZ position as reported by ONVIF"}))
+            }.await;
+            // An explicit Stop keeps cancellation authoritative; otherwise restore.
+            let restored=self.goto_with_settle(origin,settle).await;
+            restored?;let value=measured?;
+            crate::metrics::sync_result("config.calibration_persist",||->Result<()> {
+                let temp=root.join("calibration.tmp");
+                std::fs::write(&temp,serde_json::to_vec_pretty(&value)?)?;
+                std::fs::rename(temp,root.join("calibration.json"))?;Ok(())
+            })?;
+            Ok(value)
+        }).await
     }
 }
 
@@ -810,6 +918,20 @@ mod tests {
         let _ = tokio::time::timeout(Duration::from_secs(1), gate.lock())
             .await
             .unwrap();
+    }
+    #[test]
+    fn backlash_compensation_respects_direction_and_hard_limits() {
+        let p = [0., 0.];
+        let t = [0.1, 0.];
+        let b = [0.008, 0.];
+        assert_eq!(backlash_target(p, t, [1, 0], b).0, t);
+        assert!((backlash_target(p, t, [-1, 0], b).0[0] - 0.108).abs() < 1e-9);
+        assert!((backlash_target(p, t, [0, 0], b).0[0] - 0.104).abs() < 1e-9);
+        assert_eq!(
+            backlash_target([0.99, 0.], [1., 0.], [-1, 0], b).0,
+            [1., 0.]
+        );
+        assert_eq!(backlash_target(p, p, [-1, 0], b).0, p);
     }
     #[test]
     fn point_geometry_and_limits() {

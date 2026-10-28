@@ -1,20 +1,186 @@
 {
   "coordinate_system": "image normalized from top-left; PTZ position as reported by ONVIF",
+  "directional_samples": [
+    {
+      "after_image": "/tmp/rust-calibration-0-1-after.jpg",
+      "after_pose": [
+        -0.011851,
+        -0.699992
+      ],
+      "axis": 0,
+      "before_image": "/tmp/rust-calibration-0-1-before.jpg",
+      "before_pose": [
+        -0.051854,
+        -0.699992
+      ],
+      "delta": 0.040003,
+      "derivative": [
+        2.272003041551456,
+        0.03993713816704158
+      ],
+      "direction": 1.0,
+      "matched_points": 9
+    },
+    {
+      "after_image": "/tmp/rust-calibration-0--1-after.jpg",
+      "after_pose": [
+        -0.091857,
+        -0.699992
+      ],
+      "axis": 0,
+      "before_image": "/tmp/rust-calibration-0--1-before.jpg",
+      "before_pose": [
+        -0.051854,
+        -0.699992
+      ],
+      "delta": -0.040003,
+      "derivative": [
+        2.2603724198277626,
+        -0.024086975938459695
+      ],
+      "direction": -1.0,
+      "matched_points": 8
+    },
+    {
+      "after_image": "/tmp/rust-calibration-1-1-after.jpg",
+      "after_pose": [
+        -0.051854,
+        -0.619987
+      ],
+      "axis": 1,
+      "before_image": "/tmp/rust-calibration-1-1-before.jpg",
+      "before_pose": [
+        -0.051854,
+        -0.699992
+      ],
+      "delta": 0.08000499999999999,
+      "derivative": [
+        0.00037920158267026313,
+        0.8285156953432458
+      ],
+      "direction": 1.0,
+      "matched_points": 8
+    },
+    {
+      "after_image": "/tmp/rust-calibration-1--1-after.jpg",
+      "after_pose": [
+        -0.051854,
+        -0.779997
+      ],
+      "axis": 1,
+      "before_image": "/tmp/rust-calibration-1--1-before.jpg",
+      "before_pose": [
+        -0.051854,
+        -0.699992
+      ],
+      "delta": -0.0800050000000001,
+      "derivative": [
+        -0.0002151136538706767,
+        0.8013339607448602
+      ],
+      "direction": -1.0,
+      "matched_points": 8
+    }
+  ],
   "firmware": "1.1.1 Build 241224 Rel.56667n",
   "image_shift_per_pose_unit": [
     [
-      2.086055736490214,
-      0.19068507047915345
+      2.266187730689609,
+      8.204396439979322e-05
     ],
     [
-      -0.026246826720379625,
-      0.8048649243510344
+      0.007925081114290942,
+      0.814924828044053
     ]
   ],
-  "method": "Rust FAST/BRIEF local affine RANSAC finite differences on H264 preview decoded to640px JPEG",
+  "method": "Symmetric Rust FAST/BRIEF affine finite differences; matched approach direction and fresh baselines on H264 decode to 640px JPEG",
   "model": "Tapo C210",
+  "origin_return_offsets": [
+    {
+      "axis": 0,
+      "samples": [
+        [
+          0.017756026970276728,
+          -0.001129895835102368
+        ],
+        [
+          0.017930381846059162,
+          -0.0018951475932584838
+        ],
+        [
+          0.01767579359462873,
+          -0.00229828063973625
+        ],
+        [
+          0.018491346680305387,
+          0.000215102806694345
+        ],
+        [
+          0.019188414047754065,
+          0.00010954625225245707
+        ],
+        [
+          0.017923930909212626,
+          0.0015526392950316326
+        ],
+        [
+          0.01784759537233427,
+          0.0021273961860577284
+        ],
+        [
+          0.019120688889092907,
+          -0.0039378525679808485
+        ]
+      ]
+    },
+    {
+      "axis": 1,
+      "samples": [
+        [
+          -2.5255249517297518e-05,
+          0.00036273021615079726
+        ],
+        [
+          -9.837319715799708e-05,
+          0.0004291999297508786
+        ],
+        [
+          -1.7347934404610132e-05,
+          0.0006467836865465815
+        ],
+        [
+          -6.537524704147701e-05,
+          0.0002818902051785477
+        ],
+        [
+          -6.886814705725497e-05,
+          0.0005426676495101646
+        ],
+        [
+          0.00021591009342125655,
+          0.0009532891299232071
+        ],
+        [
+          -0.00010418982317572656,
+          0.0005829356157883714
+        ],
+        [
+          -0.00017537925770660934,
+          0.0005323558792582617
+        ],
+        [
+          -0.0025140505852266903,
+          0.0014061627808836796
+        ]
+      ]
+    }
+  ],
   "samples_per_axis": [
-    9,
-    9
+    17,
+    16
+  ],
+  "backlash_pose_units": [
+    0.007910711074311834,
+    0.0006659112973802158
   ]
 }
