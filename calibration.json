@@ -1,0 +1,5 @@
+{
+  "model": "Tapo C210",
+  "image_shift_per_pose_unit": [[1.68, 0.0], [0.0, 0.87]],
+  "method": "Initial empirical finite differences; run scripts/calibrate.py to refresh"
+}
