@@ -65,6 +65,42 @@
       "normalized_center_error": 0.06,
       "centering": "pass",
       "judged_utc": "2026-10-28T02:56:45Z"
+    },
+    {
+      "challenge": "SPY-R01",
+      "attempt": 1,
+      "image": "/tmp/camera-search-1793156613651073125-1.jpg",
+      "identity": "pass",
+      "sharpness": "fail",
+      "center": [
+        0.473,
+        0.592
+      ],
+      "normalized_center_error": 0.096,
+      "centering": "fail",
+      "judged_utc": "2026-10-28T03:03:43Z",
+      "tool_times_ms": {
+        "scan4": 6614.8,
+        "rough_focus": 740.5
+      },
+      "runtime": "3847e1b",
+      "notes": "material motion smear on case internals/fans and keyboard; settling/freshness insufficient for successful optical frame"
+    },
+    {
+      "challenge": "SPY-R01",
+      "attempt": 2,
+      "image": "/tmp/camera-search-1793156652884078987-1.jpg",
+      "identity": "pass",
+      "sharpness": "pass",
+      "center": [
+        0.47,
+        0.52
+      ],
+      "normalized_center_error": 0.036,
+      "centering": "pass",
+      "judged_utc": "2026-10-28T03:05:43Z",
+      "runtime": "3847e1b",
+      "notes": "settled refresh; delay includes coordination, cannot infer minimum settling time"
     }
   ]
 }

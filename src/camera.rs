@@ -45,6 +45,7 @@ pub type ObservationResult = (Value, Arc<Frame>);
 pub struct Camera {
     pub onvif: Arc<Onvif>,
     pub preview: Video,
+    preview_encoding: &'static str,
     pose_poller: tokio::task::JoinHandle<()>,
     detail_token: String,
     detail_dimensions: (u32, u32),
@@ -112,19 +113,39 @@ impl Camera {
     pub async fn connect(root: &Path) -> Result<Arc<Self>> {
         crate::metrics::result("camera.initialize", async {
             let onvif = Arc::new(Onvif::connect(Config::load()?).await?);
+            let h264_preview = std::env::var("CAMERA_PREVIEW").is_ok_and(|s| s == "h264");
             let profile = onvif
                 .profiles
                 .iter()
-                .find(|p| p.encoding == "JPEG" && p.width == 640)
-                .ok_or_else(|| {
-                    anyhow::anyhow!("This tuned server requires the C210 native 640px JPEG profile")
-                })?;
-            let preview = Video::start(
-                onvif.stream_url(&profile.token).await?,
-                onvif.config.clone(),
-                true,
-                (profile.width, profile.height),
-            );
+                .filter(|p| {
+                    if h264_preview {
+                        p.encoding == "H264" && p.width >= 640
+                    } else {
+                        p.encoding == "JPEG" && p.width == 640
+                    }
+                })
+                .min_by_key(|p| p.width)
+                .ok_or_else(|| anyhow::anyhow!("Requested preview profile unavailable"))?;
+            let preview_url = onvif.stream_url(&profile.token).await?;
+            let preview = if h264_preview {
+                Video::h264_preview(
+                    preview_url,
+                    onvif.config.clone(),
+                    (profile.width, profile.height),
+                )
+            } else {
+                Video::start(
+                    preview_url,
+                    onvif.config.clone(),
+                    true,
+                    (profile.width, profile.height),
+                )
+            };
+            let preview_encoding = if h264_preview {
+                "H264 decode to 640px JPEG"
+            } else {
+                "native JPEG passthrough"
+            };
             let detail = onvif
                 .profiles
                 .iter()
@@ -175,6 +196,7 @@ impl Camera {
             Ok(Arc::new(Self {
                 onvif,
                 preview,
+                preview_encoding,
                 pose_poller,
                 detail_token,
                 detail_dimensions,
@@ -197,7 +219,7 @@ impl Camera {
         Ok(
             json!({"manufacturer":self.onvif.manufacturer,"model":self.onvif.model,"firmware":self.onvif.firmware,
             "profiles":self.onvif.profiles,"ptz":{"Position":{"PanTilt":{"x":pose[0],"y":pose[1]}}},
-            "video":{"transport":"persistent RTSP/TCP","encoding":"native JPEG passthrough","buffered_frames":1,
+            "video":{"transport":"persistent RTSP/TCP","encoding":self.preview_encoding,"buffered_frames":1,
                 "connected":self.preview.metrics.connected.load(Ordering::Relaxed),"frames_received":self.preview.metrics.frames.load(Ordering::Relaxed),
                 "reconnects":self.preview.metrics.reconnects.load(Ordering::Relaxed),"frame_age_ms":self.preview.age_ms()},
             "remembered_views":crate::metrics::timed("lock.views_wait",self.views.lock()).await.keys().cloned().collect::<Vec<_>>()}),

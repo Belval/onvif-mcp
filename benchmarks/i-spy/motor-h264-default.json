@@ -1,0 +1,3095 @@
+{
+  "completed": true,
+  "description": "15ms polling; first in-range pose; absolute/relative Stop after 700ms optical reference; continuous Stop at crossing",
+  "failure": null,
+  "metrics": {
+    "clock": "host_monotonic",
+    "counters": {
+      "video.jpeg_bytes": 23994928,
+      "video.published_frames": 633
+    },
+    "durations": {
+      "config.endpoint_validation": {
+        "cancelled": 0,
+        "count": 4,
+        "errors": 0,
+        "max_ms": 0.019151,
+        "mean_ms": 0.0079465,
+        "min_ms": 0.0014,
+        "p50_ms": 0.00659,
+        "p95_ms": 0.019151,
+        "p99_ms": 0.019151,
+        "percentile_window": 4,
+        "total_ms": 0.031786
+      },
+      "config.environment": {
+        "cancelled": 0,
+        "count": 1,
+        "errors": 0,
+        "max_ms": 0.001264,
+        "mean_ms": 0.001264,
+        "min_ms": 0.001264,
+        "p50_ms": 0.001264,
+        "p95_ms": 0.001264,
+        "p99_ms": 0.001264,
+        "percentile_window": 1,
+        "total_ms": 0.001264
+      },
+      "lock.pose_cache_write": {
+        "cancelled": 0,
+        "count": 236,
+        "errors": 0,
+        "max_ms": 0.000982,
+        "mean_ms": 0.0003323389830508475,
+        "min_ms": 0.000122,
+        "p50_ms": 0.000273,
+        "p95_ms": 0.000688,
+        "p99_ms": 0.000947,
+        "percentile_window": 236,
+        "total_ms": 0.078432
+      },
+      "onvif.AbsoluteMove": {
+        "cancelled": 0,
+        "count": 14,
+        "errors": 0,
+        "max_ms": 32.754717,
+        "mean_ms": 14.295273357142857,
+        "min_ms": 6.616705,
+        "p50_ms": 11.517989,
+        "p95_ms": 32.754717,
+        "p99_ms": 32.754717,
+        "percentile_window": 14,
+        "total_ms": 200.133827
+      },
+      "onvif.ContinuousMove": {
+        "cancelled": 0,
+        "count": 1,
+        "errors": 0,
+        "max_ms": 9.651429,
+        "mean_ms": 9.651429,
+        "min_ms": 9.651429,
+        "p50_ms": 9.651429,
+        "p95_ms": 9.651429,
+        "p99_ms": 9.651429,
+        "percentile_window": 1,
+        "total_ms": 9.651429
+      },
+      "onvif.GetCapabilities": {
+        "cancelled": 0,
+        "count": 1,
+        "errors": 0,
+        "max_ms": 6.077431,
+        "mean_ms": 6.077431,
+        "min_ms": 6.077431,
+        "p50_ms": 6.077431,
+        "p95_ms": 6.077431,
+        "p99_ms": 6.077431,
+        "percentile_window": 1,
+        "total_ms": 6.077431
+      },
+      "onvif.GetDeviceInformation": {
+        "cancelled": 0,
+        "count": 1,
+        "errors": 0,
+        "max_ms": 5.321134,
+        "mean_ms": 5.321134,
+        "min_ms": 5.321134,
+        "p50_ms": 5.321134,
+        "p95_ms": 5.321134,
+        "p99_ms": 5.321134,
+        "percentile_window": 1,
+        "total_ms": 5.321134
+      },
+      "onvif.GetProfiles": {
+        "cancelled": 0,
+        "count": 1,
+        "errors": 0,
+        "max_ms": 87.622149,
+        "mean_ms": 87.622149,
+        "min_ms": 87.622149,
+        "p50_ms": 87.622149,
+        "p95_ms": 87.622149,
+        "p99_ms": 87.622149,
+        "percentile_window": 1,
+        "total_ms": 87.622149
+      },
+      "onvif.GetStatus": {
+        "cancelled": 0,
+        "count": 236,
+        "errors": 0,
+        "max_ms": 87.751746,
+        "mean_ms": 18.802018127118647,
+        "min_ms": 5.727115,
+        "p50_ms": 14.148811,
+        "p95_ms": 54.825187,
+        "p99_ms": 75.38639,
+        "percentile_window": 236,
+        "total_ms": 4437.276278
+      },
+      "onvif.GetStreamUri": {
+        "cancelled": 0,
+        "count": 1,
+        "errors": 0,
+        "max_ms": 29.882205,
+        "mean_ms": 29.882205,
+        "min_ms": 29.882205,
+        "p50_ms": 29.882205,
+        "p95_ms": 29.882205,
+        "p99_ms": 29.882205,
+        "percentile_window": 1,
+        "total_ms": 29.882205
+      },
+      "onvif.GetSystemDateAndTime": {
+        "cancelled": 0,
+        "count": 1,
+        "errors": 0,
+        "max_ms": 22.387296,
+        "mean_ms": 22.387296,
+        "min_ms": 22.387296,
+        "p50_ms": 22.387296,
+        "p95_ms": 22.387296,
+        "p99_ms": 22.387296,
+        "percentile_window": 1,
+        "total_ms": 22.387296
+      },
+      "onvif.Stop": {
+        "cancelled": 0,
+        "count": 15,
+        "errors": 0,
+        "max_ms": 92.112956,
+        "mean_ms": 22.7381312,
+        "min_ms": 6.515012,
+        "p50_ms": 12.252445,
+        "p95_ms": 92.112956,
+        "p99_ms": 92.112956,
+        "percentile_window": 15,
+        "total_ms": 341.071968
+      },
+      "onvif.absolute": {
+        "cancelled": 0,
+        "count": 14,
+        "errors": 0,
+        "max_ms": 32.759302,
+        "mean_ms": 14.299678428571427,
+        "min_ms": 6.622449,
+        "p50_ms": 11.521415,
+        "p95_ms": 32.759302,
+        "p99_ms": 32.759302,
+        "percentile_window": 14,
+        "total_ms": 200.195498
+      },
+      "onvif.connection_setup": {
+        "cancelled": 0,
+        "count": 271,
+        "errors": 0,
+        "max_ms": 50.660677,
+        "mean_ms": 4.993025977859778,
+        "min_ms": 1.560816,
+        "p50_ms": 2.379675,
+        "p95_ms": 17.497014,
+        "p99_ms": 43.084302,
+        "percentile_window": 256,
+        "total_ms": 1353.11004
+      },
+      "onvif.http_body": {
+        "cancelled": 0,
+        "count": 271,
+        "errors": 0,
+        "max_ms": 24.492137,
+        "mean_ms": 0.6425483542435425,
+        "min_ms": 0.004367,
+        "p50_ms": 0.266995,
+        "p95_ms": 0.76519,
+        "p99_ms": 13.705059,
+        "percentile_window": 256,
+        "total_ms": 174.130604
+      },
+      "onvif.http_headers": {
+        "cancelled": 0,
+        "count": 271,
+        "errors": 0,
+        "max_ms": 87.49856,
+        "mean_ms": 18.229851033210334,
+        "min_ms": 5.121074,
+        "p50_ms": 13.045725,
+        "p95_ms": 54.714361,
+        "p99_ms": 75.243254,
+        "percentile_window": 256,
+        "total_ms": 4940.28963
+      },
+      "onvif.initialize": {
+        "cancelled": 0,
+        "count": 1,
+        "errors": 0,
+        "max_ms": 122.047432,
+        "mean_ms": 122.047432,
+        "min_ms": 122.047432,
+        "p50_ms": 122.047432,
+        "p95_ms": 122.047432,
+        "p99_ms": 122.047432,
+        "percentile_window": 1,
+        "total_ms": 122.047432
+      },
+      "onvif.position": {
+        "cancelled": 0,
+        "count": 236,
+        "errors": 0,
+        "max_ms": 87.815149,
+        "mean_ms": 18.844488190677968,
+        "min_ms": 5.749996,
+        "p50_ms": 14.183881,
+        "p95_ms": 54.850208,
+        "p99_ms": 75.407997,
+        "percentile_window": 236,
+        "total_ms": 4447.299213
+      },
+      "onvif.stop": {
+        "cancelled": 0,
+        "count": 15,
+        "errors": 0,
+        "max_ms": 92.119526,
+        "mean_ms": 22.744021,
+        "min_ms": 6.519656,
+        "p50_ms": 12.258498,
+        "p95_ms": 92.119526,
+        "p99_ms": 92.119526,
+        "percentile_window": 15,
+        "total_ms": 341.160315
+      },
+      "onvif.stream_discovery": {
+        "cancelled": 0,
+        "count": 1,
+        "errors": 0,
+        "max_ms": 29.95122,
+        "mean_ms": 29.95122,
+        "min_ms": 29.95122,
+        "p50_ms": 29.95122,
+        "p95_ms": 29.95122,
+        "p99_ms": 29.95122,
+        "percentile_window": 1,
+        "total_ms": 29.95122
+      },
+      "onvif.velocity": {
+        "cancelled": 0,
+        "count": 1,
+        "errors": 0,
+        "max_ms": 9.654819,
+        "mean_ms": 9.654819,
+        "min_ms": 9.654819,
+        "p50_ms": 9.654819,
+        "p95_ms": 9.654819,
+        "p99_ms": 9.654819,
+        "percentile_window": 1,
+        "total_ms": 9.654819
+      },
+      "onvif.wsse_digest": {
+        "cancelled": 0,
+        "count": 271,
+        "errors": 0,
+        "max_ms": 0.025643,
+        "mean_ms": 0.007353059040590406,
+        "min_ms": 0.002399,
+        "p50_ms": 0.005612,
+        "p95_ms": 0.016615,
+        "p99_ms": 0.023554,
+        "percentile_window": 256,
+        "total_ms": 1.992679
+      },
+      "onvif.xml_parse": {
+        "cancelled": 0,
+        "count": 514,
+        "errors": 0,
+        "max_ms": 0.491676,
+        "mean_ms": 0.04171090077821012,
+        "min_ms": 0.011998,
+        "p50_ms": 0.031369,
+        "p95_ms": 0.11186,
+        "p99_ms": 0.133518,
+        "percentile_window": 256,
+        "total_ms": 21.439403
+      },
+      "rtsp.connect": {
+        "cancelled": 0,
+        "count": 1,
+        "errors": 0,
+        "max_ms": 26.636078,
+        "mean_ms": 26.636078,
+        "min_ms": 26.636078,
+        "p50_ms": 26.636078,
+        "p95_ms": 26.636078,
+        "p99_ms": 26.636078,
+        "percentile_window": 1,
+        "total_ms": 26.636078
+      },
+      "rtsp.describe": {
+        "cancelled": 0,
+        "count": 1,
+        "errors": 0,
+        "max_ms": 13.614467,
+        "mean_ms": 13.614467,
+        "min_ms": 13.614467,
+        "p50_ms": 13.614467,
+        "p95_ms": 13.614467,
+        "p99_ms": 13.614467,
+        "percentile_window": 1,
+        "total_ms": 13.614467
+      },
+      "rtsp.play": {
+        "cancelled": 0,
+        "count": 1,
+        "errors": 0,
+        "max_ms": 3.143676,
+        "mean_ms": 3.143676,
+        "min_ms": 3.143676,
+        "p50_ms": 3.143676,
+        "p95_ms": 3.143676,
+        "p99_ms": 3.143676,
+        "percentile_window": 1,
+        "total_ms": 3.143676
+      },
+      "rtsp.setup": {
+        "cancelled": 0,
+        "count": 1,
+        "errors": 0,
+        "max_ms": 9.86255,
+        "mean_ms": 9.86255,
+        "min_ms": 9.86255,
+        "p50_ms": 9.86255,
+        "p95_ms": 9.86255,
+        "p99_ms": 9.86255,
+        "percentile_window": 1,
+        "total_ms": 9.86255
+      },
+      "runtime.blocking_execute": {
+        "cancelled": 0,
+        "count": 633,
+        "errors": 0,
+        "max_ms": 55.021503,
+        "mean_ms": 21.771767383886257,
+        "min_ms": 13.642117,
+        "p50_ms": 14.603573,
+        "p95_ms": 48.734555,
+        "p99_ms": 52.558225,
+        "percentile_window": 256,
+        "total_ms": 13781.528754
+      },
+      "runtime.blocking_queue": {
+        "cancelled": 0,
+        "count": 633,
+        "errors": 0,
+        "max_ms": 0.334259,
+        "mean_ms": 0.04756933491311216,
+        "min_ms": 0.007923,
+        "p50_ms": 0.050723,
+        "p95_ms": 0.078039,
+        "p99_ms": 0.084152,
+        "percentile_window": 256,
+        "total_ms": 30.111389
+      },
+      "runtime.blocking_wait": {
+        "cancelled": 0,
+        "count": 633,
+        "errors": 0,
+        "max_ms": 55.140035,
+        "mean_ms": 21.870989707740915,
+        "min_ms": 13.718005,
+        "p50_ms": 14.675309,
+        "p95_ms": 48.914682,
+        "p99_ms": 52.709291,
+        "percentile_window": 256,
+        "total_ms": 13844.336485
+      },
+      "video.detail_decode_encode": {
+        "cancelled": 0,
+        "count": 633,
+        "errors": 0,
+        "max_ms": 55.020661,
+        "mean_ms": 21.77111680094787,
+        "min_ms": 13.641724,
+        "p50_ms": 14.60318,
+        "p95_ms": 48.733605,
+        "p99_ms": 52.557337,
+        "percentile_window": 256,
+        "total_ms": 13781.116935
+      },
+      "video.detail_jpeg_encode": {
+        "cancelled": 0,
+        "count": 633,
+        "errors": 0,
+        "max_ms": 12.842297,
+        "mean_ms": 6.136229652448657,
+        "min_ms": 4.731509,
+        "p50_ms": 5.182447,
+        "p95_ms": 9.730784,
+        "p99_ms": 10.684517,
+        "percentile_window": 256,
+        "total_ms": 3884.23337
+      },
+      "video.fresh_frame_wait": {
+        "cancelled": 0,
+        "count": 73,
+        "errors": 0,
+        "max_ms": 117.176914,
+        "mean_ms": 57.631628958904116,
+        "min_ms": 0.001333,
+        "p50_ms": 58.28333,
+        "p95_ms": 107.515498,
+        "p99_ms": 117.176914,
+        "percentile_window": 73,
+        "total_ms": 4207.108914
+      },
+      "video.h264_decode": {
+        "cancelled": 0,
+        "count": 633,
+        "errors": 0,
+        "max_ms": 23.702125,
+        "mean_ms": 2.685915325434439,
+        "min_ms": 0.425069,
+        "p50_ms": 0.912892,
+        "p95_ms": 11.91316,
+        "p99_ms": 19.147545,
+        "percentile_window": 256,
+        "total_ms": 1700.184401
+      },
+      "video.h264_packet_wait": {
+        "cancelled": 0,
+        "count": 633,
+        "errors": 0,
+        "max_ms": 63.393352,
+        "mean_ms": 44.759023109004744,
+        "min_ms": 1.528441,
+        "p50_ms": 50.880963,
+        "p95_ms": 57.045699,
+        "p99_ms": 59.811596,
+        "percentile_window": 256,
+        "total_ms": 28332.461628
+      },
+      "video.publish": {
+        "cancelled": 0,
+        "count": 633,
+        "errors": 0,
+        "max_ms": 0.018403,
+        "mean_ms": 0.002066736176935229,
+        "min_ms": 0.000368,
+        "p50_ms": 0.000724,
+        "p95_ms": 0.013836,
+        "p99_ms": 0.015769,
+        "percentile_window": 256,
+        "total_ms": 1.308244
+      },
+      "video.watch_wait": {
+        "cancelled": 0,
+        "count": 83,
+        "errors": 0,
+        "max_ms": 105.709167,
+        "mean_ms": 50.68336478313253,
+        "min_ms": 2.412906,
+        "p50_ms": 42.608681,
+        "p95_ms": 102.083117,
+        "p99_ms": 105.709167,
+        "percentile_window": 83,
+        "total_ms": 4206.719277
+      },
+      "video.yuv_to_rgb": {
+        "cancelled": 0,
+        "count": 633,
+        "errors": 0,
+        "max_ms": 0.733488,
+        "mean_ms": 0.18975258135860978,
+        "min_ms": 0.10808,
+        "p50_ms": 0.115083,
+        "p95_ms": 0.486869,
+        "p99_ms": 0.517639,
+        "percentile_window": 256,
+        "total_ms": 120.113384
+      },
+      "vision.affine_refit": {
+        "cancelled": 0,
+        "count": 522,
+        "errors": 0,
+        "max_ms": 0.015739,
+        "mean_ms": 0.0007319444444444445,
+        "min_ms": 0.000091,
+        "p50_ms": 0.000662,
+        "p95_ms": 0.001421,
+        "p99_ms": 0.001726,
+        "percentile_window": 256,
+        "total_ms": 0.382075
+      },
+      "vision.brief": {
+        "cancelled": 0,
+        "count": 1080,
+        "errors": 0,
+        "max_ms": 10.929578,
+        "mean_ms": 5.014553521296296,
+        "min_ms": 3.071747,
+        "p50_ms": 5.153201,
+        "p95_ms": 5.749903,
+        "p99_ms": 6.163845,
+        "percentile_window": 256,
+        "total_ms": 5415.717803
+      },
+      "vision.descriptor_matching": {
+        "cancelled": 0,
+        "count": 540,
+        "errors": 0,
+        "max_ms": 8.759335,
+        "mean_ms": 3.4593523444444445,
+        "min_ms": 0.135542,
+        "p50_ms": 3.388403,
+        "p95_ms": 6.000255,
+        "p99_ms": 6.41539,
+        "percentile_window": 256,
+        "total_ms": 1868.050266
+      },
+      "vision.fast_corners": {
+        "cancelled": 0,
+        "count": 1080,
+        "errors": 0,
+        "max_ms": 8.722515,
+        "mean_ms": 4.49926635462963,
+        "min_ms": 2.829038,
+        "p50_ms": 4.826091,
+        "p95_ms": 5.446355,
+        "p99_ms": 5.763343,
+        "percentile_window": 256,
+        "total_ms": 4859.207663
+      },
+      "vision.features": {
+        "cancelled": 0,
+        "count": 1080,
+        "errors": 0,
+        "max_ms": 17.332125,
+        "mean_ms": 9.845919526851851,
+        "min_ms": 6.115257,
+        "p50_ms": 10.490424,
+        "p95_ms": 11.432581,
+        "p99_ms": 11.91126,
+        "percentile_window": 256,
+        "total_ms": 10633.593089
+      },
+      "vision.jpeg_decode": {
+        "cancelled": 0,
+        "count": 1080,
+        "errors": 0,
+        "max_ms": 5.460482,
+        "mean_ms": 1.256657988888889,
+        "min_ms": 1.026159,
+        "p50_ms": 1.238024,
+        "p95_ms": 1.841455,
+        "p99_ms": 2.233815,
+        "percentile_window": 256,
+        "total_ms": 1357.190628
+      },
+      "vision.ransac": {
+        "cancelled": 0,
+        "count": 536,
+        "errors": 0,
+        "max_ms": 3.306491,
+        "mean_ms": 1.229662412313433,
+        "min_ms": 0.095864,
+        "p50_ms": 1.276208,
+        "p95_ms": 2.155832,
+        "p99_ms": 2.527487,
+        "percentile_window": 256,
+        "total_ms": 659.099053
+      },
+      "vision.resize_grayscale": {
+        "cancelled": 0,
+        "count": 1080,
+        "errors": 0,
+        "max_ms": 32.191152,
+        "mean_ms": 8.842989271296297,
+        "min_ms": 8.299356,
+        "p50_ms": 8.85362,
+        "p95_ms": 9.480633,
+        "p99_ms": 10.128578,
+        "percentile_window": 256,
+        "total_ms": 9550.428413
+      },
+      "vision.select_corners": {
+        "cancelled": 0,
+        "count": 1080,
+        "errors": 0,
+        "max_ms": 0.716461,
+        "mean_ms": 0.33093452777777776,
+        "min_ms": 0.202259,
+        "p50_ms": 0.342501,
+        "p95_ms": 0.401469,
+        "p99_ms": 0.444026,
+        "percentile_window": 256,
+        "total_ms": 357.40929
+      },
+      "vision.track": {
+        "cancelled": 0,
+        "count": 540,
+        "errors": 0,
+        "max_ms": 77.043205,
+        "mean_ms": 44.689527831481485,
+        "min_ms": 33.980067,
+        "p50_ms": 46.390543,
+        "p95_ms": 50.594528,
+        "p99_ms": 52.765767,
+        "percentile_window": 256,
+        "total_ms": 24132.345029
+      }
+    },
+    "enabled": true,
+    "log_dropped": 0,
+    "log_errors": 0,
+    "max_spans_per_trace": 8192,
+    "percentiles": "most recent 256 samples per stage; totals are since process start",
+    "recent_background": [],
+    "recent_requests": [],
+    "retained_requests": 0
+  },
+  "samples": [
+    {
+      "amount": 0.05,
+      "before_sequence": 14,
+      "command_ms": 12.839542,
+      "direction": 1.0,
+      "final_pose": [
+        0.21841,
+        -0.112964
+      ],
+      "first_reported_arrival_ms": 249.00188400000002,
+      "mode": "absolute_default",
+      "optics": [
+        {
+          "actual_ms": 46.656112,
+          "image": "/tmp/spy-motor-0-absolute_default-0.05-1-0.jpg",
+          "matches": 7,
+          "max_residual": 0.0103145699401359,
+          "offset_ms": 0,
+          "sequence": 19
+        },
+        {
+          "actual_ms": 123.318952,
+          "image": "/tmp/spy-motor-0-absolute_default-0.05-1-50.jpg",
+          "matches": 9,
+          "max_residual": 0.0018674704866799218,
+          "offset_ms": 50,
+          "sequence": 20
+        },
+        {
+          "actual_ms": 181.604225,
+          "image": "/tmp/spy-motor-0-absolute_default-0.05-1-100.jpg",
+          "matches": 9,
+          "max_residual": 0.0007965806789504469,
+          "offset_ms": 100,
+          "sequence": 21
+        },
+        {
+          "actual_ms": 372.674039,
+          "image": "/tmp/spy-motor-0-absolute_default-0.05-1-300.jpg",
+          "matches": 9,
+          "max_residual": 0.0006609501109266137,
+          "offset_ms": 300,
+          "sequence": 24
+        },
+        {
+          "actual_ms": 792.305279,
+          "image": "/tmp/spy-motor-0-absolute_default-0.05-1-700.jpg",
+          "matches": 9,
+          "max_residual": 2.5737366780467722e-14,
+          "offset_ms": 700,
+          "sequence": 30
+        }
+      ],
+      "polls": [
+        {
+          "pose": [
+            0.168414,
+            -0.112964
+          ],
+          "received_ms": 22.402814,
+          "sent_ms": 12.839692999999999
+        },
+        {
+          "pose": [
+            0.172906,
+            -0.112964
+          ],
+          "received_ms": 53.426106000000004,
+          "sent_ms": 39.104689
+        },
+        {
+          "pose": [
+            0.181178,
+            -0.112964
+          ],
+          "received_ms": 83.57986100000001,
+          "sent_ms": 69.703947
+        },
+        {
+          "pose": [
+            0.185314,
+            -0.112964
+          ],
+          "received_ms": 110.220193,
+          "sent_ms": 99.806536
+        },
+        {
+          "pose": [
+            0.193586,
+            -0.112964
+          ],
+          "received_ms": 146.245498,
+          "sent_ms": 126.81210800000001
+        },
+        {
+          "pose": [
+            0.201858,
+            -0.112964
+          ],
+          "received_ms": 174.015631,
+          "sent_ms": 162.422921
+        },
+        {
+          "pose": [
+            0.21841,
+            -0.112964
+          ],
+          "received_ms": 249.000066,
+          "sent_ms": 190.237101
+        }
+      ],
+      "repeat": 0,
+      "start": [
+        0.168414,
+        -0.112964
+      ],
+      "target": [
+        0.218414,
+        -0.112964
+      ]
+    },
+    {
+      "amount": 0.05,
+      "before_sequence": 60,
+      "command_ms": 6.715477,
+      "direction": -1.0,
+      "final_pose": [
+        0.168414,
+        -0.112964
+      ],
+      "first_reported_arrival_ms": 261.649437,
+      "mode": "absolute_default",
+      "optics": [
+        {
+          "actual_ms": 113.965545,
+          "image": "/tmp/spy-motor-0-absolute_default-0.05--1-0.jpg",
+          "matches": 9,
+          "max_residual": 0.0005755174496334576,
+          "offset_ms": 0,
+          "sequence": 66
+        },
+        {
+          "actual_ms": 142.187204,
+          "image": "/tmp/spy-motor-0-absolute_default-0.05--1-50.jpg",
+          "matches": 9,
+          "max_residual": 0.0003776629322128998,
+          "offset_ms": 50,
+          "sequence": 67
+        },
+        {
+          "actual_ms": 247.704179,
+          "image": "/tmp/spy-motor-0-absolute_default-0.05--1-100.jpg",
+          "matches": 9,
+          "max_residual": 0.0002485365491062765,
+          "offset_ms": 100,
+          "sequence": 68
+        },
+        {
+          "actual_ms": 347.072044,
+          "image": "/tmp/spy-motor-0-absolute_default-0.05--1-300.jpg",
+          "matches": 9,
+          "max_residual": 0.00017862361548903,
+          "offset_ms": 300,
+          "sequence": 70
+        },
+        {
+          "actual_ms": 745.973422,
+          "image": "/tmp/spy-motor-0-absolute_default-0.05--1-700.jpg",
+          "matches": 9,
+          "max_residual": 1.0007415106216803e-14,
+          "offset_ms": 700,
+          "sequence": 76
+        }
+      ],
+      "polls": [
+        {
+          "pose": [
+            0.21841,
+            -0.112964
+          ],
+          "received_ms": 12.902385,
+          "sent_ms": 6.715634
+        },
+        {
+          "pose": [
+            0.213919,
+            -0.112964
+          ],
+          "received_ms": 36.344911,
+          "sent_ms": 28.942472
+        },
+        {
+          "pose": [
+            0.205647,
+            -0.112964
+          ],
+          "received_ms": 62.618036000000004,
+          "sent_ms": 52.596275
+        },
+        {
+          "pose": [
+            0.205647,
+            -0.112964
+          ],
+          "received_ms": 91.83703899999999,
+          "sent_ms": 78.792654
+        },
+        {
+          "pose": [
+            0.201511,
+            -0.112964
+          ],
+          "received_ms": 115.852893,
+          "sent_ms": 108.091341
+        },
+        {
+          "pose": [
+            0.193238,
+            -0.112964
+          ],
+          "received_ms": 138.156035,
+          "sent_ms": 131.667952
+        },
+        {
+          "pose": [
+            0.184966,
+            -0.112964
+          ],
+          "received_ms": 163.812106,
+          "sent_ms": 154.42304000000001
+        },
+        {
+          "pose": [
+            0.18083,
+            -0.112964
+          ],
+          "received_ms": 204.315904,
+          "sent_ms": 180.00189899999998
+        },
+        {
+          "pose": [
+            0.172558,
+            -0.112964
+          ],
+          "received_ms": 226.77497499999998,
+          "sent_ms": 220.047626
+        },
+        {
+          "pose": [
+            0.168414,
+            -0.112964
+          ],
+          "received_ms": 261.648453,
+          "sent_ms": 243.04196
+        }
+      ],
+      "repeat": 0,
+      "start": [
+        0.21841,
+        -0.112964
+      ],
+      "target": [
+        0.168414,
+        -0.112964
+      ]
+    },
+    {
+      "amount": 0.2,
+      "before_sequence": 108,
+      "command_ms": 11.868484,
+      "direction": 1.0,
+      "final_pose": [
+        0.368414,
+        -0.112964
+      ],
+      "first_reported_arrival_ms": 941.9738530000001,
+      "mode": "absolute_default",
+      "optics": [
+        {
+          "actual_ms": 78.557387,
+          "image": "/tmp/spy-motor-0-absolute_default-0.2-1-0.jpg",
+          "matches": 7,
+          "max_residual": 0.0044312990702788145,
+          "offset_ms": 0,
+          "sequence": 123
+        },
+        {
+          "actual_ms": 112.461673,
+          "image": "/tmp/spy-motor-0-absolute_default-0.2-1-50.jpg",
+          "matches": 8,
+          "max_residual": 0.004484853216673208,
+          "offset_ms": 50,
+          "sequence": 124
+        },
+        {
+          "actual_ms": 207.521857,
+          "image": "/tmp/spy-motor-0-absolute_default-0.2-1-100.jpg",
+          "matches": 7,
+          "max_residual": 0.0008056422222607206,
+          "offset_ms": 100,
+          "sequence": 125
+        },
+        {
+          "actual_ms": 382.843848,
+          "image": "/tmp/spy-motor-0-absolute_default-0.2-1-300.jpg",
+          "matches": 9,
+          "max_residual": 0.0007330003586352401,
+          "offset_ms": 300,
+          "sequence": 128
+        },
+        {
+          "actual_ms": 776.5947960000001,
+          "image": "/tmp/spy-motor-0-absolute_default-0.2-1-700.jpg",
+          "matches": 9,
+          "max_residual": 2.631603300504352e-14,
+          "offset_ms": 700,
+          "sequence": 134
+        }
+      ],
+      "polls": [
+        {
+          "pose": [
+            0.168414,
+            -0.112964
+          ],
+          "received_ms": 19.527724,
+          "sent_ms": 11.868594
+        },
+        {
+          "pose": [
+            0.174012,
+            -0.112964
+          ],
+          "received_ms": 49.605409,
+          "sent_ms": 35.742448
+        },
+        {
+          "pose": [
+            0.190557,
+            -0.112964
+          ],
+          "received_ms": 127.55302900000001,
+          "sent_ms": 65.749162
+        },
+        {
+          "pose": [
+            0.198829,
+            -0.112964
+          ],
+          "received_ms": 152.920022,
+          "sent_ms": 143.780006
+        },
+        {
+          "pose": [
+            0.207101,
+            -0.112964
+          ],
+          "received_ms": 189.161201,
+          "sent_ms": 168.913295
+        },
+        {
+          "pose": [
+            0.219509,
+            -0.112964
+          ],
+          "received_ms": 241.509636,
+          "sent_ms": 206.006515
+        },
+        {
+          "pose": [
+            0.223645,
+            -0.112964
+          ],
+          "received_ms": 270.10145600000004,
+          "sent_ms": 257.80357399999997
+        },
+        {
+          "pose": [
+            0.231917,
+            -0.112964
+          ],
+          "received_ms": 314.175992,
+          "sent_ms": 287.066933
+        },
+        {
+          "pose": [
+            0.244325,
+            -0.112964
+          ],
+          "received_ms": 377.150137,
+          "sent_ms": 330.397076
+        },
+        {
+          "pose": [
+            0.265005,
+            -0.112964
+          ],
+          "received_ms": 441.802031,
+          "sent_ms": 393.50241
+        },
+        {
+          "pose": [
+            0.265005,
+            -0.112964
+          ],
+          "received_ms": 471.580894,
+          "sent_ms": 457.42794599999996
+        },
+        {
+          "pose": [
+            0.277413,
+            -0.112964
+          ],
+          "received_ms": 507.87408199999993,
+          "sent_ms": 487.82144100000005
+        },
+        {
+          "pose": [
+            0.285685,
+            -0.112964
+          ],
+          "received_ms": 537.210197,
+          "sent_ms": 524.125473
+        },
+        {
+          "pose": [
+            0.289822,
+            -0.112964
+          ],
+          "received_ms": 574.951987,
+          "sent_ms": 553.101595
+        },
+        {
+          "pose": [
+            0.298094,
+            -0.112964
+          ],
+          "received_ms": 606.570977,
+          "sent_ms": 590.31776
+        },
+        {
+          "pose": [
+            0.318774,
+            -0.112964
+          ],
+          "received_ms": 691.550302,
+          "sent_ms": 622.7588969999999
+        },
+        {
+          "pose": [
+            0.32291,
+            -0.112964
+          ],
+          "received_ms": 736.767332,
+          "sent_ms": 707.859438
+        },
+        {
+          "pose": [
+            0.335318,
+            -0.112964
+          ],
+          "received_ms": 778.703495,
+          "sent_ms": 753.0850489999999
+        },
+        {
+          "pose": [
+            0.34359,
+            -0.112964
+          ],
+          "received_ms": 810.920936,
+          "sent_ms": 795.172517
+        },
+        {
+          "pose": [
+            0.351862,
+            -0.112964
+          ],
+          "received_ms": 846.053123,
+          "sent_ms": 827.205621
+        },
+        {
+          "pose": [
+            0.355998,
+            -0.112964
+          ],
+          "received_ms": 872.889192,
+          "sent_ms": 862.2697000000001
+        },
+        {
+          "pose": [
+            0.36427,
+            -0.112964
+          ],
+          "received_ms": 910.498202,
+          "sent_ms": 888.3271900000001
+        },
+        {
+          "pose": [
+            0.368414,
+            -0.112964
+          ],
+          "received_ms": 941.973258,
+          "sent_ms": 926.9612510000001
+        }
+      ],
+      "repeat": 0,
+      "start": [
+        0.168414,
+        -0.112964
+      ],
+      "target": [
+        0.368414,
+        -0.112964
+      ]
+    },
+    {
+      "amount": 0.2,
+      "before_sequence": 159,
+      "command_ms": 10.770185999999999,
+      "direction": -1.0,
+      "final_pose": [
+        0.168414,
+        -0.112964
+      ],
+      "first_reported_arrival_ms": 917.589999,
+      "mode": "absolute_default",
+      "optics": [
+        {
+          "actual_ms": 75.092675,
+          "image": "/tmp/spy-motor-0-absolute_default-0.2--1-0.jpg",
+          "matches": 9,
+          "max_residual": 0.002473243322937428,
+          "offset_ms": 0,
+          "sequence": 174
+        },
+        {
+          "actual_ms": 163.865217,
+          "image": "/tmp/spy-motor-0-absolute_default-0.2--1-50.jpg",
+          "matches": 9,
+          "max_residual": 0.0007433908695104838,
+          "offset_ms": 50,
+          "sequence": 175
+        },
+        {
+          "actual_ms": 197.980813,
+          "image": "/tmp/spy-motor-0-absolute_default-0.2--1-100.jpg",
+          "matches": 9,
+          "max_residual": 0.0008335905879654557,
+          "offset_ms": 100,
+          "sequence": 176
+        },
+        {
+          "actual_ms": 338.843349,
+          "image": "/tmp/spy-motor-0-absolute_default-0.2--1-300.jpg",
+          "matches": 9,
+          "max_residual": 0.0012259773586625847,
+          "offset_ms": 300,
+          "sequence": 178
+        },
+        {
+          "actual_ms": 734.079727,
+          "image": "/tmp/spy-motor-0-absolute_default-0.2--1-700.jpg",
+          "matches": 9,
+          "max_residual": 1.0103639518324897e-14,
+          "offset_ms": 700,
+          "sequence": 184
+        }
+      ],
+      "polls": [
+        {
+          "pose": [
+            0.368414,
+            -0.112964
+          ],
+          "received_ms": 18.618656,
+          "sent_ms": 10.770315
+        },
+        {
+          "pose": [
+            0.362816,
+            -0.112964
+          ],
+          "received_ms": 43.229352,
+          "sent_ms": 35.016008
+        },
+        {
+          "pose": [
+            0.346272,
+            -0.112964
+          ],
+          "received_ms": 108.554949,
+          "sent_ms": 59.376397
+        },
+        {
+          "pose": [
+            0.342136,
+            -0.112964
+          ],
+          "received_ms": 137.84652,
+          "sent_ms": 124.684341
+        },
+        {
+          "pose": [
+            0.338,
+            -0.112964
+          ],
+          "received_ms": 175.181486,
+          "sent_ms": 154.306639
+        },
+        {
+          "pose": [
+            0.329728,
+            -0.112964
+          ],
+          "received_ms": 201.298643,
+          "sent_ms": 190.531807
+        },
+        {
+          "pose": [
+            0.325592,
+            -0.112964
+          ],
+          "received_ms": 241.809817,
+          "sent_ms": 217.52466
+        },
+        {
+          "pose": [
+            0.31732,
+            -0.112964
+          ],
+          "received_ms": 266.936769,
+          "sent_ms": 258.013022
+        },
+        {
+          "pose": [
+            0.309048,
+            -0.112964
+          ],
+          "received_ms": 290.980849,
+          "sent_ms": 282.532345
+        },
+        {
+          "pose": [
+            0.304911,
+            -0.112964
+          ],
+          "received_ms": 315.60632100000004,
+          "sent_ms": 307.089444
+        },
+        {
+          "pose": [
+            0.296639,
+            -0.112964
+          ],
+          "received_ms": 339.03725299999996,
+          "sent_ms": 331.662351
+        },
+        {
+          "pose": [
+            0.288367,
+            -0.112964
+          ],
+          "received_ms": 379.70665199999996,
+          "sent_ms": 355.37095899999997
+        },
+        {
+          "pose": [
+            0.284231,
+            -0.112964
+          ],
+          "received_ms": 410.744424,
+          "sent_ms": 395.934287
+        },
+        {
+          "pose": [
+            0.275959,
+            -0.112964
+          ],
+          "received_ms": 440.557121,
+          "sent_ms": 426.994306
+        },
+        {
+          "pose": [
+            0.271823,
+            -0.112964
+          ],
+          "received_ms": 470.506523,
+          "sent_ms": 456.81358
+        },
+        {
+          "pose": [
+            0.263551,
+            -0.112964
+          ],
+          "received_ms": 511.00167100000004,
+          "sent_ms": 486.85919900000005
+        },
+        {
+          "pose": [
+            0.255279,
+            -0.112964
+          ],
+          "received_ms": 537.278607,
+          "sent_ms": 527.185195
+        },
+        {
+          "pose": [
+            0.251143,
+            -0.112964
+          ],
+          "received_ms": 576.459822,
+          "sent_ms": 553.8376109999999
+        },
+        {
+          "pose": [
+            0.230463,
+            -0.112964
+          ],
+          "received_ms": 668.102541,
+          "sent_ms": 592.692719
+        },
+        {
+          "pose": [
+            0.222191,
+            -0.112964
+          ],
+          "received_ms": 690.005394,
+          "sent_ms": 683.521484
+        },
+        {
+          "pose": [
+            0.213919,
+            -0.112964
+          ],
+          "received_ms": 713.6382,
+          "sent_ms": 706.122995
+        },
+        {
+          "pose": [
+            0.209783,
+            -0.112964
+          ],
+          "received_ms": 738.411489,
+          "sent_ms": 730.209622
+        },
+        {
+          "pose": [
+            0.209783,
+            -0.112964
+          ],
+          "received_ms": 777.1165020000001,
+          "sent_ms": 754.520394
+        },
+        {
+          "pose": [
+            0.201511,
+            -0.112964
+          ],
+          "received_ms": 809.822405,
+          "sent_ms": 793.071875
+        },
+        {
+          "pose": [
+            0.189103,
+            -0.112964
+          ],
+          "received_ms": 840.2343330000001,
+          "sent_ms": 825.9637560000001
+        },
+        {
+          "pose": [
+            0.18083,
+            -0.112964
+          ],
+          "received_ms": 868.335686,
+          "sent_ms": 857.40564
+        },
+        {
+          "pose": [
+            0.176694,
+            -0.112964
+          ],
+          "received_ms": 892.4956229999999,
+          "sent_ms": 884.598116
+        },
+        {
+          "pose": [
+            0.168414,
+            -0.112964
+          ],
+          "received_ms": 917.587752,
+          "sent_ms": 909.1320010000001
+        }
+      ],
+      "repeat": 0,
+      "start": [
+        0.368414,
+        -0.112964
+      ],
+      "target": [
+        0.168414,
+        -0.112964
+      ]
+    },
+    {
+      "amount": 0.05,
+      "before_sequence": 216,
+      "command_ms": 32.761169,
+      "direction": 1.0,
+      "final_pose": [
+        0.21841,
+        -0.112964
+      ],
+      "first_reported_arrival_ms": 253.945751,
+      "mode": "absolute_default",
+      "optics": [
+        {
+          "actual_ms": 58.682856,
+          "image": "/tmp/spy-motor-1-absolute_default-0.05-1-0.jpg",
+          "matches": 8,
+          "max_residual": 0.014143476697875811,
+          "offset_ms": 0,
+          "sequence": 221
+        },
+        {
+          "actual_ms": 128.09721299999998,
+          "image": "/tmp/spy-motor-1-absolute_default-0.05-1-50.jpg",
+          "matches": 9,
+          "max_residual": 0.00029659080410611953,
+          "offset_ms": 50,
+          "sequence": 222
+        },
+        {
+          "actual_ms": 175.92131899999998,
+          "image": "/tmp/spy-motor-1-absolute_default-0.05-1-100.jpg",
+          "matches": 9,
+          "max_residual": 0.00035307206703458026,
+          "offset_ms": 100,
+          "sequence": 223
+        },
+        {
+          "actual_ms": 392.63192000000004,
+          "image": "/tmp/spy-motor-1-absolute_default-0.05-1-300.jpg",
+          "matches": 9,
+          "max_residual": 0.00013530353658301305,
+          "offset_ms": 300,
+          "sequence": 226
+        },
+        {
+          "actual_ms": 775.1454650000001,
+          "image": "/tmp/spy-motor-1-absolute_default-0.05-1-700.jpg",
+          "matches": 9,
+          "max_residual": 1.1815532565599485e-14,
+          "offset_ms": 700,
+          "sequence": 232
+        }
+      ],
+      "polls": [
+        {
+          "pose": [
+            0.168414,
+            -0.112964
+          ],
+          "received_ms": 46.551097999999996,
+          "sent_ms": 32.761666000000005
+        },
+        {
+          "pose": [
+            0.177042,
+            -0.112964
+          ],
+          "received_ms": 69.769544,
+          "sent_ms": 62.885211
+        },
+        {
+          "pose": [
+            0.181178,
+            -0.112964
+          ],
+          "received_ms": 92.640839,
+          "sent_ms": 85.96943499999999
+        },
+        {
+          "pose": [
+            0.18945,
+            -0.112964
+          ],
+          "received_ms": 117.36063800000001,
+          "sent_ms": 109.282714
+        },
+        {
+          "pose": [
+            0.18945,
+            -0.112964
+          ],
+          "received_ms": 163.5183,
+          "sent_ms": 133.566988
+        },
+        {
+          "pose": [
+            0.21013,
+            -0.112964
+          ],
+          "received_ms": 229.99882699999998,
+          "sent_ms": 179.830849
+        },
+        {
+          "pose": [
+            0.218402,
+            -0.112964
+          ],
+          "received_ms": 253.94446,
+          "sent_ms": 246.29002599999998
+        }
+      ],
+      "repeat": 1,
+      "start": [
+        0.168414,
+        -0.112964
+      ],
+      "target": [
+        0.218414,
+        -0.112964
+      ]
+    },
+    {
+      "amount": 0.05,
+      "before_sequence": 263,
+      "command_ms": 10.290501,
+      "direction": -1.0,
+      "final_pose": [
+        0.168414,
+        -0.112964
+      ],
+      "first_reported_arrival_ms": 252.846385,
+      "mode": "absolute_default",
+      "optics": [
+        {
+          "actual_ms": 99.542272,
+          "image": "/tmp/spy-motor-1-absolute_default-0.05--1-0.jpg",
+          "matches": 9,
+          "max_residual": 0.001117881797526161,
+          "offset_ms": 0,
+          "sequence": 268
+        },
+        {
+          "actual_ms": 130.208439,
+          "image": "/tmp/spy-motor-1-absolute_default-0.05--1-50.jpg",
+          "matches": 9,
+          "max_residual": 0.0004065076069311166,
+          "offset_ms": 50,
+          "sequence": 269
+        },
+        {
+          "actual_ms": 234.791952,
+          "image": "/tmp/spy-motor-1-absolute_default-0.05--1-100.jpg",
+          "matches": 9,
+          "max_residual": 0.0005607620475333524,
+          "offset_ms": 100,
+          "sequence": 270
+        },
+        {
+          "actual_ms": 353.123089,
+          "image": "/tmp/spy-motor-1-absolute_default-0.05--1-300.jpg",
+          "matches": 9,
+          "max_residual": 0.0002009022417517664,
+          "offset_ms": 300,
+          "sequence": 272
+        },
+        {
+          "actual_ms": 753.8602930000001,
+          "image": "/tmp/spy-motor-1-absolute_default-0.05--1-700.jpg",
+          "matches": 9,
+          "max_residual": 8.298685035797932e-15,
+          "offset_ms": 700,
+          "sequence": 278
+        }
+      ],
+      "polls": [
+        {
+          "pose": [
+            0.21841,
+            -0.112964
+          ],
+          "received_ms": 23.72086,
+          "sent_ms": 10.290653
+        },
+        {
+          "pose": [
+            0.213919,
+            -0.112964
+          ],
+          "received_ms": 46.234577,
+          "sent_ms": 39.885214000000005
+        },
+        {
+          "pose": [
+            0.205647,
+            -0.112964
+          ],
+          "received_ms": 107.38153799999999,
+          "sent_ms": 62.387737
+        },
+        {
+          "pose": [
+            0.193238,
+            -0.112964
+          ],
+          "received_ms": 145.27892400000002,
+          "sent_ms": 123.561294
+        },
+        {
+          "pose": [
+            0.184966,
+            -0.112964
+          ],
+          "received_ms": 173.874802,
+          "sent_ms": 161.55516
+        },
+        {
+          "pose": [
+            0.18083,
+            -0.112964
+          ],
+          "received_ms": 201.006447,
+          "sent_ms": 190.04781
+        },
+        {
+          "pose": [
+            0.168414,
+            -0.112964
+          ],
+          "received_ms": 252.84564500000002,
+          "sent_ms": 216.63578
+        }
+      ],
+      "repeat": 1,
+      "start": [
+        0.21841,
+        -0.112964
+      ],
+      "target": [
+        0.168414,
+        -0.112964
+      ]
+    },
+    {
+      "amount": 0.2,
+      "before_sequence": 310,
+      "command_ms": 9.311229,
+      "direction": 1.0,
+      "final_pose": [
+        0.368414,
+        -0.112964
+      ],
+      "first_reported_arrival_ms": 939.756932,
+      "mode": "absolute_default",
+      "optics": [
+        {
+          "actual_ms": 108.708416,
+          "image": "/tmp/spy-motor-1-absolute_default-0.2-1-0.jpg",
+          "matches": 8,
+          "max_residual": 0.0007133401064685652,
+          "offset_ms": 0,
+          "sequence": 326
+        },
+        {
+          "actual_ms": 137.69099400000002,
+          "image": "/tmp/spy-motor-1-absolute_default-0.2-1-50.jpg",
+          "matches": 8,
+          "max_residual": 0.0032929076815047206,
+          "offset_ms": 50,
+          "sequence": 327
+        },
+        {
+          "actual_ms": 237.343124,
+          "image": "/tmp/spy-motor-1-absolute_default-0.2-1-100.jpg",
+          "matches": 8,
+          "max_residual": 0.0009424604762313087,
+          "offset_ms": 100,
+          "sequence": 328
+        },
+        {
+          "actual_ms": 367.828217,
+          "image": "/tmp/spy-motor-1-absolute_default-0.2-1-300.jpg",
+          "matches": 8,
+          "max_residual": 0.0008576991776669586,
+          "offset_ms": 300,
+          "sequence": 330
+        },
+        {
+          "actual_ms": 769.572571,
+          "image": "/tmp/spy-motor-1-absolute_default-0.2-1-700.jpg",
+          "matches": 9,
+          "max_residual": 2.5829094694466905e-14,
+          "offset_ms": 700,
+          "sequence": 336
+        }
+      ],
+      "polls": [
+        {
+          "pose": [
+            0.168414,
+            -0.112964
+          ],
+          "received_ms": 15.933037,
+          "sent_ms": 9.311358
+        },
+        {
+          "pose": [
+            0.178149,
+            -0.112964
+          ],
+          "received_ms": 40.771539000000004,
+          "sent_ms": 32.20165299999999
+        },
+        {
+          "pose": [
+            0.190557,
+            -0.112964
+          ],
+          "received_ms": 103.78852900000001,
+          "sent_ms": 57.079416
+        },
+        {
+          "pose": [
+            0.194693,
+            -0.112964
+          ],
+          "received_ms": 142.280304,
+          "sent_ms": 120.63863900000001
+        },
+        {
+          "pose": [
+            0.202965,
+            -0.112964
+          ],
+          "received_ms": 165.824264,
+          "sent_ms": 158.37689899999998
+        },
+        {
+          "pose": [
+            0.211237,
+            -0.112964
+          ],
+          "received_ms": 205.115246,
+          "sent_ms": 182.39054199999998
+        },
+        {
+          "pose": [
+            0.215373,
+            -0.112964
+          ],
+          "received_ms": 232.683143,
+          "sent_ms": 221.377958
+        },
+        {
+          "pose": [
+            0.223645,
+            -0.112964
+          ],
+          "received_ms": 267.83912399999997,
+          "sent_ms": 248.901001
+        },
+        {
+          "pose": [
+            0.227781,
+            -0.112964
+          ],
+          "received_ms": 302.879567,
+          "sent_ms": 283.980879
+        },
+        {
+          "pose": [
+            0.236053,
+            -0.112964
+          ],
+          "received_ms": 337.416055,
+          "sent_ms": 319.090288
+        },
+        {
+          "pose": [
+            0.244325,
+            -0.112964
+          ],
+          "received_ms": 364.13203300000004,
+          "sent_ms": 353.687434
+        },
+        {
+          "pose": [
+            0.256733,
+            -0.112964
+          ],
+          "received_ms": 399.681227,
+          "sent_ms": 380.363593
+        },
+        {
+          "pose": [
+            0.256733,
+            -0.112964
+          ],
+          "received_ms": 431.434052,
+          "sent_ms": 414.778594
+        },
+        {
+          "pose": [
+            0.269141,
+            -0.112964
+          ],
+          "received_ms": 467.766085,
+          "sent_ms": 447.596887
+        },
+        {
+          "pose": [
+            0.269141,
+            -0.112964
+          ],
+          "received_ms": 495.79463499999997,
+          "sent_ms": 483.972287
+        },
+        {
+          "pose": [
+            0.281549,
+            -0.112964
+          ],
+          "received_ms": 533.629119,
+          "sent_ms": 512.0023219999999
+        },
+        {
+          "pose": [
+            0.289822,
+            -0.112964
+          ],
+          "received_ms": 560.682275,
+          "sent_ms": 549.223553
+        },
+        {
+          "pose": [
+            0.298094,
+            -0.112964
+          ],
+          "received_ms": 585.050096,
+          "sent_ms": 576.8439629999999
+        },
+        {
+          "pose": [
+            0.310502,
+            -0.112964
+          ],
+          "received_ms": 654.359601,
+          "sent_ms": 600.890284
+        },
+        {
+          "pose": [
+            0.314638,
+            -0.112964
+          ],
+          "received_ms": 675.493566,
+          "sent_ms": 669.7421909999999
+        },
+        {
+          "pose": [
+            0.314638,
+            -0.112964
+          ],
+          "received_ms": 702.634665,
+          "sent_ms": 691.65711
+        },
+        {
+          "pose": [
+            0.331182,
+            -0.112964
+          ],
+          "received_ms": 738.820154,
+          "sent_ms": 718.796424
+        },
+        {
+          "pose": [
+            0.335318,
+            -0.112964
+          ],
+          "received_ms": 763.0261419999999,
+          "sent_ms": 755.280209
+        },
+        {
+          "pose": [
+            0.335318,
+            -0.112964
+          ],
+          "received_ms": 786.673989,
+          "sent_ms": 779.218654
+        },
+        {
+          "pose": [
+            0.34359,
+            -0.112964
+          ],
+          "received_ms": 815.2398939999999,
+          "sent_ms": 801.8701070000001
+        },
+        {
+          "pose": [
+            0.351862,
+            -0.112964
+          ],
+          "received_ms": 841.002926,
+          "sent_ms": 831.495683
+        },
+        {
+          "pose": [
+            0.360134,
+            -0.112964
+          ],
+          "received_ms": 874.490205,
+          "sent_ms": 856.9318489999999
+        },
+        {
+          "pose": [
+            0.36427,
+            -0.112964
+          ],
+          "received_ms": 899.050412,
+          "sent_ms": 890.71847
+        },
+        {
+          "pose": [
+            0.368414,
+            -0.112964
+          ],
+          "received_ms": 939.756362,
+          "sent_ms": 915.250303
+        }
+      ],
+      "repeat": 1,
+      "start": [
+        0.168414,
+        -0.112964
+      ],
+      "target": [
+        0.368414,
+        -0.112964
+      ]
+    },
+    {
+      "amount": 0.2,
+      "before_sequence": 365,
+      "command_ms": 11.522269,
+      "direction": -1.0,
+      "final_pose": [
+        0.168414,
+        -0.112964
+      ],
+      "first_reported_arrival_ms": 1002.107485,
+      "mode": "absolute_default",
+      "optics": [
+        {
+          "actual_ms": 93.848134,
+          "image": "/tmp/spy-motor-1-absolute_default-0.2--1-0.jpg",
+          "matches": 9,
+          "max_residual": 0.00051407133139074,
+          "offset_ms": 0,
+          "sequence": 381
+        },
+        {
+          "actual_ms": 129.648616,
+          "image": "/tmp/spy-motor-1-absolute_default-0.2--1-50.jpg",
+          "matches": 9,
+          "max_residual": 0.00036028367532173964,
+          "offset_ms": 50,
+          "sequence": 382
+        },
+        {
+          "actual_ms": 224.44923599999998,
+          "image": "/tmp/spy-motor-1-absolute_default-0.2--1-100.jpg",
+          "matches": 9,
+          "max_residual": 0.0005140557653395052,
+          "offset_ms": 100,
+          "sequence": 383
+        },
+        {
+          "actual_ms": 352.964788,
+          "image": "/tmp/spy-motor-1-absolute_default-0.2--1-300.jpg",
+          "matches": 9,
+          "max_residual": 0.0009709514091847439,
+          "offset_ms": 300,
+          "sequence": 385
+        },
+        {
+          "actual_ms": 765.766531,
+          "image": "/tmp/spy-motor-1-absolute_default-0.2--1-700.jpg",
+          "matches": 9,
+          "max_residual": 1.4638638967479607e-14,
+          "offset_ms": 700,
+          "sequence": 391
+        }
+      ],
+      "polls": [
+        {
+          "pose": [
+            0.368414,
+            -0.112964
+          ],
+          "received_ms": 18.567818,
+          "sent_ms": 11.522378
+        },
+        {
+          "pose": [
+            0.362816,
+            -0.112964
+          ],
+          "received_ms": 53.42053,
+          "sent_ms": 34.812536
+        },
+        {
+          "pose": [
+            0.35868,
+            -0.112964
+          ],
+          "received_ms": 80.853864,
+          "sent_ms": 69.58516900000001
+        },
+        {
+          "pose": [
+            0.350408,
+            -0.112964
+          ],
+          "received_ms": 124.07508,
+          "sent_ms": 96.76264599999999
+        },
+        {
+          "pose": [
+            0.342136,
+            -0.112964
+          ],
+          "received_ms": 151.69525000000002,
+          "sent_ms": 140.33087999999998
+        },
+        {
+          "pose": [
+            0.329728,
+            -0.112964
+          ],
+          "received_ms": 188.607999,
+          "sent_ms": 167.944715
+        },
+        {
+          "pose": [
+            0.329728,
+            -0.112964
+          ],
+          "received_ms": 216.893992,
+          "sent_ms": 204.918186
+        },
+        {
+          "pose": [
+            0.325592,
+            -0.112964
+          ],
+          "received_ms": 252.686572,
+          "sent_ms": 233.000894
+        },
+        {
+          "pose": [
+            0.31732,
+            -0.112964
+          ],
+          "received_ms": 282.11381600000004,
+          "sent_ms": 268.931866
+        },
+        {
+          "pose": [
+            0.304911,
+            -0.112964
+          ],
+          "received_ms": 319.98879800000003,
+          "sent_ms": 298.37639
+        },
+        {
+          "pose": [
+            0.296639,
+            -0.112964
+          ],
+          "received_ms": 354.60012800000004,
+          "sent_ms": 336.237972
+        },
+        {
+          "pose": [
+            0.275959,
+            -0.112964
+          ],
+          "received_ms": 425.60975299999996,
+          "sent_ms": 370.758271
+        },
+        {
+          "pose": [
+            0.263551,
+            -0.112964
+          ],
+          "received_ms": 496.724329,
+          "sent_ms": 441.892656
+        },
+        {
+          "pose": [
+            0.259415,
+            -0.112964
+          ],
+          "received_ms": 531.1577440000001,
+          "sent_ms": 512.4916929999999
+        },
+        {
+          "pose": [
+            0.251143,
+            -0.112964
+          ],
+          "received_ms": 554.8059549999999,
+          "sent_ms": 547.340065
+        },
+        {
+          "pose": [
+            0.238735,
+            -0.112964
+          ],
+          "received_ms": 616.841246,
+          "sent_ms": 571.210632
+        },
+        {
+          "pose": [
+            0.230463,
+            -0.112964
+          ],
+          "received_ms": 654.090092,
+          "sent_ms": 633.077134
+        },
+        {
+          "pose": [
+            0.226327,
+            -0.112964
+          ],
+          "received_ms": 685.467319,
+          "sent_ms": 670.3107630000001
+        },
+        {
+          "pose": [
+            0.218055,
+            -0.112964
+          ],
+          "received_ms": 719.906696,
+          "sent_ms": 702.175871
+        },
+        {
+          "pose": [
+            0.209783,
+            -0.112964
+          ],
+          "received_ms": 753.4290649999999,
+          "sent_ms": 735.807721
+        },
+        {
+          "pose": [
+            0.205647,
+            -0.112964
+          ],
+          "received_ms": 790.973471,
+          "sent_ms": 769.589703
+        },
+        {
+          "pose": [
+            0.189103,
+            -0.112964
+          ],
+          "received_ms": 817.5925189999999,
+          "sent_ms": 807.194722
+        },
+        {
+          "pose": [
+            0.184966,
+            -0.112964
+          ],
+          "received_ms": 855.617598,
+          "sent_ms": 834.3332780000001
+        },
+        {
+          "pose": [
+            0.176694,
+            -0.112964
+          ],
+          "received_ms": 891.535497,
+          "sent_ms": 871.812877
+        },
+        {
+          "pose": [
+            0.172558,
+            -0.112964
+          ],
+          "received_ms": 919.8766579999999,
+          "sent_ms": 907.84778
+        },
+        {
+          "pose": [
+            0.168414,
+            -0.112964
+          ],
+          "received_ms": 1002.106094,
+          "sent_ms": 936.092772
+        }
+      ],
+      "repeat": 1,
+      "start": [
+        0.368414,
+        -0.112964
+      ],
+      "target": [
+        0.168414,
+        -0.112964
+      ]
+    },
+    {
+      "amount": 0.05,
+      "before_sequence": 424,
+      "command_ms": 8.593767,
+      "direction": 1.0,
+      "final_pose": [
+        0.21841,
+        -0.112964
+      ],
+      "first_reported_arrival_ms": 259.546917,
+      "mode": "absolute_default",
+      "optics": [
+        {
+          "actual_ms": 117.348138,
+          "image": "/tmp/spy-motor-2-absolute_default-0.05-1-0.jpg",
+          "matches": 8,
+          "max_residual": 0.00012637045027390895,
+          "offset_ms": 0,
+          "sequence": 430
+        },
+        {
+          "actual_ms": 141.947652,
+          "image": "/tmp/spy-motor-2-absolute_default-0.05-1-50.jpg",
+          "matches": 8,
+          "max_residual": 0.0004037241585873629,
+          "offset_ms": 50,
+          "sequence": 431
+        },
+        {
+          "actual_ms": 238.01530000000002,
+          "image": "/tmp/spy-motor-2-absolute_default-0.05-1-100.jpg",
+          "matches": 8,
+          "max_residual": 0.00017974761778766777,
+          "offset_ms": 100,
+          "sequence": 432
+        },
+        {
+          "actual_ms": 373.292732,
+          "image": "/tmp/spy-motor-2-absolute_default-0.05-1-300.jpg",
+          "matches": 9,
+          "max_residual": 0.00012282162548032024,
+          "offset_ms": 300,
+          "sequence": 434
+        },
+        {
+          "actual_ms": 744.0909350000001,
+          "image": "/tmp/spy-motor-2-absolute_default-0.05-1-700.jpg",
+          "matches": 9,
+          "max_residual": 1.2553991365661213e-14,
+          "offset_ms": 700,
+          "sequence": 440
+        }
+      ],
+      "polls": [
+        {
+          "pose": [
+            0.168414,
+            -0.112964
+          ],
+          "received_ms": 21.288180999999998,
+          "sent_ms": 8.593879000000001
+        },
+        {
+          "pose": [
+            0.172906,
+            -0.112964
+          ],
+          "received_ms": 60.090061,
+          "sent_ms": 37.559008999999996
+        },
+        {
+          "pose": [
+            0.185314,
+            -0.112964
+          ],
+          "received_ms": 99.658637,
+          "sent_ms": 76.342724
+        },
+        {
+          "pose": [
+            0.193586,
+            -0.112964
+          ],
+          "received_ms": 132.809852,
+          "sent_ms": 115.797832
+        },
+        {
+          "pose": [
+            0.201858,
+            -0.112964
+          ],
+          "received_ms": 176.44834,
+          "sent_ms": 149.272942
+        },
+        {
+          "pose": [
+            0.21013,
+            -0.112964
+          ],
+          "received_ms": 201.0206,
+          "sent_ms": 192.550628
+        },
+        {
+          "pose": [
+            0.214266,
+            -0.112964
+          ],
+          "received_ms": 224.779223,
+          "sent_ms": 217.27803600000001
+        },
+        {
+          "pose": [
+            0.21841,
+            -0.112964
+          ],
+          "received_ms": 259.546314,
+          "sent_ms": 241.010978
+        }
+      ],
+      "repeat": 2,
+      "start": [
+        0.168414,
+        -0.112964
+      ],
+      "target": [
+        0.218414,
+        -0.112964
+      ]
+    },
+    {
+      "amount": 0.05,
+      "before_sequence": 471,
+      "command_ms": 10.10078,
+      "direction": -1.0,
+      "final_pose": [
+        0.168414,
+        -0.112964
+      ],
+      "first_reported_arrival_ms": 262.467124,
+      "mode": "absolute_default",
+      "optics": [
+        {
+          "actual_ms": 106.427716,
+          "image": "/tmp/spy-motor-2-absolute_default-0.05--1-0.jpg",
+          "matches": 9,
+          "max_residual": 0.0004633106422366707,
+          "offset_ms": 0,
+          "sequence": 477
+        },
+        {
+          "actual_ms": 141.19892000000002,
+          "image": "/tmp/spy-motor-2-absolute_default-0.05--1-50.jpg",
+          "matches": 9,
+          "max_residual": 0.0005566828555981416,
+          "offset_ms": 50,
+          "sequence": 478
+        },
+        {
+          "actual_ms": 242.804612,
+          "image": "/tmp/spy-motor-2-absolute_default-0.05--1-100.jpg",
+          "matches": 9,
+          "max_residual": 0.0002627468240015572,
+          "offset_ms": 100,
+          "sequence": 479
+        },
+        {
+          "actual_ms": 383.93009500000005,
+          "image": "/tmp/spy-motor-2-absolute_default-0.05--1-300.jpg",
+          "matches": 9,
+          "max_residual": 0.00009893454752804517,
+          "offset_ms": 300,
+          "sequence": 481
+        },
+        {
+          "actual_ms": 774.130744,
+          "image": "/tmp/spy-motor-2-absolute_default-0.05--1-700.jpg",
+          "matches": 9,
+          "max_residual": 1.3732700395566712e-14,
+          "offset_ms": 700,
+          "sequence": 487
+        }
+      ],
+      "polls": [
+        {
+          "pose": [
+            0.21841,
+            -0.112964
+          ],
+          "received_ms": 21.597648,
+          "sent_ms": 10.100952
+        },
+        {
+          "pose": [
+            0.213919,
+            -0.112964
+          ],
+          "received_ms": 59.358162,
+          "sent_ms": 37.845832
+        },
+        {
+          "pose": [
+            0.205647,
+            -0.112964
+          ],
+          "received_ms": 87.433406,
+          "sent_ms": 75.547619
+        },
+        {
+          "pose": [
+            0.197375,
+            -0.112964
+          ],
+          "received_ms": 112.433778,
+          "sent_ms": 103.647038
+        },
+        {
+          "pose": [
+            0.193238,
+            -0.112964
+          ],
+          "received_ms": 136.215904,
+          "sent_ms": 127.926019
+        },
+        {
+          "pose": [
+            0.184966,
+            -0.112964
+          ],
+          "received_ms": 162.160071,
+          "sent_ms": 152.70102999999997
+        },
+        {
+          "pose": [
+            0.176694,
+            -0.112964
+          ],
+          "received_ms": 205.532646,
+          "sent_ms": 178.561231
+        },
+        {
+          "pose": [
+            0.172558,
+            -0.112964
+          ],
+          "received_ms": 230.200147,
+          "sent_ms": 221.81910399999998
+        },
+        {
+          "pose": [
+            0.168414,
+            -0.112964
+          ],
+          "received_ms": 262.466035,
+          "sent_ms": 246.504167
+        }
+      ],
+      "repeat": 2,
+      "start": [
+        0.21841,
+        -0.112964
+      ],
+      "target": [
+        0.168414,
+        -0.112964
+      ]
+    },
+    {
+      "amount": 0.2,
+      "before_sequence": 521,
+      "command_ms": 6.624021,
+      "direction": 1.0,
+      "final_pose": [
+        0.368414,
+        -0.112964
+      ],
+      "first_reported_arrival_ms": 932.972757,
+      "mode": "absolute_default",
+      "optics": [
+        {
+          "actual_ms": 95.559478,
+          "image": "/tmp/spy-motor-2-absolute_default-0.2-1-0.jpg",
+          "matches": 8,
+          "max_residual": 0.001541232409288137,
+          "offset_ms": 0,
+          "sequence": 537
+        },
+        {
+          "actual_ms": 173.602351,
+          "image": "/tmp/spy-motor-2-absolute_default-0.2-1-50.jpg",
+          "matches": 8,
+          "max_residual": 0.003913744897178067,
+          "offset_ms": 50,
+          "sequence": 538
+        },
+        {
+          "actual_ms": 211.44264800000002,
+          "image": "/tmp/spy-motor-2-absolute_default-0.2-1-100.jpg",
+          "matches": 8,
+          "max_residual": 0.002477051513761638,
+          "offset_ms": 100,
+          "sequence": 539
+        },
+        {
+          "actual_ms": 352.27596,
+          "image": "/tmp/spy-motor-2-absolute_default-0.2-1-300.jpg",
+          "matches": 9,
+          "max_residual": 0.0003604587358219118,
+          "offset_ms": 300,
+          "sequence": 541
+        },
+        {
+          "actual_ms": 750.653092,
+          "image": "/tmp/spy-motor-2-absolute_default-0.2-1-700.jpg",
+          "matches": 9,
+          "max_residual": 1.2479025325372385e-14,
+          "offset_ms": 700,
+          "sequence": 547
+        }
+      ],
+      "polls": [
+        {
+          "pose": [
+            0.168414,
+            -0.112964
+          ],
+          "received_ms": 12.393212,
+          "sent_ms": 6.624283
+        },
+        {
+          "pose": [
+            0.174012,
+            -0.112964
+          ],
+          "received_ms": 38.656306,
+          "sent_ms": 28.408999
+        },
+        {
+          "pose": [
+            0.182284,
+            -0.112964
+          ],
+          "received_ms": 68.958153,
+          "sent_ms": 54.946794
+        },
+        {
+          "pose": [
+            0.194693,
+            -0.112964
+          ],
+          "received_ms": 134.60033399999998,
+          "sent_ms": 85.16098699999999
+        },
+        {
+          "pose": [
+            0.202965,
+            -0.112964
+          ],
+          "received_ms": 164.491395,
+          "sent_ms": 150.74262
+        },
+        {
+          "pose": [
+            0.207101,
+            -0.112964
+          ],
+          "received_ms": 200.467397,
+          "sent_ms": 179.90883499999998
+        },
+        {
+          "pose": [
+            0.215373,
+            -0.112964
+          ],
+          "received_ms": 231.351249,
+          "sent_ms": 215.738984
+        },
+        {
+          "pose": [
+            0.223645,
+            -0.112964
+          ],
+          "received_ms": 266.686342,
+          "sent_ms": 247.561856
+        },
+        {
+          "pose": [
+            0.227781,
+            -0.112964
+          ],
+          "received_ms": 296.86297099999996,
+          "sent_ms": 283.219839
+        },
+        {
+          "pose": [
+            0.248461,
+            -0.112964
+          ],
+          "received_ms": 369.24462800000003,
+          "sent_ms": 313.20367300000004
+        },
+        {
+          "pose": [
+            0.256733,
+            -0.112964
+          ],
+          "received_ms": 402.418334,
+          "sent_ms": 385.404378
+        },
+        {
+          "pose": [
+            0.260869,
+            -0.112964
+          ],
+          "received_ms": 432.64817999999997,
+          "sent_ms": 418.588658
+        },
+        {
+          "pose": [
+            0.281549,
+            -0.112964
+          ],
+          "received_ms": 518.107094,
+          "sent_ms": 448.848769
+        },
+        {
+          "pose": [
+            0.281549,
+            -0.112964
+          ],
+          "received_ms": 540.118511,
+          "sent_ms": 533.762019
+        },
+        {
+          "pose": [
+            0.289822,
+            -0.112964
+          ],
+          "received_ms": 570.7217949999999,
+          "sent_ms": 556.265273
+        },
+        {
+          "pose": [
+            0.293957,
+            -0.112964
+          ],
+          "received_ms": 602.245221,
+          "sent_ms": 586.8917580000001
+        },
+        {
+          "pose": [
+            0.30223,
+            -0.112964
+          ],
+          "received_ms": 626.042119,
+          "sent_ms": 618.20449
+        },
+        {
+          "pose": [
+            0.306366,
+            -0.112964
+          ],
+          "received_ms": 666.05556,
+          "sent_ms": 642.2002799999999
+        },
+        {
+          "pose": [
+            0.32291,
+            -0.112964
+          ],
+          "received_ms": 699.317604,
+          "sent_ms": 682.192185
+        },
+        {
+          "pose": [
+            0.327046,
+            -0.112964
+          ],
+          "received_ms": 732.4590119999999,
+          "sent_ms": 715.434257
+        },
+        {
+          "pose": [
+            0.335318,
+            -0.112964
+          ],
+          "received_ms": 760.498593,
+          "sent_ms": 748.505584
+        },
+        {
+          "pose": [
+            0.339454,
+            -0.112964
+          ],
+          "received_ms": 785.654752,
+          "sent_ms": 776.791673
+        },
+        {
+          "pose": [
+            0.339454,
+            -0.112964
+          ],
+          "received_ms": 809.09716,
+          "sent_ms": 802.368901
+        },
+        {
+          "pose": [
+            0.347726,
+            -0.112964
+          ],
+          "received_ms": 833.176428,
+          "sent_ms": 825.458944
+        },
+        {
+          "pose": [
+            0.355998,
+            -0.112964
+          ],
+          "received_ms": 866.798854,
+          "sent_ms": 849.55219
+        },
+        {
+          "pose": [
+            0.360134,
+            -0.112964
+          ],
+          "received_ms": 894.7207390000001,
+          "sent_ms": 883.499154
+        },
+        {
+          "pose": [
+            0.368414,
+            -0.112964
+          ],
+          "received_ms": 932.97182,
+          "sent_ms": 910.829586
+        }
+      ],
+      "repeat": 2,
+      "start": [
+        0.168414,
+        -0.112964
+      ],
+      "target": [
+        0.368414,
+        -0.112964
+      ]
+    },
+    {
+      "amount": 0.2,
+      "before_sequence": 574,
+      "command_ms": 32.093022,
+      "direction": -1.0,
+      "final_pose": [
+        0.168414,
+        -0.112964
+      ],
+      "first_reported_arrival_ms": 963.813224,
+      "mode": "absolute_default",
+      "optics": [
+        {
+          "actual_ms": 118.307349,
+          "image": "/tmp/spy-motor-2-absolute_default-0.2--1-0.jpg",
+          "matches": 9,
+          "max_residual": 0.0005061319879167995,
+          "offset_ms": 0,
+          "sequence": 590
+        },
+        {
+          "actual_ms": 140.40668300000002,
+          "image": "/tmp/spy-motor-2-absolute_default-0.2--1-50.jpg",
+          "matches": 9,
+          "max_residual": 0.0005454719714620734,
+          "offset_ms": 50,
+          "sequence": 591
+        },
+        {
+          "actual_ms": 242.494459,
+          "image": "/tmp/spy-motor-2-absolute_default-0.2--1-100.jpg",
+          "matches": 9,
+          "max_residual": 0.00019302332106245279,
+          "offset_ms": 100,
+          "sequence": 592
+        },
+        {
+          "actual_ms": 375.980334,
+          "image": "/tmp/spy-motor-2-absolute_default-0.2--1-300.jpg",
+          "matches": 9,
+          "max_residual": 0.00024340959888512702,
+          "offset_ms": 300,
+          "sequence": 594
+        },
+        {
+          "actual_ms": 741.839585,
+          "image": "/tmp/spy-motor-2-absolute_default-0.2--1-700.jpg",
+          "matches": 9,
+          "max_residual": 1.0575712043090365e-14,
+          "offset_ms": 700,
+          "sequence": 600
+        }
+      ],
+      "polls": [
+        {
+          "pose": [
+            0.368414,
+            -0.112964
+          ],
+          "received_ms": 37.979467,
+          "sent_ms": 32.093146000000004
+        },
+        {
+          "pose": [
+            0.350408,
+            -0.112964
+          ],
+          "received_ms": 126.29905899999999,
+          "sent_ms": 54.345136000000004
+        },
+        {
+          "pose": [
+            0.342136,
+            -0.112964
+          ],
+          "received_ms": 165.785704,
+          "sent_ms": 143.25528500000001
+        },
+        {
+          "pose": [
+            0.338,
+            -0.112964
+          ],
+          "received_ms": 192.453325,
+          "sent_ms": 182.261214
+        },
+        {
+          "pose": [
+            0.329728,
+            -0.112964
+          ],
+          "received_ms": 232.893405,
+          "sent_ms": 208.895882
+        },
+        {
+          "pose": [
+            0.321456,
+            -0.112964
+          ],
+          "received_ms": 257.532424,
+          "sent_ms": 249.029619
+        },
+        {
+          "pose": [
+            0.31732,
+            -0.112964
+          ],
+          "received_ms": 281.460927,
+          "sent_ms": 273.688023
+        },
+        {
+          "pose": [
+            0.309048,
+            -0.112964
+          ],
+          "received_ms": 305.54635,
+          "sent_ms": 297.412179
+        },
+        {
+          "pose": [
+            0.304911,
+            -0.112964
+          ],
+          "received_ms": 343.656574,
+          "sent_ms": 321.6664
+        },
+        {
+          "pose": [
+            0.296639,
+            -0.112964
+          ],
+          "received_ms": 366.981112,
+          "sent_ms": 359.649695
+        },
+        {
+          "pose": [
+            0.275959,
+            -0.112964
+          ],
+          "received_ms": 468.607124,
+          "sent_ms": 383.181673
+        },
+        {
+          "pose": [
+            0.267687,
+            -0.112964
+          ],
+          "received_ms": 501.840634,
+          "sent_ms": 484.87672100000003
+        },
+        {
+          "pose": [
+            0.259415,
+            -0.112964
+          ],
+          "received_ms": 527.051645,
+          "sent_ms": 518.1657240000001
+        },
+        {
+          "pose": [
+            0.255279,
+            -0.112964
+          ],
+          "received_ms": 564.006813,
+          "sent_ms": 543.239395
+        },
+        {
+          "pose": [
+            0.247007,
+            -0.112964
+          ],
+          "received_ms": 592.415295,
+          "sent_ms": 580.4689440000001
+        },
+        {
+          "pose": [
+            0.242871,
+            -0.112964
+          ],
+          "received_ms": 630.477407,
+          "sent_ms": 608.6631679999999
+        },
+        {
+          "pose": [
+            0.234599,
+            -0.112964
+          ],
+          "received_ms": 659.851365,
+          "sent_ms": 646.799854
+        },
+        {
+          "pose": [
+            0.226327,
+            -0.112964
+          ],
+          "received_ms": 698.10958,
+          "sent_ms": 675.829827
+        },
+        {
+          "pose": [
+            0.222191,
+            -0.112964
+          ],
+          "received_ms": 727.795757,
+          "sent_ms": 713.4596789999999
+        },
+        {
+          "pose": [
+            0.209783,
+            -0.112964
+          ],
+          "received_ms": 763.506746,
+          "sent_ms": 743.8902840000001
+        },
+        {
+          "pose": [
+            0.209783,
+            -0.112964
+          ],
+          "received_ms": 790.5389299999999,
+          "sent_ms": 779.894115
+        },
+        {
+          "pose": [
+            0.193238,
+            -0.112964
+          ],
+          "received_ms": 827.448032,
+          "sent_ms": 807.188374
+        },
+        {
+          "pose": [
+            0.189103,
+            -0.112964
+          ],
+          "received_ms": 860.365864,
+          "sent_ms": 843.667127
+        },
+        {
+          "pose": [
+            0.18083,
+            -0.112964
+          ],
+          "received_ms": 897.523745,
+          "sent_ms": 876.584609
+        },
+        {
+          "pose": [
+            0.176694,
+            -0.112964
+          ],
+          "received_ms": 926.958434,
+          "sent_ms": 913.733386
+        },
+        {
+          "pose": [
+            0.168414,
+            -0.112964
+          ],
+          "received_ms": 963.812529,
+          "sent_ms": 943.100936
+        }
+      ],
+      "repeat": 2,
+      "start": [
+        0.368414,
+        -0.112964
+      ],
+      "target": [
+        0.168414,
+        -0.112964
+      ]
+    }
+  ],
+  "velocity_probe": {
+    "absolute_axis_sign_per_positive_velocity": -1.0,
+    "end": [
+      0.160126,
+      -0.112964
+    ],
+    "start": [
+      0.168414,
+      -0.112964
+    ]
+  }
+}

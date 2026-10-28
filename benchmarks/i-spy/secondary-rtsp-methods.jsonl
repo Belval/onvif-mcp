@@ -1,0 +1,9 @@
+{"method": "OPTIONS", "status": 200, "sent_cseq": 1, "returned_cseq": 1, "advertised_methods": ["OPTIONS", "DESCRIBE", "SETUP", "TEARDOWN", "PLAY", "PAUSE", "GET_PARAMETER", "SET_PARAMETER"]}
+{"method": "DESCRIBE", "status": 200, "sent_cseq": 3, "returned_cseq": 3}
+{"method": "SETUP", "status": 200, "sent_cseq": 4, "returned_cseq": 4}
+{"method": "PLAY", "status": 200, "sent_cseq": 5, "returned_cseq": 5}
+{"method": "GET_PARAMETER", "status": 200, "sent_cseq": 6, "returned_cseq": 6}
+{"method": "SET_PARAMETER", "status": 400, "sent_cseq": 7, "returned_cseq": 6}
+{"method": "GET_PARAMETER", "status": 200, "sent_cseq": 8, "returned_cseq": 8}
+{"method": "OPTIONS", "status": 200, "sent_cseq": 9, "returned_cseq": 9, "advertised_methods": ["OPTIONS", "DESCRIBE", "SETUP", "TEARDOWN", "PLAY", "PAUSE", "GET_PARAMETER", "SET_PARAMETER"]}
+{"method": "TEARDOWN", "status": 200, "sent_cseq": 10, "returned_cseq": 10}

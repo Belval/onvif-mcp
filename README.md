@@ -6,7 +6,7 @@ MCP stdio, visual tracking and motor control. Python and FFmpeg are not required
 
 ## Build and configure
 
-Requires Rust 1.89+ and a C/C++ compiler for the optional OpenH264 detail decoder.
+Requires Rust 1.89+, a C/C++ compiler, CMake and NASM for bundled OpenH264/TurboJPEG codecs.
 The preview path uses the camera's native JPEG stream and needs no decoder.
 
 ```sh

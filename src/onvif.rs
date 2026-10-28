@@ -356,6 +356,40 @@ impl Onvif {
 
 }).await
     }
+    pub async fn absolute_speed(&self, target: [f64; 2], speed: f64) -> Result<()> {
+        ensure!(
+            target
+                .iter()
+                .all(|v| v.is_finite() && (-1.0..=1.0).contains(v))
+                && speed.is_finite()
+                && (0.0..=16.0).contains(&speed),
+            "Invalid motion experiment"
+        );
+        self.call(&self.ptz_url,PTZ,"AbsoluteMove",&format!("<s:ProfileToken>{}</s:ProfileToken><s:Position><tt:PanTilt x=\"{}\" y=\"{}\"/></s:Position><s:Speed><tt:PanTilt x=\"{speed}\" y=\"{speed}\"/></s:Speed>",escape(&self.profile),target[0],target[1])).await?;
+        Ok(())
+    }
+    pub async fn relative_default(&self, delta: [f64; 2]) -> Result<()> {
+        ensure!(
+            delta
+                .iter()
+                .all(|v| v.is_finite() && (-1.0..=1.0).contains(v)),
+            "Invalid motion experiment"
+        );
+        self.call(&self.ptz_url,PTZ,"RelativeMove",&format!("<s:ProfileToken>{}</s:ProfileToken><s:Translation><tt:PanTilt x=\"{}\" y=\"{}\"/></s:Translation>",escape(&self.profile),delta[0],delta[1])).await?;
+        Ok(())
+    }
+    pub async fn relative(&self, delta: [f64; 2], speed: f64) -> Result<()> {
+        ensure!(
+            delta
+                .iter()
+                .all(|v| v.is_finite() && (-1.0..=1.0).contains(v))
+                && speed.is_finite()
+                && (0.0..=1.0).contains(&speed),
+            "Invalid motion experiment"
+        );
+        self.call(&self.ptz_url,PTZ,"RelativeMove",&format!("<s:ProfileToken>{}</s:ProfileToken><s:Translation><tt:PanTilt x=\"{}\" y=\"{}\"/></s:Translation><s:Speed><tt:PanTilt x=\"{speed}\" y=\"{speed}\"/></s:Speed>",escape(&self.profile),delta[0],delta[1])).await?;
+        Ok(())
+    }
     pub async fn velocity(&self, pan: f64, tilt: f64, seconds: f64) -> Result<()> {
         crate::metrics::result("onvif.velocity", async {
         validate_movement(pan, tilt, seconds)?;
@@ -416,6 +450,7 @@ fn action_stage(action: &str) -> &'static str {
     match action {
         "GetStatus" => "onvif.GetStatus",
         "AbsoluteMove" => "onvif.AbsoluteMove",
+        "RelativeMove" => "onvif.RelativeMove",
         "ContinuousMove" => "onvif.ContinuousMove",
         "Stop" => "onvif.Stop",
         "GetStreamUri" => "onvif.GetStreamUri",
