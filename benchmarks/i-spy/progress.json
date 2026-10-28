@@ -1,0 +1,81 @@
+{
+  "updated_utc": "2026-10-28T04:30:24.801345+00:00",
+  "goal_status": "active; not at proven practical plateau",
+  "objective": "Push the C210 to the maximum hardware usefully permits via independent I-spy challenges from the second camera, record each challenge metrics, optimize and replay, stop only after an evidenced practical minimum.",
+  "repository": "/mnt/main/Git/onvif-mcp",
+  "latest_commit": "978d7687cbf0636fc7d0757c5ea47cb1f54d1604",
+  "permissions": "Full filesystem/network access; approval never. User authorized secondary-camera subagent, camera settings experiments, wear/failure and commits. Never echo/commit credentials; primary .env is ignored.",
+  "agent": {
+    "name": "/root/spy",
+    "role": "Independent secondary-camera challenge setter/judge; holds two undisclosed held-outs. All secondary connections currently closed. Continue existing agent; no need to spawn another."
+  },
+  "primary": {
+    "host": "192.168.0.62",
+    "model": "Tapo C210",
+    "minor": {
+      "resolution": [
+        640,
+        360
+      ],
+      "fps": 15,
+      "bitrate_kbps": 512,
+      "quality": 3,
+      "gov": 25
+    },
+    "main": {
+      "resolution": [
+        2304,
+        1296
+      ],
+      "quality": 5,
+      "secondary_reported_bitrate_kbps": 1228
+    },
+    "current_reported_pose_approx": [
+      0.712707,
+      -0.207643
+    ],
+    "original_minor_backup": "metrics/primary-minor-before-640.xml"
+  },
+  "completed": [
+    "Baseline3 independent challenges passed; SPY001 has missing scan client wall and interleaved development, explicitly flagged.",
+    "JPEG frame-local recovery3847e1b committed; long-tail reduced but JPEG still unreliable.",
+    "H264 minor640x360 native15fps verified by independent PyAV decode. 200 buffered calls worst1.68ms, later SIMD200 worst1.87ms, no reconnects.",
+    "TurboJPEG persistent encoder, no pointless thumbnail on native-size preview, SIMD resize for detail/main candidate, OpenH264 release rebuilt with NASM; actual SSE2 symbols verified.",
+    "29 unit tests and clippy passed latest code. Stop completion is cancellation-durable and gated; immediate Stop bypass plus FIFO barrier prevents later motion overtaking pending Stops. Live stress check still required.",
+    "Matched18-trial wait sweeps saved; fastest zero waits rejected for actual motion smear. Fast50/100 and two-zero aligned geometrically but independent judge found softness, so no new default yet.",
+    "Continuous pan no faster and overshoots. Explicit speed1/.1/4 unusably slow or timeout. Relative default works but no clear gain; relative max failed. Secondary dual Continuous command prioritizes pan, no demonstrated concurrent-axis improvement.",
+    "Bitrate2048, GOV1, Quality5, JPEG FPS15 setters all refused/clamped; full-config verification rolled back each.",
+    "Secondary vendor local-account auth failed read-only; no credential guessing. Faster vendor motor interface not demonstrated/available with current credentials.",
+    "Fresh H264/SIMD held-out headphones SPY-H02 passed first attempt,918.85ms tool sum; actual prompt-to-verdict51s. Judge timestamps separate from later bookkeeping."
+  ],
+  "active_process": {
+    "session_id": 80124,
+    "kind": "exec_command",
+    "command": "CAMERA_PREVIEW=h264-main CAMERA_SETTLE_MS=50 CAMERA_POLL_MS=30 CAMERA_STABLE_SAMPLES=1 CAMERA_BENCH_LABEL=framing-main50 CAMERA_BENCH_REPEATS=3 target/release/onvif-sight --measure-framing",
+    "stdout": "/tmp/spy-framing-main50-stdout.log",
+    "stderr": "/tmp/spy-framing-main50-progress.jsonl",
+    "artifact": "benchmarks/i-spy/framing-main50.json",
+    "next_action": "Poll same session or inspect authoritative process before restarting. Main preview uses unchanged high-resolution main source and SIMD downsizing; no main settings writes."
+  },
+  "outstanding": [
+    "Compare main-source vs minor-source first-frame sharpness and latency; ask independent judge on worst paired frames. Main has higher default quality/bitrate; optional CAMERA_PREVIEW=h264-main is compiled.",
+    "Fix calibration protocol: current code reuses the original pre-pan baseline after pan-origin return when measuring tilt. Re-capture immediately before each axis and use matched signed approaches/symmetric differences; preserve raw directional samples/return offsets rather than assuming cross term zero. Current H264 matrix[[2.0861,.1907],[-.02625,.80486]] reduced precise2.14s->1.64s, but cross term may be contaminated. Backup old matrix metrics/calibration-before-h264.json. Gain1.0 did not improve current matrix and was not promoted.",
+    "Rebuild/check after calibration changes. Recalibrate fresh H264 on textured stationary view with conservative settled frames, restore origin. Revalidate ordinary/precise/rough framing and far points, choose gain from evidence.",
+    "Stress real cancellation followed immediately by new movement/restoration with the latest gated Stop code. One prior verify-motion restore timed out before fix. Deterministic unit tests cover queue/cancellation behavior but live evidence is outstanding.",
+    "Select smallest wait/poll setting that passes semantic framing and material-smear quality, not geometry alone; compare repeated matched trials and judge images. Current main50 trial underway. Minor baseline300ms/60ms/2confirm p50~927ms; fast50/15ms/1confirm p50~622ms but softer early images; continuous polling worse tail.",
+    "Play remaining independently held-out challenges after each useful accepted optimization; record actual tool calls/traces and judge outcomes with /tmp/spy_control.py.",
+    "Investigate remembered-view visual drift before cleanup: original printer reference /tmp/camera-search-1793155359788916891-1.jpg has printer nearcenter, later same reported pose /tmp/camera-search-1793159710389827210-1.jpg places it left. Do not assume exact origin return from position alone. At end visually reframe/resave printer and air_outlet if necessary. Original air_outlet reference /tmp/camera-search-1793155451597015832-1.jpg and stored pose[-.904928,.426509].",
+    "Promote validated preview/tuning defaults in Rust, tool descriptions, README and global/project Codex config. Existing user MCP config remains rust-native-v4-metrics without H264 env, so NOT yet final deployment. Default runtime is still JPEG unless CAMERA_PREVIEW=h264/h264-main. Reload via /tmp/reload_camera_ws.py after revision bump; no user approval needed.",
+    "Run final release tests/clippy/live checks, repeated representative measurements proving practical plateau, verify all explicit goal requirements including game/challenge metrics, commit clean final worktree. Only then update_goal complete."
+  ],
+  "helpers": {
+    "cargo": "/home/edouard/.cargo/bin/cargo",
+    "nasm": "/home/edouard/.local/bin/nasm",
+    "bridge": "CAMERA_PREVIEW=h264 .venv/bin/python /tmp/camera_metrics_bridge.py (currently closed); uses /tmp/onvif-metrics-bridge.sock and Rust MCP child. SPY_CAMERA_BINARY overrides child path.",
+    "controller": "/tmp/spy_control.py begin ID PROMPT PHASE; call JSON; finish VERDICT. Agent judgement UTC is authoritative for verdict latency; script close timestamp is bookkeeping.",
+    "stationary": "/tmp/spy_stationary.py PHASE (200 calls, warms first, saves benchmarks/i-spy/stationary-PHASE.json)",
+    "encoder": "/tmp/encoder_try.py + /tmp/camera_encoder_experiment.py; loads dotenv securely, backups0600, complete verify+rollback, no credential output.",
+    "native_experiments": "--measure-motor and --measure-framing in src/experiments.rs; CAMERA_BENCH_* control subsets/repeats/labels/output. Timed primary trials must not run alongside other primary movers/compilation/secondary capture."
+  },
+  "documentation": "benchmarks/i-spy/README.md, runs.jsonl, judgments.json and raw trial JSON contain evidence/limits. Do not read spy private target-pool file before held-outs are issued."
+}
