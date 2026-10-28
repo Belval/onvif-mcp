@@ -13,7 +13,7 @@ async def main():
         async with ClientSession(read, write) as session:
             await session.initialize()
             names = {t.name for t in (await session.list_tools()).tools}
-            assert names == {'camera_status','camera_see','camera_move','camera_stop'}
+            assert names == {'camera_status','camera_see','camera_move','camera_stop','camera_focus'}
             async def call(name, args=None):
                 result = await session.call_tool(name, args or {})
                 assert not result.isError, result

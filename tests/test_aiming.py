@@ -50,12 +50,16 @@ def simulated_camera(point=(.7,.3)):
 
 def test_focus_uses_position_mapping_and_returns_centered_image(monkeypatch):
     c = simulated_camera()
+    previous = np.zeros(2)
     def track(before, after, point):
-        return np.array(point)+c.calibration@c.current
+        nonlocal previous
+        result = np.array(point)+c.calibration@(c.current-previous)
+        previous = c.current.copy()
+        return result
     monkeypatch.setattr('camera_mcp.track_point',track)
     metadata, image = c.focus(.7,.3,'frame')
     assert metadata['focus_status'] == 'centered'
-    assert np.allclose(metadata['target'],[.5,.5])
+    assert np.linalg.norm(np.array(metadata['target'])-.5) <= .02
     target = c.goto.call_args.args[0]
     assert target[0] < 0  # Image-right requires decreasing this camera's pan position.
     assert target[1] > 0  # Image-above requires increasing tilt position.
@@ -84,7 +88,7 @@ def test_tracking_failure_stops_corrections(monkeypatch):
     metadata, _ = c.focus(.7,.3,'frame')
     assert metadata['focus_status'] == 'tracking_lost'
     assert metadata['target'] is None
-    assert c.goto.call_count == 1
+    assert c.goto.call_count == 0
 
 
 @pytest.mark.parametrize('point',[(float('nan'),.5),(-.1,.5),(.5,1.1)])
@@ -92,3 +96,37 @@ def test_focus_rejects_invalid_points(point):
     c = simulated_camera()
     with pytest.raises(ValueError): c.focus(*point,'frame')
     c.goto.assert_not_called()
+
+
+def test_absolute_move_waits_for_stable_position_and_stops(monkeypatch):
+    c = Camera.__new__(Camera)
+    c.profile = Mock(token='profile')
+    c.ptz = Mock()
+    c.stop = Mock()
+    c.position = Mock(side_effect=[np.array([0.,0.]),np.array([.1,.2]),np.array([.1,.2])])
+    monkeypatch.setattr('camera_mcp.time.sleep',lambda _:None)
+    assert np.allclose(c.goto([.1,.2]),[.1,.2])
+    assert c.position.call_count == 3
+    c.stop.assert_called_once()
+    request = c.ptz.AbsoluteMove.call_args.args[0]
+    assert 'Speed' not in request
+
+
+def test_absolute_move_failure_still_stops():
+    c = Camera.__new__(Camera)
+    c.profile = Mock(token='profile')
+    c.ptz = Mock()
+    c.ptz.AbsoluteMove.side_effect = RuntimeError('disconnected')
+    c.stop = Mock()
+    with pytest.raises(RuntimeError): c.goto([.1,.2])
+    c.stop.assert_called_once()
+
+
+def test_visual_dead_zone_does_not_amplify_corrections(monkeypatch):
+    c = simulated_camera()
+    monkeypatch.setattr('camera_mcp.track_point',lambda a,b,point:np.array(point))
+    metadata, _ = c.focus(.6,.6,'frame')
+    assert metadata['focus_status'] == 'iteration_limit'
+    positions = np.array([call.args[0] for call in c.goto.call_args_list])
+    increments = np.diff(np.vstack([np.zeros(2),positions]),axis=0)
+    assert np.allclose(increments, increments[0])

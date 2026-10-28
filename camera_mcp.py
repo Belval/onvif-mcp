@@ -80,9 +80,9 @@ class Camera:
             frame = next(frames)
             first_pts = frame.time
             # Consume a little video rather than returning the stream's first keyframe.
-            for _ in range(15):
+            for _ in range(30):
                 frame = next(frames)
-                if first_pts is not None and frame.time is not None and frame.time-first_pts >= .25:
+                if first_pts is not None and frame.time is not None and frame.time-first_pts >= .5:
                     break
             img = frame.to_image()
             img.thumbnail((1280, 960))
@@ -109,11 +109,20 @@ class Camera:
                 actual = self.position()
                 stable = stable + 1 if np.max(np.abs(actual - target)) < .002 else 0
                 if stable >= 2:
-                    time.sleep(.15)
+                    time.sleep(.65)
                     return actual
             raise RuntimeError('Camera did not reach the requested position')
         finally:
             self.stop()
+
+    def record_observation(self, jpeg, pose, **metadata):
+        frame_id = uuid.uuid4().hex[:16]
+        self.observation = {'id': frame_id, 'time': time.monotonic(),
+                            'pose': pose, 'jpeg': jpeg}
+        width, height = image_size(jpeg)
+        return {'frame_id': frame_id, 'width': width, 'height': height,
+                'coordinates': 'x,y normalized 0..1 from top-left; center=(0.5,0.5)',
+                **metadata}, jpeg
 
     def observe(self, **metadata):
         # Associate pixels with a stationary pose; reject images taken during movement.
@@ -122,13 +131,7 @@ class Camera:
         jpeg = self.see()
         if np.max(np.abs(self.position() - pose)) > .003:
             raise ValueError('Camera moved during capture; request another image')
-        frame_id = uuid.uuid4().hex[:16]
-        self.observation = {'id': frame_id, 'time': time.monotonic(),
-                            'pose': pose, 'jpeg': jpeg}
-        width, height = image_size(jpeg)
-        return {'frame_id': frame_id, 'width': width, 'height': height,
-                'coordinates': 'x,y normalized 0..1 from top-left; center=(0.5,0.5)',
-                **metadata}, jpeg
+        return self.record_observation(jpeg, pose, **metadata)
 
     def focus(self, x, y, frame_id):
         if not all(math.isfinite(v) and 0 <= v <= 1 for v in (x, y)):
@@ -140,16 +143,22 @@ class Camera:
         if np.max(np.abs(pose-old['pose'])) > .003:
             return self.observe(focus_status='stale_frame', detail='Camera moved since that image; choose a new point.')
         point = np.array([x, y], dtype=float)
-        before = old['jpeg']
+        before = self.see()
+        tracked = track_point(old['jpeg'], before, point)
+        if tracked is None:
+            return self.record_observation(before, pose, focus_status='tracking_lost',
+                                           iterations=0, target=None)
+        point = tracked
         matrix = self.calibration.copy()
         status = 'iteration_limit'
         iterations = 0
+        corrections = []
         for _ in range(3):
             error = point - .5
-            if np.linalg.norm(error) <= .035:
+            if np.linalg.norm(error) <= .02:
                 status = 'centered'
                 break
-            delta = -np.linalg.solve(matrix, error)
+            delta = -.8 * np.linalg.solve(matrix, error)
             delta = np.clip(delta, [-.12, -.30], [.12, .30])
             target = np.clip(pose + delta, -1, 1)
             if np.max(np.abs(target-pose)) < .002:
@@ -164,24 +173,23 @@ class Camera:
                 before = after
                 break
             movement = actual-pose
+            corrections.append({'before': point.tolist(), 'after': tracked.tolist(), 'pose_delta': movement.tolist()})
             shift = tracked-point
             if np.dot(movement, movement) > 1e-6:
                 # Local secant correction compensates for tilt, perspective and lens distortion.
                 candidate = matrix + np.outer(shift-matrix@movement, movement) / np.dot(movement, movement)
-                if np.linalg.cond(candidate) < 20 and np.linalg.det(candidate)*np.linalg.det(matrix) > 0:
-                    matrix = candidate
+                ratios = np.diag(candidate) / np.diag(self.calibration)
+                if (np.linalg.cond(candidate) < 20 and np.all(ratios > .5)
+                        and np.all(ratios < 2)
+                        and np.max(np.abs(candidate-np.diag(np.diag(candidate)))) < .5):
+                    matrix = .5*matrix + .5*candidate
             point, pose, before = tracked, actual, after
-        if status == 'iteration_limit' and np.linalg.norm(point-.5) <= .035:
+        if status == 'iteration_limit' and np.linalg.norm(point-.5) <= .02:
             status = 'centered'
         metadata = {'focus_status': status, 'iterations': iterations,
-                    'target': point.tolist() if status != 'tracking_lost' else None}
+                    'target': point.tolist() if status != 'tracking_lost' else None, 'corrections': corrections}
         # Return exactly the frame used for the final tracking result.
-        frame_id = uuid.uuid4().hex[:16]
-        self.observation = {'id': frame_id, 'time': time.monotonic(),
-                            'pose': self.position(), 'jpeg': before}
-        width, height = image_size(before)
-        return {'frame_id': frame_id, 'width': width, 'height': height,
-                'coordinates': 'x,y normalized 0..1 from top-left; center=(0.5,0.5)', **metadata}, before
+        return self.record_observation(before, self.position(), **metadata)
 
 
 def camera():
@@ -241,7 +249,8 @@ def camera_focus(x: float, y: float, frame_id: str) -> CallToolResult:
 def camera_move(pan: float = 0, tilt: float = 0, seconds: float = 0.3) -> dict:
     """Look around: pan/tilt velocities -1..1; positive right/up. Max 2 seconds, then stop.
 
-    Use small movements and camera_see afterwards to check the view.
+    Prefer camera_focus to center an image point. This raw velocity command is
+    not an image displacement. Use camera_see afterwards to check the view.
     """
     return safe_call('move', pan, tilt, seconds)
 
