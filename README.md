@@ -35,8 +35,10 @@ configuration to apply. See [Codex MCP configuration](https://learn.chatgpt.com/
 
 ## Tools
 
-- `camera_see`: fresh video frame as an MCP JPEG image, at most 1280×960,
-  plus `frame_id`, width and height.
+- `camera_see`: fresh 640-pixel-wide JPEG preview (640×360 on this C210),
+  plus `frame_id`, width and height. Use `camera_see(detail=true)` for up to
+  1280×960 detail. Focus results also return previews. Full-resolution frames stay
+  internal for visual tracking, so normalized aiming coordinates are unchanged.
 - `camera_focus(x, y, frame_id)`: center a point from that image in one call and
   return the resulting image. Coordinates are fractions of image width/height,
   from the top-left: `(0,0)` is top-left, `(0.5,0.5)` is center. For example, a

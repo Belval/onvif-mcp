@@ -11,6 +11,7 @@ import time
 from urllib.parse import urlsplit, urlunsplit, quote
 
 import av
+from PIL import Image as PILImage
 from dotenv import load_dotenv
 from mcp.server.fastmcp import FastMCP, Image
 from mcp.types import CallToolResult, TextContent
@@ -217,16 +218,28 @@ def camera_status() -> dict:
 
 
 @mcp.tool()
-def camera_see() -> CallToolResult:
-    """See a fresh image with a frame_id for camera_focus. Coordinates are normalized 0..1.
+def camera_see(detail: bool = False) -> CallToolResult:
+    """See a fresh 640px-wide preview with a frame_id for camera_focus.
+
+    Set detail=true for a 1280px image when reading small details. Coordinates are normalized 0..1.
 
     Use camera_focus(x,y,frame_id) to center a point in this image in one call.
     """
-    return observation_result(safe_call('observe'))
+    return observation_result(safe_call('observe'), detail=detail)
 
 
-def observation_result(observation):
+def observation_result(observation, detail=False):
     metadata, jpeg = observation
+    metadata = dict(metadata)
+    metadata['source_width'], metadata['source_height'] = image_size(jpeg)
+    if not detail:
+        with PILImage.open(BytesIO(jpeg)) as image:
+            image.thumbnail((640, 480))
+            output = BytesIO()
+            image.save(output, format='JPEG', quality=70)
+            jpeg = output.getvalue()
+    metadata['width'], metadata['height'] = image_size(jpeg)
+    metadata['detail'] = 'full' if detail else 'preview'
     return CallToolResult(content=[TextContent(type='text', text=json.dumps(metadata)),
                                   Image(data=jpeg, format='jpeg').to_image_content()])
 
