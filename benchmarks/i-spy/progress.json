@@ -1,6 +1,6 @@
 {
-  "updated_utc": "2026-10-28T05:25:42.307475+00:00",
-  "goal_status": "active: final supported default-tilt-speed comparison/restoration pending; all other completion gates verified",
+  "updated_utc": "2026-10-28T05:28:07.436749+00:00",
+  "goal_status": "completion audit passed; final evidence commit and clean-tree assertion follow",
   "candidate_revision": "9c8334515dc8428f5f7ccb4eb964cb49b915096b",
   "deployed_revision": "rust-native-v5-h264",
   "completed": [
@@ -9,13 +9,12 @@
     "Same-origin18+18 matched comparison933\u2192614ms median,18/18 geometry each; fresh worst-pair semantic review passed",
     "Global/project MCP config promoted/reloaded; actual9 tools/H264/metrics verified",
     "Printer view re-centered/saved; air-outlet view visually verified;8.607s cross-room named look succeeded",
-    "Credential scan passed; initial timing gaps remain explicitly documented"
+    "Credential scan passed; initial timing gaps remain explicitly documented",
+    "Default tilt .89\u21921 offered no gain; exact configuration restored",
+    "Secondary original pre-protocol pose verified twice,Stop acknowledged,credential helper/bytecode removed",
+    "Requirement-by-requirement completion evidence assertions passed"
   ],
-  "pending": [
-    "Secondary y=.89\u21921 default tilt-speed comparison and exact configuration/pose restoration",
-    "Secondary temporary credential helper cleanup",
-    "Final evidence commit,clean-worktree check and completion audit"
-  ],
+  "pending": [],
   "evidence": [
     "benchmarks/i-spy/completion-audit.json",
     "benchmarks/i-spy/final-comparison.json",

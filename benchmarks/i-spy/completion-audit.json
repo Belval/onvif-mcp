@@ -1,5 +1,5 @@
 {
-  "checked_utc": "2026-10-28T05:22:57.670218+00:00",
+  "checked_utc": "2026-10-28T05:28:07.436749+00:00",
   "objective": "Optimize C210 using independent I-spy games to an evidenced useful plateau; record metrics, optimize/replay and commit changes",
   "requirements": {
     "production_rust_and_metrics": {
@@ -36,9 +36,11 @@
         "benchmarks/i-spy/encoder-experiments.jsonl",
         "benchmarks/i-spy/backlash-comparison.jsonl",
         "benchmarks/i-spy/motor-h264-continuous.json",
-        "benchmarks/i-spy/final-pair-verdicts.json"
+        "benchmarks/i-spy/final-pair-verdicts.json",
+        "benchmarks/i-spy/secondary-default-speed.json",
+        "benchmarks/i-spy/secondary-default-speed-gate.json"
       ],
-      "status": "verified on current modes/waits/streams with fresh worst-pair review; final supported default-tilt-speed knob remains pending"
+      "status": "verified: faster unsafe/unreliable waits rejected; all tested command/encoder/source/poll/backlash/default-speed alternatives failed useful-improvement gate; fresh games and matched optical trials passed"
     },
     "deployment_and_named_views": {
       "evidence": [
@@ -51,11 +53,20 @@
     "cleanup_and_commits": {
       "evidence": [
         "git status",
-        "git log"
+        "git log",
+        "benchmarks/i-spy/secondary-cleanup.json"
       ],
-      "status": "pending secondary restoration/helper cleanup and final commit"
+      "status": "verified secondary exact config/original pose/Stop/helper cleanup; production commit9c83345 and deployment/evidence commit678948e; final evidence commit and clean-tree assertion follow this audit"
     }
   },
   "binary_sha256": "fc9e496220b181959535056b2926cdd45c8fff73066876279778320fbfe33900",
-  "scope_limit": "Current firmware/LAN and available interfaces; no universal optimality claim or sensor exposure latency measurement"
+  "scope_limit": "Current firmware/LAN and available interfaces; no universal optimality claim or sensor exposure latency measurement",
+  "assertions": "PASS: final games complete successful traces/binary hash,18+18 complete optical trials/restores,whole-room completed wire trace,both MCP configurationsv5,secondary config/pose/credential cleanup",
+  "checks": [
+    "cargo test --locked:30 passed",
+    "cargo clippy --all-targets --locked -- -D warnings:passed",
+    "cargo build --release --locked:passed",
+    "Final release --verify-motion:passed",
+    "Tracked/untracked nonignored files credential scan:passed"
+  ]
 }

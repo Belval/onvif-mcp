@@ -1,0 +1,11 @@
+{
+  "started_utc": "2026-10-28T05:24:16.554732+00:00",
+  "camera": "secondary-only",
+  "motion_performed": false,
+  "identity_roundtrip_supported": true,
+  "outcomes": [],
+  "backup": "/tmp/spy-secondary-ptz-before-default-speed.xml",
+  "backup_sha256": "104949203e1d484c0c06275130508c63643a7f1fd3c1d54f684c2a224de7df83",
+  "original_config_readback_unchanged": true,
+  "finished_utc": "2026-10-28T05:24:17.073750+00:00"
+}

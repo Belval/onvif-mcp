@@ -1,0 +1,23 @@
+{
+  "started_utc": "2026-10-28T05:26:24.044040+00:00",
+  "camera": "secondary-only",
+  "pre_protocol_origin": [
+    0.282357,
+    -0.571451
+  ],
+  "actual_pose_first": [
+    0.282357,
+    -0.571451
+  ],
+  "actual_pose_second": [
+    0.282357,
+    -0.571451
+  ],
+  "pose_restored": true,
+  "stable": true,
+  "stop_acknowledged": true,
+  "credential_source_removed": true,
+  "credential_bytecode_files_removed": 1,
+  "remaining_literal_matches_in_owned_helpers": 0,
+  "finished_utc": "2026-10-28T05:26:27.821762+00:00"
+}

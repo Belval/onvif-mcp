@@ -218,3 +218,15 @@ Fresh final matched candidate quality review (`final-pair-verdicts.json`) accept
 both lowest-sharpness-ratio pairs under the original semantic framing rule.
 Moderate early fine-detail softness remains measurable; it is neither hidden nor
 misrepresented as pixel-identical settled quality.
+
+The final supported default-speed knob was tested on the secondary camera:
+SetConfiguration identity round-trip and full readback succeeded, and changing
+DefaultPTZSpeed tilt .89→1 was confirmed with pan unchanged. Two .4-unit tilt
+trials per setting averaged435.0ms at .89 versus446.3ms at1: no useful improvement.
+The exact original configuration and test-origin pose were restored. The gate and
+full timing/readback evidence are in secondary-default-speed*.json. The advertised
+default-speed headroom therefore offers no measured gain.
+
+Completion cleanup (`secondary-cleanup.json`) verified the original secondary
+pre-protocol pose twice, acknowledged Stop and removed credential-bearing helper
+source/bytecode. `completion-audit.json` maps the goal to current evidence.
