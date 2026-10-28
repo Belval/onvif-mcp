@@ -164,3 +164,57 @@ at778ms and rough at518ms, but scan revisit failed.100ms settling passed twice;
 therefore uses50ms extra settling for tracked focus/scan/look and zero for rough.
 Raw console evidence is in live-candidate-checks.jsonl; remaining fresh games
 and repeated final-build checks are still required.
+
+Secondary speed-space check: `secondary-speed-uri.json` compares eight bounded
+encoder-arrival trials with awaited Stops and verified restores. Omitted Speed
+arrived in161–261ms for small pan/tilt steps; all four explicit1.0 commands
+using the advertised GenericSpeedSpace URI timed out at3s. Adding the URI does
+not repair firmware Speed behavior. Secondary configuration reports default pan
+speed1.0 (advertised maximum) and tilt.89; there is no advertised faster pan
+space. This supports using omitted Speed, not a universal hardware-limit claim.
+
+## Final candidate and deployment
+
+Revision9c83345 uses persistent minor H264, assembly-enabled OpenH264, cached
+TurboJPEG and SIMD resize, matched signed calibration with gain1, omitted-Speed
+absolute movement,15ms polling/two arrival reports,50ms extra settling for tracked
+operations and zero for rough framing. It retains fresh-frame barriers, bounded
+execution and cancellation-durable Stop ordering.
+
+`final-comparison.json` summarizes a fresh same-origin pair of18-trial blocks:
+baseline300ms/60ms/two reports median933.0ms,p95 1239.0ms versus final50ms/15ms/two
+reports median613.8ms,p95 911.1ms. Both passed18/18 optical geometry checks, restored
+and stopped. Blocks ran baseline then candidate rather than
+interleaved; source, binary and origin were identical. Native timing excludes
+late-reference/tracking overhead; real MCP checks cover the complete tool path.
+
+Held-out targets all passed their first submitted final frame. H02 headphones
+used the earlier H264/SIMD candidate(918.85ms tool sum); H03 clock and H01 mug
+used the final release build with complete traces:17003.88ms/7278.50ms tool sums,
+66s/48s prompt-to-verdict. These are independent search tasks, not matched timing
+comparisons. Direction choices, visual reasoning and judge coordination remain
+in game wall time; learned-room navigation is not called a hardware speedup.
+
+The project/global MCP configuration was promoted to rust-native-v5-h264 and
+reloaded. Actual registered tools return H264 status and full metrics. The printer
+named view was optically re-centered and saved; the air-outlet view was visually
+verified above the open door. Printer-to-outlet look completed in8607ms with
+complete wire trace(`deployed-whole-room-trace.json`), validating the adaptive
+whole-room timeout. `deployment.json` records the active stream and zero
+reconnects in the observed deployment window.
+
+Practical plateau evidence: one arrival report with zero settling caused material
+smear; two reports with zero settling failed a real scan revisit;50ms restored
+that behavior. Busy polling and backlash feedforward had no useful gain. Explicit
+speeds, including the advertised speed-space URI, were much slower; continuous
+movement overshot without beating default absolute and did not produce simultaneous
+axes. Encoder quality/bitrate/GOP attempts were refused or clamped and rolled back;
+the unchanged main-stream preview produced unusable blocking. Remaining host image
+retrieval is about2ms warm; physical sequential motion and sensor/stream cadence
+dominate meaningful camera latency. This is a practical measured plateau for the
+current firmware, LAN and available protocols, not a proof against firmware changes.
+
+Fresh final matched candidate quality review (`final-pair-verdicts.json`) accepted
+both lowest-sharpness-ratio pairs under the original semantic framing rule.
+Moderate early fine-detail softness remains measurable; it is neither hidden nor
+misrepresented as pixel-identical settled quality.

@@ -5,5 +5,5 @@ tool_timeout_sec = 45
 
 [mcp_servers.camera.env]
 CAMERA_CONFIG_DIR = "/mnt/main/Git/onvif-mcp"
-CAMERA_MCP_REVISION = "rust-native-v4-metrics"
+CAMERA_MCP_REVISION = "rust-native-v5-h264"
 CAMERA_METRICS_FILE = "/mnt/main/Git/onvif-mcp/metrics/camera-{pid}.jsonl"

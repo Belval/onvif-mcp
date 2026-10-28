@@ -1,0 +1,38 @@
+{
+  "judged_utc": "2026-10-28T05:20:29Z",
+  "criterion": "Original semantic framing rule, not pixel-identical fine detail.",
+  "verdicts": [
+    {
+      "early_image": "/tmp/spy-framing-final-matched-candidate-1-diagonal--1-early.jpg",
+      "late_image": "/tmp/spy-framing-final-matched-candidate-1-diagonal--1-late.jpg",
+      "framing_rule_pass": true,
+      "failure_reason": null,
+      "material_directional_smear": false,
+      "unusable_blocking": false,
+      "fine_detail_softness_vs_late": "moderate",
+      "notes": "Keyboard, white/black mugs, mouse and monitor/stand remain recognizable. Fine key/monitor/texture detail is softer early; foreground mouse has shallow-focus softness in both. No material coherent directional smearing or unusable blocking under original rule.",
+      "image_sha256": {
+        "early": "0ebd94d16fceb5ced345391e9bd38084ca10dc1eb3942fada4d2caa4fa9d5ae1",
+        "late": "304b9e7fa627e63946939354fdb8ecffb30822f8647641a9fa0f7f105a63489f"
+      }
+    },
+    {
+      "early_image": "/tmp/spy-framing-final-matched-candidate-0-diagonal--1-early.jpg",
+      "late_image": "/tmp/spy-framing-final-matched-candidate-0-diagonal--1-late.jpg",
+      "framing_rule_pass": true,
+      "failure_reason": null,
+      "material_directional_smear": false,
+      "unusable_blocking": false,
+      "fine_detail_softness_vs_late": "moderate",
+      "notes": "Keyboard, white/black mugs, mouse and monitor/stand remain recognizable. Fine key/monitor/texture detail is softer early; foreground mouse has shallow-focus softness in both. No material coherent directional smearing or unusable blocking under original rule.",
+      "image_sha256": {
+        "early": "7817fb364cf80578d15df55f53b8205f2ee1d128f285fe9a3be8e059be402e0d",
+        "late": "a22b84a0cd016b2673ed4c76cdf4f1cac88d90360847259982cf3e7366d14b6b"
+      }
+    }
+  ],
+  "summary": {
+    "pass": 2,
+    "fail": 0
+  }
+}

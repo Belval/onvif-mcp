@@ -203,3 +203,10 @@ rough-focus trace isolated 1030.3 ms in fresh-video watch waits, 426.0 ms in pol
 intervals, 341.6 ms in HTTP headers/connect, 101.2 ms settling and 9.2 ms HTTP body
 reads. Only 0.002 ms lay outside measured spans. These are one run's exclusive
 stages, not a general hardware latency guarantee.
+
+Measured C210 tuning and rejected alternatives are documented in
+[`benchmarks/i-spy/README.md`](benchmarks/i-spy/README.md). The final same-origin
+18-trial comparison reduced move-plus-image median933ms→614ms with18/18 optical
+geometry passes in each block. Three independent held-out targets passed their
+first submitted final image. These measurements separate tool time from assistant
+search/judging time and do not claim to measure sensor exposure latency.

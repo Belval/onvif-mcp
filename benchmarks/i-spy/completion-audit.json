@@ -1,0 +1,61 @@
+{
+  "checked_utc": "2026-10-28T05:22:57.670218+00:00",
+  "objective": "Optimize C210 using independent I-spy games to an evidenced useful plateau; record metrics, optimize/replay and commit changes",
+  "requirements": {
+    "production_rust_and_metrics": {
+      "evidence": [
+        "src/metrics.rs",
+        "src/transport_metrics.rs",
+        "src/onvif.rs",
+        "src/video.rs",
+        "src/camera.rs",
+        "src/verify.rs"
+      ],
+      "status": "verified: release build,30 unit tests,clippy and full MCP live checks"
+    },
+    "independent_games": {
+      "evidence": [
+        "benchmarks/i-spy/runs.jsonl",
+        "benchmarks/i-spy/judgments.json"
+      ],
+      "status": "verified:3 baseline challenges plus replays and3 fresh held-outs; initial SPY001 missing client scan wall retained as explicit data-quality limitation"
+    },
+    "measure_optimize_replay": {
+      "evidence": [
+        "benchmarks/i-spy/final-comparison.json",
+        "benchmarks/i-spy/framing-final-matched-baseline.json",
+        "benchmarks/i-spy/framing-final-matched-candidate.json",
+        "benchmarks/i-spy/live-candidate-checks.jsonl"
+      ],
+      "status": "verified: same-origin18+18 blocks,18/18 geometry each; final full MCP functional pass"
+    },
+    "useful_plateau": {
+      "evidence": [
+        "benchmarks/i-spy/blind-quality.json",
+        "benchmarks/i-spy/secondary-speed-uri.json",
+        "benchmarks/i-spy/encoder-experiments.jsonl",
+        "benchmarks/i-spy/backlash-comparison.jsonl",
+        "benchmarks/i-spy/motor-h264-continuous.json",
+        "benchmarks/i-spy/final-pair-verdicts.json"
+      ],
+      "status": "verified on current modes/waits/streams with fresh worst-pair review; final supported default-tilt-speed knob remains pending"
+    },
+    "deployment_and_named_views": {
+      "evidence": [
+        ".codex/config.toml",
+        "benchmarks/i-spy/deployment.json",
+        "benchmarks/i-spy/deployed-whole-room-trace.json"
+      ],
+      "status": "verified: global/project revisionv5, reload, actual registered H264/tools/metrics, printer re-centered/saved, air-outlet visually verified, whole-room8.607s look passed"
+    },
+    "cleanup_and_commits": {
+      "evidence": [
+        "git status",
+        "git log"
+      ],
+      "status": "pending secondary restoration/helper cleanup and final commit"
+    }
+  },
+  "binary_sha256": "fc9e496220b181959535056b2926cdd45c8fff73066876279778320fbfe33900",
+  "scope_limit": "Current firmware/LAN and available interfaces; no universal optimality claim or sensor exposure latency measurement"
+}

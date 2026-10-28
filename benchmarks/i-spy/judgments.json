@@ -122,6 +122,38 @@
       },
       "tool_sum_ms": 918.848,
       "notes": "first submitted frame; H264+SIMD preview; baseline motion waits unchanged"
+    },
+    {
+      "challenge": "SPY-H03",
+      "attempt": 1,
+      "image": "/tmp/camera-search-1793164490416599757-1.jpg",
+      "identity": "pass",
+      "sharpness": "pass-original-framing-rule",
+      "center": [
+        0.5234,
+        0.5222
+      ],
+      "normalized_center_error": 0.0323,
+      "centering": "pass",
+      "judged_utc": "2026-10-28T05:15:01Z",
+      "runtime": "9c83345",
+      "notes": "Correct distinctive round wood-and-green wall clock, complete object visible; gross border/pattern edges recognizable without material directional smear. Candidate used fresh see/tilt/two scans/scan-image revisit rough focus; no saved view."
+    },
+    {
+      "challenge": "SPY-H01",
+      "attempt": 1,
+      "image": "/tmp/camera-search-1793164633147036533-1.jpg",
+      "identity": "pass",
+      "sharpness": "pass-original-framing-rule",
+      "center": [
+        0.5141,
+        0.5111
+      ],
+      "normalized_center_error": 0.0179,
+      "centering": "pass",
+      "judged_utc": "2026-10-28T05:17:26Z",
+      "runtime": "9c83345",
+      "notes": "Correct white/light ceramic drinking mug with dark rim, matching fresh independent source. Mug extent approximatelyx271\u2013387/y128\u2013240; small lower-right occlusion by mouse. Rim and gross sides recognizable without material directional smear. Acquisition used see/tilt-down/four-view scan/revisit rough focus; no saved views."
     }
   ]
 }

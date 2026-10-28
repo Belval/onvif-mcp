@@ -1,0 +1,37 @@
+{
+  "runs": [
+    {
+      "variant": "baseline",
+      "n": 18,
+      "median_ms": 932.9957039999999,
+      "p95_ms": 1239.042106,
+      "geometry_passes": 18,
+      "origin": [
+        -0.108506,
+        -0.508946
+      ],
+      "restored": true,
+      "stopped": true
+    },
+    {
+      "variant": "candidate",
+      "n": 18,
+      "median_ms": 613.8249525,
+      "p95_ms": 911.0839520000001,
+      "geometry_passes": 18,
+      "origin": [
+        -0.108506,
+        -0.508946
+      ],
+      "restored": true,
+      "stopped": true
+    }
+  ],
+  "median_reduction_pct": 34.20924127856434,
+  "binary_sha256": "fc9e496220b181959535056b2926cdd45c8fff73066876279778320fbfe33900",
+  "limits": [
+    "Two blocks in baseline/candidate order, not randomized/interleaved",
+    "Optical geometry threshold .01 differs from semantic challenge center .08",
+    "No sensor capture latency measurement; publication/receipt barriers only"
+  ]
+}
