@@ -5,4 +5,4 @@ tool_timeout_sec = 45
 
 [mcp_servers.camera.env]
 CAMERA_CONFIG_DIR = "/mnt/main/Git/onvif-mcp"
-CAMERA_MCP_REVISION = "rust-native-v2-lazy"
+CAMERA_MCP_REVISION = "rust-native-v3-rough"

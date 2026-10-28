@@ -43,9 +43,12 @@ refresh for loaded threads; no full app restart is needed.
   `detail=true` opens a short-lived native 1280px H.264 connection and returns
   up to 1280×960. It closes after the capture so occasional detail requests do
   not keep decoding video or compete with PTZ and preview traffic.
-- `camera_focus(x,y,frame_id,precise=false)`: center a selected image point and
+- `camera_focus(x,y,frame_id,precise=false,rough=false)`: center a selected image point and
   return the resulting image in one call. Coordinates are fractions from the
-  top-left: `(0,0)` top-left, `(0.5,0.5)` center. Fast framing allows two internal
+  top-left: `(0,0)` top-left, `(0.5,0.5)` center. Use `rough=true` for one calibrated
+  move, a 100ms settling wait, and no visual corrections; status is `aimed`, not
+  verified `centered`. Points already within 8% of center are left alone.
+  Rough and precise cannot be combined. Ordinary fast framing allows two internal
   corrections to within 4% normalized distance; `precise=true` allows three
   corrections to within 2%. This aims the camera, not the lens.
 - `camera_scan(direction,views=4,step=0.25)`: return several overlapping views in
@@ -82,7 +85,8 @@ stayed in place. Scan observations can be revisited. IDs include a per-process r
 refer to an image from an earlier server process. All observations expire after
 two minutes. Low texture, occlusion, large subject motion and mechanical limits
 can prevent centering. Inspect `focus_status`: `centered`, `tracking_lost`,
-`mechanical_limit`, `iteration_limit` or `stale_frame`.
+`mechanical_limit`, `iteration_limit` or `stale_frame`. Rough mode reports `aimed`
+and leaves `target` null because the final point has not been visually verified.
 
 Operations involving movement are serialized. Stop bypasses that lock, and
 cancellation/disconnect attempts to stop via a drop guard. The camera's timed
@@ -129,7 +133,8 @@ Live measurements on this LAN, with the release binary and native CPU flags:
 | --- | --- |
 | First valid MCP preview, including process startup | 0.12–0.16 s |
 | Warm MCP preview, 20-call sample | about 1.5–1.6 ms median, 1.8–2.2 ms p95 |
-| Precise centering, two visual corrections | 2.2–2.8 s |
+| Precise centering, two visual corrections | 2.2–2.8 s in the reference run; varies with frame/motion waits |
+| Rough framing, one move (smaller test offset) | 0.68 s |
 | Preview-only three-view scan, 0.10 step | 1.97 s |
 | Wider three-view scan, 0.15 step, full verification run | 7–11 s |
 

@@ -85,6 +85,25 @@ fn norm(point: [f64; 2]) -> f64 {
 fn can_compensate_pose_cache(pose_delta: f64, original: [f64; 2], tracked: [f64; 2]) -> bool {
     pose_delta <= 0.05 && (original[0] - tracked[0]).hypot(original[1] - tracked[1]) <= 0.02
 }
+fn calibrated_delta(matrix: Matrix2<f64>, point: [f64; 2]) -> Result<Vector2<f64>> {
+    Ok(-0.8
+        * matrix
+            .try_inverse()
+            .ok_or_else(|| anyhow::anyhow!("Invalid calibration"))?
+        * Vector2::new(point[0] - 0.5, point[1] - 0.5))
+}
+fn aim_target(matrix: Matrix2<f64>, pose: [f64; 2], point: [f64; 2]) -> Result<[f64; 2]> {
+    let delta = calibrated_delta(matrix, point)?;
+    Ok(clip([
+        pose[0] + delta[0].clamp(-0.12, 0.12),
+        pose[1] + delta[1].clamp(-0.30, 0.30),
+    ]))
+}
+fn rough_target(matrix: Matrix2<f64>, pose: [f64; 2], point: [f64; 2]) -> Result<[f64; 2]> {
+    let delta = calibrated_delta(matrix, point)?;
+    // One-shot aiming is not constrained to the small steps used by visual correction.
+    Ok(clip([pose[0] + delta[0], pose[1] + delta[1]]))
+}
 fn clip(point: [f64; 2]) -> [f64; 2] {
     [point[0].clamp(-1., 1.), point[1].clamp(-1., 1.)]
 }
@@ -250,6 +269,10 @@ impl Camera {
         Ok(())
     }
     pub async fn goto(&self, target: [f64; 2]) -> Result<[f64; 2]> {
+        self.goto_with_settle(target, Duration::from_millis(300))
+            .await
+    }
+    async fn goto_with_settle(&self, target: [f64; 2], settle: Duration) -> Result<[f64; 2]> {
         self.check_cancelled()?;
         let target = clip(target);
         let mut guard = StopGuard {
@@ -282,7 +305,7 @@ impl Camera {
         };
         let arrived = Instant::now();
         // The device position can lead optical arrival; hold briefly, then require a new video frame.
-        tokio::time::sleep(Duration::from_millis(300)).await;
+        tokio::time::sleep(settle).await;
         self.check_cancelled()?;
         guard.finish().await?;
         let mut state = self.state.lock().await;
@@ -317,7 +340,9 @@ impl Camera {
         y: f64,
         id: &str,
         precise: bool,
+        rough: bool,
     ) -> Result<ObservationResult> {
+        ensure!(!(rough && precise), "Choose rough or precise, not both");
         ensure!(
             [x, y]
                 .iter()
@@ -350,7 +375,7 @@ impl Camera {
         };
         let mut frame = self.preview.frame(barrier).await?;
         let mut point = [x, y];
-        if old.frame.sequence != frame.sequence || pose_changed {
+        if (old.frame.sequence != frame.sequence && !rough) || pose_changed {
             let tracked = Self::track(old.frame.clone(), frame.clone(), point).await?;
             if pose_changed
                 && !tracked
@@ -370,6 +395,21 @@ impl Camera {
             };
             point = tracked;
         }
+        if rough {
+            if norm(point) <= 0.08 {
+                return self.record(frame,pose,json!({"focus_status":"aimed","rough":true,"iterations":0,"target":null,"detail":"Point was already near center; no move or visual verification"}),false).await;
+            }
+            let target = rough_target(self.calibration, pose, point)?;
+            if max_delta(target, pose) < 0.002 {
+                return self.record(frame,pose,json!({"focus_status":"mechanical_limit","rough":true,"iterations":0,"target":null}),false).await;
+            }
+            let actual = self
+                .goto_with_settle(target, Duration::from_millis(100))
+                .await?;
+            frame = self.preview.frame(self.state.lock().await.barrier).await?;
+            let timing = self.state.lock().await.last_move.clone();
+            return self.record(frame,actual,json!({"focus_status":"aimed","rough":true,"iterations":1,"target":null,"move_timing":timing,"detail":"Single calibrated move; centering not visually verified"}),false).await;
+        }
         let threshold = if precise { 0.02 } else { 0.04 };
         let limit = if precise { 3 } else { 2 };
         let mut matrix = self.calibration;
@@ -381,15 +421,7 @@ impl Camera {
                 break;
             }
             self.check_cancelled()?;
-            let delta = -0.8
-                * matrix
-                    .try_inverse()
-                    .ok_or_else(|| anyhow::anyhow!("Invalid calibration"))?
-                * Vector2::new(point[0] - 0.5, point[1] - 0.5);
-            let target = clip([
-                pose[0] + delta[0].clamp(-0.12, 0.12),
-                pose[1] + delta[1].clamp(-0.30, 0.30),
-            ]);
+            let target = aim_target(matrix, pose, point)?;
             if max_delta(target, pose) < 0.002 {
                 status = "mechanical_limit";
                 break;
@@ -562,5 +594,31 @@ mod cache_lag_tests {
     fn large_external_pan_still_invalidates_observation() {
         assert!(!can_compensate_pose_cache(0.1, [0.5, 0.5], [0.5, 0.5]));
         assert!(!can_compensate_pose_cache(f64::NAN, [0.5, 0.5], [0.5, 0.5]));
+    }
+}
+
+#[cfg(test)]
+mod rough_tests {
+    use super::*;
+    #[test]
+    fn calibrated_rough_target_has_correct_direction_and_limits() {
+        let matrix = Matrix2::new(1.3, 0., 0., 0.8);
+        let target = rough_target(matrix, [0., 0.], [0.7, 0.3]).unwrap();
+        assert!(target[0] < 0. && target[1] > 0.);
+        let target = rough_target(matrix, [0.99, -0.99], [0., 1.]).unwrap();
+        assert_eq!(target, [1., -1.]);
+    }
+}
+
+#[cfg(test)]
+mod rough_range_tests {
+    use super::*;
+    #[test]
+    fn far_image_point_is_not_limited_to_a_small_correction_step() {
+        let matrix = Matrix2::new(1.3, 0., 0., 0.8);
+        let regular = aim_target(matrix, [0., 0.], [0.95, 0.95]).unwrap();
+        let rough = rough_target(matrix, [0., 0.], [0.95, 0.95]).unwrap();
+        assert!(rough[0].abs() > regular[0].abs());
+        assert!(rough[1].abs() > regular[1].abs());
     }
 }

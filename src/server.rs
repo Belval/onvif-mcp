@@ -45,6 +45,9 @@ pub struct FocusArgs {
     /// Default false: up to two corrections to 4% of image center. True: up to three, 2%.
     #[serde(default)]
     pub precise: bool,
+    /// One calibrated move, shorter settling, no visual corrections; returns aimed, not verified centered.
+    #[serde(default)]
+    pub rough: bool,
 }
 #[derive(Deserialize, JsonSchema)]
 pub struct MoveArgs {
@@ -126,7 +129,7 @@ impl CameraServer {
         )
     }
     #[tool(
-        description = "Center a point from a camera image and return the new view in one call. x,y are normalized 0..1 from top-left; center=.5,.5. Supply frame_id from camera_see or any image in camera_scan. Scan views can be revisited automatically. Default is fast framing; precise=true allows an extra correction. Check focus_status: centered, tracking_lost, mechanical_limit, iteration_limit, stale_frame. This aims the camera, not the lens."
+        description = "Center a point from a camera image and return the new view in one call. x,y are normalized 0..1 from top-left; center=.5,.5. Supply frame_id from camera_see or any image in camera_scan. Scan views can be revisited automatically. Use rough=true for a quick single calibrated move with no visual corrections; result is aimed, not verified centered. Otherwise fast framing allows two corrections; precise=true allows three. Do not combine rough and precise. Check focus_status: centered, tracking_lost, mechanical_limit, iteration_limit, stale_frame. This aims the camera, not the lens."
     )]
     async fn camera_focus(&self, Parameters(args): Parameters<FocusArgs>) -> CallToolResult {
         let started = Instant::now();
@@ -137,7 +140,7 @@ impl CameraServer {
         let _lock = camera.motion.lock().await;
         picture(
             camera
-                .focus(args.x, args.y, &args.frame_id, args.precise)
+                .focus(args.x, args.y, &args.frame_id, args.precise, args.rough)
                 .await,
             started,
         )
@@ -221,7 +224,7 @@ impl CameraServer {
 impl ServerHandler for CameraServer {
     fn get_info(&self) -> ServerConfig {
         ServerConfig::new(ServerCapabilities::builder().enable_tools().build()).with_instructions(
-            "Use camera_see for a quick current view; camera_scan batches a search into one call; camera_focus frames an object from any returned image. Save stationary objects with camera_remember and use camera_look to avoid future searches. Coordinates are normalized from image top-left. Frames come from a persistent, latest-only native JPEG buffer; never infer success if focus_status reports otherwise.")
+            "Use rough=true for ordinary quick framing; precise=true only when tight centering is needed. Use camera_see for a quick current view; camera_scan batches a search into one call; camera_focus frames an object from any returned image. Save stationary objects with camera_remember and use camera_look to avoid future searches. Coordinates are normalized from image top-left. Frames come from a persistent, latest-only native JPEG buffer; never infer success if focus_status reports otherwise.")
     }
 }
 

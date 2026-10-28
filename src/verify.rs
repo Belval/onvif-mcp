@@ -151,6 +151,27 @@ pub async fn run(moving: bool) -> Result<()> {
                 "Focus did not center the selected point"
             );
             let start = Instant::now();
+            let (rough, images) = call(
+                &client,
+                "camera_focus",
+                json!({"x":0.6,"y":0.6,"frame_id":focused[0]["frame_id"],"rough":true}),
+            )
+            .await?;
+            ensure!(
+                rough[0]["focus_status"] == "aimed" && rough[0]["iterations"].as_u64() == Some(1),
+                "Rough framing must make exactly one unverified move"
+            );
+            ensure!(
+                rough[0]["target"].is_null(),
+                "Rough framing must not claim a visually verified target"
+            );
+            std::fs::write("/tmp/rust-rough-after.jpg", &images[0])?;
+            eprintln!(
+                "Rough focus {:.1}ms: {}",
+                start.elapsed().as_secs_f64() * 1000.,
+                rough[0]
+            );
+            let start = Instant::now();
             let (views, images) = call(
                 &client,
                 "camera_scan",
