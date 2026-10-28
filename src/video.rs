@@ -1,5 +1,5 @@
 use crate::onvif::Config;
-use anyhow::{Result, bail, ensure};
+use anyhow::{Result, bail};
 use futures_util::StreamExt;
 use image::{DynamicImage, ImageBuffer, codecs::jpeg::JpegEncoder};
 use openh264::formats::YUVSource;
@@ -15,6 +15,33 @@ use std::time::{Duration, Instant};
 use tokio::{sync::watch, task::JoinHandle};
 use url::Url;
 
+type EncodedPicture = (Vec<u8>, u32, u32);
+fn decode_picture(
+    mut decoder: openh264::decoder::Decoder,
+    packet: Vec<u8>,
+    encode: bool,
+) -> Result<(openh264::decoder::Decoder, Option<EncodedPicture>)> {
+    let picture = {
+        let decoded = decoder.decode(&packet)?;
+        if let Some(yuv) = decoded.filter(|_| encode) {
+            let (w, h) = yuv.dimensions();
+            let mut rgb = vec![0; w * h * 3];
+            yuv.write_rgb8(&mut rgb);
+            let image = DynamicImage::ImageRgb8(
+                ImageBuffer::from_raw(w as u32, h as u32, rgb)
+                    .ok_or_else(|| anyhow::anyhow!("Invalid video size"))?,
+            )
+            .thumbnail(1280, 960);
+            let (w, h) = (image.width(), image.height());
+            let mut data = vec![];
+            JpegEncoder::new_with_quality(&mut data, 85).encode_image(&image)?;
+            Some((data, w, h))
+        } else {
+            None
+        }
+    };
+    Ok((decoder, picture))
+}
 pub struct Frame {
     pub jpeg: Arc<Vec<u8>>,
     pub received: Instant,
@@ -111,47 +138,23 @@ impl Video {
             return Self::receive_jpeg(session, dimensions, tx, metrics).await;
         }
         let mut frames = session.demuxed()?;
-        let mut decoder = if jpeg {
-            None
-        } else {
-            Some(openh264::decoder::Decoder::new()?)
-        };
+        let mut decoder = openh264::decoder::Decoder::new()?;
         let mut encoded_at = Instant::now() - Duration::from_secs(1);
         metrics.connected.store(true, Ordering::Relaxed);
         while let Some(item) = tokio::time::timeout(Duration::from_secs(3), frames.next()).await? {
             if let CodecItem::VideoFrame(frame) = item? {
                 let received = Instant::now();
-                let (data, width, height) = if let Some(decoder) = decoder.as_mut() {
-                    if let Some(yuv) = decoder.decode(frame.data())? {
-                        if encoded_at.elapsed() < Duration::from_millis(150) {
-                            continue;
-                        }
-                        let (w, h) = yuv.dimensions();
-                        let mut rgb = vec![0; w * h * 3];
-                        yuv.write_rgb8(&mut rgb);
-                        let image = DynamicImage::ImageRgb8(
-                            ImageBuffer::from_raw(w as u32, h as u32, rgb)
-                                .ok_or_else(|| anyhow::anyhow!("Invalid video size"))?,
-                        )
-                        .thumbnail(1280, 960);
-                        let (w, h) = (image.width(), image.height());
-                        let mut data = Vec::new();
-                        JpegEncoder::new_with_quality(&mut data, 85).encode_image(&image)?;
-                        encoded_at = Instant::now();
-                        (data, w, h)
-                    } else {
-                        continue;
-                    }
-                } else {
-                    let data = frame.into_data();
-                    ensure!(
-                        data.len() <= 4 * 1024 * 1024
-                            && data.starts_with(&[0xff, 0xd8])
-                            && data.ends_with(&[0xff, 0xd9]),
-                        "Invalid JPEG frame"
-                    );
-                    (data, dimensions.0, dimensions.1)
+                let encode = encoded_at.elapsed() >= Duration::from_millis(150);
+                let packet = frame.into_data();
+                // CPU-heavy detail work must not block the RTSP/PTZ/MCP I/O runtime.
+                let (next, picture) =
+                    tokio::task::spawn_blocking(move || decode_picture(decoder, packet, encode))
+                        .await??;
+                decoder = next;
+                let Some((data, width, height)) = picture else {
+                    continue;
                 };
+                encoded_at = Instant::now();
                 let sequence = metrics.frames.fetch_add(1, Ordering::Relaxed) + 1;
                 tx.send_replace(Some(Arc::new(Frame {
                     jpeg: Arc::new(data),

@@ -39,7 +39,9 @@ refresh for loaded threads; no full app restart is needed.
 
 - `camera_see(detail=false)`: a native 640×360 JPEG from the persistent buffer,
   with `frame_id`, dimensions, sequence number, frame age and request time.
-  `detail=true` lazily starts an H.264 connection and returns up to 1280×960.
+  `detail=true` opens a short-lived native 1280px H.264 connection and returns
+  up to 1280×960. It closes after the capture so occasional detail requests do
+  not keep decoding video or compete with PTZ and preview traffic.
 - `camera_focus(x,y,frame_id,precise=false)`: center a selected image point and
   return the resulting image in one call. Coordinates are fractions from the
   top-left: `(0,0)` top-left, `(0.5,0.5)` center. Fast framing allows two internal
@@ -69,8 +71,9 @@ Unknown layouts/tables and incomplete/out-of-order frames are rejected.
 
 PTZ position polling runs in the background to avoid network round trips on each
 look. Focus always reads a fresh position before moving. Normal frame IDs are
-invalidated by newer observations or a changed pose; scan observations can be
-revisited. IDs include a per-process random epoch, so they cannot accidentally
+invalidated by newer observations or a materially changed view; small position
+cache lag is accepted only when visual matching confirms the selected point
+stayed in place. Scan observations can be revisited. IDs include a per-process random epoch, so they cannot accidentally
 refer to an image from an earlier server process. All observations expire after
 two minutes. Low texture, occlusion, large subject motion and mechanical limits
 can prevent centering. Inspect `focus_status`: `centered`, `tracking_lost`,

@@ -41,6 +41,33 @@ async fn call(
     }
     Ok((metadata, images))
 }
+async fn goto(onvif: &Onvif, target: [f64; 2]) -> Result<()> {
+    let result = async {
+        onvif.absolute(target).await?;
+        let deadline = Instant::now() + Duration::from_secs(6);
+        let mut stable = 0;
+        while stable < 2 {
+            ensure!(
+                Instant::now() < deadline,
+                "Verification could not restore/reach camera position"
+            );
+            tokio::time::sleep(Duration::from_millis(75)).await;
+            let pose = onvif.position().await?;
+            stable = if (pose[0] - target[0]).abs().max((pose[1] - target[1]).abs()) < 0.002 {
+                stable + 1
+            } else {
+                0
+            };
+        }
+        tokio::time::sleep(Duration::from_millis(300)).await;
+        Ok::<_, anyhow::Error>(())
+    }
+    .await;
+    let stopped = onvif.stop().await;
+    result?;
+    stopped?;
+    Ok(())
+}
 pub async fn run(moving: bool) -> Result<()> {
     let overall = Instant::now();
     let client = ()
@@ -102,9 +129,8 @@ pub async fn run(moving: bool) -> Result<()> {
         let onvif = Onvif::connect(Config::load()?).await?;
         let origin = onvif.position().await?;
         let test = async {
-            onvif.absolute([0.045, -0.5]).await?;
-            tokio::time::sleep(Duration::from_secs(1)).await;
-            onvif.stop().await?;
+            goto(&onvif, [0.045, -0.5]).await?;
+            tokio::time::sleep(Duration::from_millis(200)).await;
             let (seen, images) = call(&client, "camera_see", json!({})).await?;
             std::fs::write("/tmp/rust-focus-before.jpg", &images[0])?;
             let start = Instant::now();
@@ -180,10 +206,7 @@ pub async fn run(moving: bool) -> Result<()> {
         }
         .await;
         // Restore even if any verification assertion fails.
-        let restored = onvif.absolute(origin).await;
-        tokio::time::sleep(Duration::from_secs(1)).await;
-        let _ = onvif.stop().await;
-        restored?;
+        goto(&onvif, origin).await?;
         test?;
     }
     call(&client, "camera_stop", json!({})).await?;

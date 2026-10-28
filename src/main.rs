@@ -56,7 +56,7 @@ async fn run() -> Result<()> {
     let server = server::CameraServer {
         camera: camera.clone(),
     };
-    let service = server.serve(rmcp::transport::stdio()).await?;
+    let service = server.serve(rmcp::transport::stdio_pipes()).await?;
     let result = tokio::select! {
         result=service.waiting()=>result.map(|_|()),
         _=tokio::signal::ctrl_c()=>Ok(()),

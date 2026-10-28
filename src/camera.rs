@@ -16,7 +16,7 @@ use std::{
     },
     time::{Duration, Instant},
 };
-use tokio::sync::{Mutex, OnceCell};
+use tokio::sync::Mutex;
 
 #[derive(Clone)]
 struct Observation {
@@ -33,6 +33,7 @@ struct State {
     epoch: u64,
     latest: String,
     barrier: Option<Instant>,
+    last_move: Value,
 }
 #[derive(Deserialize)]
 struct Calibration {
@@ -44,7 +45,6 @@ pub type ObservationResult = (Value, Arc<Frame>);
 pub struct Camera {
     pub onvif: Arc<Onvif>,
     pub preview: Video,
-    detail: OnceCell<Video>,
     pose_poller: tokio::task::JoinHandle<()>,
     detail_token: String,
     detail_dimensions: (u32, u32),
@@ -82,6 +82,9 @@ fn max_delta(a: [f64; 2], b: [f64; 2]) -> f64 {
 fn norm(point: [f64; 2]) -> f64 {
     (point[0] - 0.5).hypot(point[1] - 0.5)
 }
+fn can_compensate_pose_cache(pose_delta: f64, original: [f64; 2], tracked: [f64; 2]) -> bool {
+    pose_delta <= 0.05 && (original[0] - tracked[0]).hypot(original[1] - tracked[1]) <= 0.02
+}
 fn clip(point: [f64; 2]) -> [f64; 2] {
     [point[0].clamp(-1., 1.), point[1].clamp(-1., 1.)]
 }
@@ -105,7 +108,8 @@ impl Camera {
         let detail = onvif
             .profiles
             .iter()
-            .find(|p| p.encoding == "H264")
+            .filter(|p| p.encoding == "H264" && p.width >= 1280)
+            .min_by_key(|p| p.width)
             .ok_or_else(|| anyhow::anyhow!("H264 detail profile unavailable"))?;
         let (detail_token, detail_dimensions) =
             (detail.token.clone(), (detail.width, detail.height));
@@ -141,7 +145,6 @@ impl Camera {
         Ok(Arc::new(Self {
             onvif,
             preview,
-            detail: OnceCell::new(),
             pose_poller,
             detail_token,
             detail_dimensions,
@@ -167,20 +170,19 @@ impl Camera {
             "remembered_views":self.views.lock().await.keys().cloned().collect::<Vec<_>>()}),
         )
     }
-    async fn source(&self, detail: bool) -> Result<&Video> {
+    async fn frame(&self, detail: bool, after: Option<Instant>) -> Result<Arc<Frame>> {
         if detail {
-            self.detail
-                .get_or_try_init(|| async {
-                    Ok::<_, anyhow::Error>(Video::start(
-                        self.onvif.stream_url(&self.detail_token).await?,
-                        self.onvif.config.clone(),
-                        false,
-                        self.detail_dimensions,
-                    ))
-                })
-                .await
+            // Keep the preview connection hot, but don't let an occasional detail
+            // request consume decoder/encoder or camera resources indefinitely.
+            let source = Video::start(
+                self.onvif.stream_url(&self.detail_token).await?,
+                self.onvif.config.clone(),
+                false,
+                self.detail_dimensions,
+            );
+            source.frame(after).await
         } else {
-            Ok(&self.preview)
+            self.preview.frame(after).await
         }
     }
     pub async fn observe(
@@ -190,7 +192,7 @@ impl Camera {
         revisit: bool,
     ) -> Result<ObservationResult> {
         let barrier = self.state.lock().await.barrier;
-        let frame = self.source(detail).await?.frame(barrier).await?;
+        let frame = self.frame(detail, barrier).await?;
         let (pose, pose_at) = match self.onvif.cached_position() {
             Some(cached) => cached,
             None => (self.onvif.position().await?, Instant::now()),
@@ -254,7 +256,10 @@ impl Camera {
             onvif: self.onvif.clone(),
             armed: true,
         };
+        let started = Instant::now();
         self.onvif.absolute(target).await?;
+        let commanded = Instant::now();
+        let mut polls = 0;
         let deadline = Instant::now() + Duration::from_secs(6);
         let mut stable = 0;
         let pose = loop {
@@ -265,6 +270,7 @@ impl Camera {
             );
             tokio::time::sleep(Duration::from_millis(60)).await;
             let actual = self.onvif.position().await?;
+            polls += 1;
             stable = if max_delta(actual, target) < 0.002 {
                 stable + 1
             } else {
@@ -274,11 +280,14 @@ impl Camera {
                 break actual;
             }
         };
+        let arrived = Instant::now();
         // The device position can lead optical arrival; hold briefly, then require a new video frame.
         tokio::time::sleep(Duration::from_millis(300)).await;
         self.check_cancelled()?;
         guard.finish().await?;
-        self.state.lock().await.barrier = Some(Instant::now());
+        let mut state = self.state.lock().await;
+        state.barrier = Some(Instant::now());
+        state.last_move = json!({"command_ms":commanded.duration_since(started).as_secs_f64()*1000.,"arrival_ms":arrived.duration_since(commanded).as_secs_f64()*1000.,"settle_stop_ms":arrived.elapsed().as_secs_f64()*1000.,"polls":polls});
         Ok(pose)
     }
     pub async fn movement(&self, pan: f64, tilt: f64, seconds: f64) -> Result<Value> {
@@ -329,17 +338,27 @@ impl Camera {
         };
         self.begin_motion();
         let mut pose = self.onvif.position().await?;
-        if max_delta(pose, old.pose) > 0.003 {
-            if old.revisit {
-                pose = self.goto(old.pose).await?;
-            } else {
-                return self.observe(false,json!({"focus_status":"stale_frame","detail":"Camera moved since that image"}),false).await;
-            }
+        let mut pose_changed = max_delta(pose, old.pose) > 0.003;
+        if pose_changed && old.revisit {
+            pose = self.goto(old.pose).await?;
+            pose_changed = false;
         }
-        let mut frame = self.preview.frame(self.state.lock().await.barrier).await?;
+        let barrier = if pose_changed {
+            Some(Instant::now())
+        } else {
+            self.state.lock().await.barrier
+        };
+        let mut frame = self.preview.frame(barrier).await?;
         let mut point = [x, y];
-        if old.frame.sequence != frame.sequence {
-            let Some(tracked) = Self::track(old.frame.clone(), frame.clone(), point).await? else {
+        if old.frame.sequence != frame.sequence || pose_changed {
+            let tracked = Self::track(old.frame.clone(), frame.clone(), point).await?;
+            if pose_changed
+                && !tracked
+                    .is_some_and(|p| can_compensate_pose_cache(max_delta(pose, old.pose), point, p))
+            {
+                return self.record(frame,pose,json!({"focus_status":"stale_frame","detail":"Camera view changed; choose a point in this new image"}),false).await;
+            }
+            let Some(tracked) = tracked else {
                 return self
                     .record(
                         frame,
@@ -386,7 +405,7 @@ impl Camera {
             let movement = Vector2::new(actual[0] - pose[0], actual[1] - pose[1]);
             let shift = Vector2::new(tracked[0] - point[0], tracked[1] - point[1]);
             corrections
-                .push(json!({"before":point,"after":tracked,"pose_delta":movement.as_slice()}));
+                .push(json!({"before":point,"after":tracked,"pose_delta":movement.as_slice(),"move_timing":self.state.lock().await.last_move.clone()}));
             if movement.norm_squared() > 1e-6 {
                 let candidate = matrix
                     + (shift - matrix * movement) * movement.transpose() / movement.norm_squared();
@@ -438,7 +457,7 @@ impl Camera {
                 }
                 self.goto(target).await?;
             }
-            result.push(self.observe(false,json!({"scan_index":index,"direction":direction,"revisitable":true,"pose":target}),true).await?);
+            result.push(self.observe(false,json!({"scan_index":index,"direction":direction,"revisitable":true,"pose":target,"move_timing":if index>0{self.state.lock().await.last_move.clone()}else{Value::Null}}),true).await?);
         }
         Ok(result)
     }
@@ -528,5 +547,20 @@ mod tests {
         let j = Matrix2::new(1.3, 0., 0., 0.8);
         let d = -j.try_inverse().unwrap() * Vector2::new(0.2, -0.2);
         assert!(d[0] < 0. && d[1] > 0.);
+    }
+}
+
+#[cfg(test)]
+mod cache_lag_tests {
+    use super::*;
+    #[test]
+    fn small_encoder_lag_requires_visually_unchanged_target() {
+        assert!(can_compensate_pose_cache(0.01, [0.6, 0.6], [0.601, 0.602]));
+        assert!(!can_compensate_pose_cache(0.01, [0.6, 0.6], [0.65, 0.6]));
+    }
+    #[test]
+    fn large_external_pan_still_invalidates_observation() {
+        assert!(!can_compensate_pose_cache(0.1, [0.5, 0.5], [0.5, 0.5]));
+        assert!(!can_compensate_pose_cache(f64::NAN, [0.5, 0.5], [0.5, 0.5]));
     }
 }

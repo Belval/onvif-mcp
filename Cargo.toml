@@ -4,7 +4,6 @@ version = "0.2.0"
 edition = "2024"
 rust-version = "1.89"
 description = "Low-latency ONVIF camera MCP with persistent RTSP and latest-frame buffers"
-license = "MIT"
 
 [dependencies]
 anyhow = "1"
