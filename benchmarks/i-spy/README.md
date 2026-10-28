@@ -56,8 +56,7 @@ not proof that every possible camera firmware or protocol modification is optima
   requires diagnostic evidence before a keepalive-library patch is justified.
 
 Experimental runtime switch: `CAMERA_PREVIEW=h264` selects persistent H264, encodes
-all decoded frames at640px, and keeps detail capture separate. JPEG remains the
-default until the candidate passes repeated game/optical checks. The original
+all decoded frames at640px, and keeps detail capture separate. H264 is the candidate default; deployment follows repeated game/optical checks. The original
 minor profile was1280x720; after setting640x360 the detail profile becomes the
 2304px main stream and is downsampled to1280px, preserving the detail output size.
 
@@ -115,8 +114,8 @@ shown; encoder signs are velocity pan=-absolute sign, tilt=+absolute sign.
 Current wait sweep (18 matched pan/tilt/diagonal calls per setting) is retained in
 framing-*.json. Baseline median927ms;15ms poll/one report/50ms settle median622ms;
 15ms poll/two reports/no extra settle median596ms. Geometry passed18/18 for these
-short-wait variants, but independent early/late image inspection still found
-softening, so no new default has been promoted solely on geometry. Polling without
+short-wait variants, and independent early/late image inspection found
+fine-detail softening. The later blind semantic review below resolves acceptance. Polling without
 sleep gave no useful median gain and a worse maximum (1085ms vs888ms).
 
 Encoder escape-hatch checks were bounded and reversible: bitrate2048, GOV1,
@@ -140,4 +139,28 @@ restore timed out after concurrent Stop; code inspection found deferred cleanup
 Stops could overtake later commands. New owned motion leases, immediate Stop with
 a queued completion barrier, and cancellation-durable Stop tasks address this;
 two deterministic concurrency tests plus the full29-test unit suite passed.
-Live stress verification of the new Stop path is still required.
+Subsequent live stress verification passed three times (see final-candidate update).
+
+Final-candidate update: `blind-quality.json` contains label-key-withheld scoring
+of the two softest pairs per wait variant. Both two-confirmation/zero-extra-wait
+pairs passed the original semantic framing rule; both one-confirmation/zero-wait
+pairs failed for material directional smear. Fine texture softness is recorded
+separately and does not silently redefine the game rule. Some images were familiar
+to the judge, so this is not an image-naive blind trial. The candidate defaults
+are H264 minor preview, 15ms polling, two arrival reports and no extra wait.
+Fresh game checks and deployment remain pending.
+
+Calibration now captures fresh baselines per axis/direction after engaging the
+gears, compares signed slopes, and restores the original pose before committing
+the matrix. Matched calibration plus gain1 reduced precise verification to
+1094–1171ms with one correction. Optional backlash feedforward gave no speed gain
+and was removed. Three live Stop/cancellation/restore checks passed after the
+durable completion barrier fix. An adaptive bounded arrival timeout now covers
+whole-room named moves rather than failing legitimate travel at a fixed6s.
+
+Live functional gate supersedes the zero-wait proposal: precise focus passed
+at778ms and rough at518ms, but scan revisit failed.100ms settling passed twice;
+50ms passed once, including scan revisit and concurrent Stop. The next candidate
+therefore uses50ms extra settling for tracked focus/scan/look and zero for rough.
+Raw console evidence is in live-candidate-checks.jsonl; remaining fresh games
+and repeated final-build checks are still required.

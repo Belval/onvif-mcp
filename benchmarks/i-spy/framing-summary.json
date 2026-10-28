@@ -1,0 +1,152 @@
+[
+  {
+    "variant": "framing-baseline",
+    "n": 18,
+    "median_ms": 926.9014085000001,
+    "p95_ms": 1268.3849380000001,
+    "geometry_passes": 18,
+    "parameters": {
+      "CAMERA_POLL_MS": null,
+      "CAMERA_PREVIEW": "h264",
+      "CAMERA_ROUGH_SETTLE_MS": null,
+      "CAMERA_SETTLE_MS": null,
+      "CAMERA_STABLE_SAMPLES": null
+    },
+    "completed": true
+  },
+  {
+    "variant": "framing-fast-zero",
+    "n": 18,
+    "median_ms": 555.7297470000001,
+    "p95_ms": 843.4317580000001,
+    "geometry_passes": 15,
+    "parameters": {
+      "CAMERA_POLL_MS": "15",
+      "CAMERA_PREVIEW": "h264",
+      "CAMERA_ROUGH_SETTLE_MS": null,
+      "CAMERA_SETTLE_MS": "0",
+      "CAMERA_STABLE_SAMPLES": "1"
+    },
+    "completed": true
+  },
+  {
+    "variant": "framing-fast100",
+    "n": 18,
+    "median_ms": 640.5415995,
+    "p95_ms": 986.941509,
+    "geometry_passes": 18,
+    "parameters": {
+      "CAMERA_POLL_MS": "15",
+      "CAMERA_PREVIEW": "h264",
+      "CAMERA_ROUGH_SETTLE_MS": null,
+      "CAMERA_SETTLE_MS": "100",
+      "CAMERA_STABLE_SAMPLES": "1"
+    },
+    "completed": true
+  },
+  {
+    "variant": "framing-fast50",
+    "n": 18,
+    "median_ms": 621.7055715,
+    "p95_ms": 888.059093,
+    "geometry_passes": 18,
+    "parameters": {
+      "CAMERA_POLL_MS": "15",
+      "CAMERA_PREVIEW": "h264",
+      "CAMERA_ROUGH_SETTLE_MS": null,
+      "CAMERA_SETTLE_MS": "50",
+      "CAMERA_STABLE_SAMPLES": "1"
+    },
+    "completed": true
+  },
+  {
+    "variant": "framing-final150",
+    "n": 18,
+    "median_ms": 709.0275825000001,
+    "p95_ms": 1013.5152949999999,
+    "geometry_passes": 18,
+    "parameters": {
+      "CAMERA_POLL_MS": "30",
+      "CAMERA_PREVIEW": "h264",
+      "CAMERA_ROUGH_SETTLE_MS": null,
+      "CAMERA_SETTLE_MS": "150",
+      "CAMERA_STABLE_SAMPLES": "1"
+    },
+    "completed": true
+  },
+  {
+    "variant": "framing-final200",
+    "n": 18,
+    "median_ms": 752.913677,
+    "p95_ms": 1039.0238590000001,
+    "geometry_passes": 17,
+    "parameters": {
+      "CAMERA_POLL_MS": "30",
+      "CAMERA_PREVIEW": "h264",
+      "CAMERA_ROUGH_SETTLE_MS": null,
+      "CAMERA_SETTLE_MS": "200",
+      "CAMERA_STABLE_SAMPLES": "1"
+    },
+    "completed": true
+  },
+  {
+    "variant": "framing-main50",
+    "n": 18,
+    "median_ms": 618.6256145,
+    "p95_ms": 875.56282,
+    "geometry_passes": 17,
+    "parameters": {
+      "CAMERA_POLL_MS": "30",
+      "CAMERA_PREVIEW": "h264-main",
+      "CAMERA_ROUGH_SETTLE_MS": null,
+      "CAMERA_SETTLE_MS": "50",
+      "CAMERA_STABLE_SAMPLES": "1"
+    },
+    "completed": true
+  },
+  {
+    "variant": "framing-poll0-50",
+    "n": 18,
+    "median_ms": 627.2769485,
+    "p95_ms": 1085.494859,
+    "geometry_passes": 18,
+    "parameters": {
+      "CAMERA_POLL_MS": "0",
+      "CAMERA_PREVIEW": "h264",
+      "CAMERA_ROUGH_SETTLE_MS": null,
+      "CAMERA_SETTLE_MS": "50",
+      "CAMERA_STABLE_SAMPLES": "1"
+    },
+    "completed": true
+  },
+  {
+    "variant": "framing-poll30-50",
+    "n": 18,
+    "median_ms": 629.7147245000001,
+    "p95_ms": 879.014454,
+    "geometry_passes": 18,
+    "parameters": {
+      "CAMERA_POLL_MS": "30",
+      "CAMERA_PREVIEW": "h264",
+      "CAMERA_ROUGH_SETTLE_MS": null,
+      "CAMERA_SETTLE_MS": "50",
+      "CAMERA_STABLE_SAMPLES": "1"
+    },
+    "completed": true
+  },
+  {
+    "variant": "framing-two-zero",
+    "n": 18,
+    "median_ms": 595.781044,
+    "p95_ms": 884.489212,
+    "geometry_passes": 18,
+    "parameters": {
+      "CAMERA_POLL_MS": "15",
+      "CAMERA_PREVIEW": "h264",
+      "CAMERA_ROUGH_SETTLE_MS": null,
+      "CAMERA_SETTLE_MS": "0",
+      "CAMERA_STABLE_SAMPLES": "2"
+    },
+    "completed": true
+  }
+]

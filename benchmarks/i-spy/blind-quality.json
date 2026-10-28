@@ -1,0 +1,222 @@
+{
+  "blind_manifest": "/tmp/spy-blind-quality-manifest.json",
+  "key_read": false,
+  "complete": true,
+  "criterion": "Recognizable room objects and no MATERIAL directional motion smear or unusable blocking. Fine-detail softness alone is not an automatic failure.",
+  "verdicts": [
+    {
+      "id": "Q01",
+      "framing_rule_pass": true,
+      "failure_reason": null,
+      "material_directional_smear": false,
+      "unusable_blocking": false,
+      "fine_detail_softness_vs_late": "moderate",
+      "notes": "PC, headphone shape and keyboard remain recognizable. Early case-cable/fan detail and background fine texture are softer; gross object edges hold without material directional doubling.",
+      "confidence": "medium",
+      "early_image": "/tmp/spy-blind-Q01-early.jpg",
+      "late_image": "/tmp/spy-blind-Q01-late.jpg",
+      "image_sha256": {
+        "early": "50b51bff2cd4ad26feb81814b61e706dad706098f0bb0c3ca31efbcd5fd9bb4a",
+        "late": "a2f4006ef4dce51dd18846ee8ee2afef9fe3687f531bfec5b97f060283c438bc"
+      },
+      "variant": "framing-two-zero"
+    },
+    {
+      "id": "Q02",
+      "framing_rule_pass": true,
+      "failure_reason": null,
+      "material_directional_smear": false,
+      "unusable_blocking": false,
+      "fine_detail_softness_vs_late": "moderate",
+      "notes": "Early image loses fine internal-cable and key detail, but case outline, headphone contours and keyboard layout remain clear enough for framing; no severe coherent streaking.",
+      "confidence": "medium",
+      "early_image": "/tmp/spy-blind-Q02-early.jpg",
+      "late_image": "/tmp/spy-blind-Q02-late.jpg",
+      "image_sha256": {
+        "early": "062bfa6109867a0897059e7c7269cee54d113e4bbaeddbc99344c82b64a02a86",
+        "late": "71673e2a6d5beead5dc0035156b861e6cbd09d49dda2626a314bde45a4a62339"
+      },
+      "variant": "framing-fast50"
+    },
+    {
+      "id": "Q03",
+      "framing_rule_pass": true,
+      "failure_reason": null,
+      "material_directional_smear": false,
+      "unusable_blocking": false,
+      "fine_detail_softness_vs_late": "mild",
+      "notes": "Keyboard, mug rims, monitor edges and mouse are recognizable. Later monitor-logo/fine-key detail improves; foreground mouse softness is present in both.",
+      "confidence": "high",
+      "early_image": "/tmp/spy-blind-Q03-early.jpg",
+      "late_image": "/tmp/spy-blind-Q03-late.jpg",
+      "image_sha256": {
+        "early": "b55f1e9eb896286403b7d59c0d0968a0b3322b5196771076d6a08deb21ff76f3",
+        "late": "fdc5ff6ad05166c1b8ab49a770eba81fafac5b26fb332d13dceec7890338a767"
+      },
+      "variant": "framing-final150"
+    },
+    {
+      "id": "Q04",
+      "framing_rule_pass": true,
+      "failure_reason": null,
+      "material_directional_smear": false,
+      "unusable_blocking": false,
+      "fine_detail_softness_vs_late": "mild",
+      "notes": "Room objects and key layout remain recognizable with stable gross edges. Case internals are a little less resolved early; not material motion smear.",
+      "confidence": "high",
+      "early_image": "/tmp/spy-blind-Q04-early.jpg",
+      "late_image": "/tmp/spy-blind-Q04-late.jpg",
+      "image_sha256": {
+        "early": "035d237b0e0179c087c447fcdac46029f7b5b6813fd900543a8c29b9796e7b5c",
+        "late": "39290350c2eb42586b27f0e4fdb156a841f18cbc748976fae6cee045f3127265"
+      },
+      "variant": "framing-fast100"
+    },
+    {
+      "id": "Q05",
+      "framing_rule_pass": true,
+      "failure_reason": null,
+      "material_directional_smear": false,
+      "unusable_blocking": false,
+      "fine_detail_softness_vs_late": "mild",
+      "notes": "PC enclosure, fans, headphones, monitor and keyboard remain readily recognizable. Small cable/key details improve late without a material smear difference.",
+      "confidence": "high",
+      "early_image": "/tmp/spy-blind-Q05-early.jpg",
+      "late_image": "/tmp/spy-blind-Q05-late.jpg",
+      "image_sha256": {
+        "early": "8ce2eedb94751cc467636d204fcbd3e5dbd49d931c0ec7bf2510486ed590e6d9",
+        "late": "9e743824d8a8eeca3279dbf0c8422ac786f74f2e58a46ab9c3f60ac7aa88fb14"
+      },
+      "variant": "framing-baseline"
+    },
+    {
+      "id": "Q06",
+      "framing_rule_pass": true,
+      "failure_reason": null,
+      "material_directional_smear": false,
+      "unusable_blocking": false,
+      "fine_detail_softness_vs_late": "mild-to-moderate",
+      "notes": "Early fine internal-cable detail is softer, but PC/headphones/keyboard shapes and gross edges are stable and usable for framing.",
+      "confidence": "high",
+      "early_image": "/tmp/spy-blind-Q06-early.jpg",
+      "late_image": "/tmp/spy-blind-Q06-late.jpg",
+      "image_sha256": {
+        "early": "5d72c7a0a71bc52b2047d67c1933097f43f8bd66b24ff0b69f2db6dd9446bd89",
+        "late": "2ad4f5bc79e66e344aed6f00ce98b16e23245f13484b0401396b0f58a7cf44a9"
+      },
+      "variant": "framing-baseline"
+    },
+    {
+      "id": "Q07",
+      "framing_rule_pass": true,
+      "failure_reason": null,
+      "material_directional_smear": false,
+      "unusable_blocking": false,
+      "fine_detail_softness_vs_late": "mild-to-moderate",
+      "notes": "Keyboard layout, mug rim and mouse silhouette remain recognizable; foreground mouse is soft in both images. Fine key/monitor detail improves late; no severe directional doubling.",
+      "confidence": "medium",
+      "early_image": "/tmp/spy-blind-Q07-early.jpg",
+      "late_image": "/tmp/spy-blind-Q07-late.jpg",
+      "image_sha256": {
+        "early": "fe970219b3b69eb3ff6ff85151453b11f56caae77721c4a0208351f060e5b5ea",
+        "late": "3b827d6dd50ba9f836c8d72a8d342fb62fe54b1793f7cd7e6a3212956e8c72d1"
+      },
+      "variant": "framing-final150"
+    },
+    {
+      "id": "Q08",
+      "framing_rule_pass": false,
+      "failure_reason": "Material coherent vertical/diagonal motion smear across case/fans, window/background and keyboard; object boundaries and details visibly streak rather than merely losing fine texture.",
+      "material_directional_smear": true,
+      "unusable_blocking": false,
+      "fine_detail_softness_vs_late": "strong",
+      "notes": "Late reference is sharply resolved. Early degradation includes clear directional elongation/doubling beyond normal fine-detail softness.",
+      "confidence": "high",
+      "early_image": "/tmp/spy-blind-Q08-early.jpg",
+      "late_image": "/tmp/spy-blind-Q08-late.jpg",
+      "image_sha256": {
+        "early": "c980fdab835ac1adb98cd035877e9ddb88c084af585260c84b3c68ef30d745b8",
+        "late": "6aef8fae5d740d149c38f16d05a5b223add8bba9995efd81827f2b917b8c631e"
+      },
+      "variant": "framing-fast-zero"
+    },
+    {
+      "id": "Q09",
+      "framing_rule_pass": true,
+      "failure_reason": null,
+      "material_directional_smear": false,
+      "unusable_blocking": false,
+      "fine_detail_softness_vs_late": "moderate",
+      "notes": "Case, headphones, keyboard and mugs remain recognizable; fine internal cables/key edges are less resolved, without a clear gross directional streak.",
+      "confidence": "medium",
+      "early_image": "/tmp/spy-blind-Q09-early.jpg",
+      "late_image": "/tmp/spy-blind-Q09-late.jpg",
+      "image_sha256": {
+        "early": "60d3c2bb832d20143c526d7a7b889ce4c7b99754bb1ba1291d00232353e78464",
+        "late": "2803b3b373d0a0296c39ddc1c4e51f9292f5702dea71794ee6a5a7000df10e1a"
+      },
+      "variant": "framing-fast50"
+    },
+    {
+      "id": "Q10",
+      "framing_rule_pass": true,
+      "failure_reason": null,
+      "material_directional_smear": false,
+      "unusable_blocking": false,
+      "fine_detail_softness_vs_late": "moderate-to-strong",
+      "notes": "Early internal cables and background fine texture soften noticeably, but case outline, central device display, headphone silhouette and keyboard layout remain usable. No definite material coherent directional doubling.",
+      "confidence": "medium",
+      "early_image": "/tmp/spy-blind-Q10-early.jpg",
+      "late_image": "/tmp/spy-blind-Q10-late.jpg",
+      "image_sha256": {
+        "early": "930af372c1ae65d2a42a5b11ed3a2f4ebf8d29000d2301a3ada2313c5708373c",
+        "late": "d2f4b1c190736f42d6b97d3c3117946a6732f38140e9cb723973f247b5ad27c1"
+      },
+      "variant": "framing-two-zero"
+    },
+    {
+      "id": "Q11",
+      "framing_rule_pass": true,
+      "failure_reason": null,
+      "material_directional_smear": false,
+      "unusable_blocking": false,
+      "fine_detail_softness_vs_late": "mild-to-moderate",
+      "notes": "Recognizable room objects and stable gross contours; later image improves fine cable/key detail. Not a material motion-smear failure under original framing rule.",
+      "confidence": "high",
+      "early_image": "/tmp/spy-blind-Q11-early.jpg",
+      "late_image": "/tmp/spy-blind-Q11-late.jpg",
+      "image_sha256": {
+        "early": "4bc50fccdbe0a96cf17751709a7a410eead87b83ea5f80fa0a82dae1f2d79027",
+        "late": "c41de3d2d2026d70a3cf4037210fd6a014f86edbdd633c6253a2e19b0abd3014"
+      },
+      "variant": "framing-fast100"
+    },
+    {
+      "id": "Q12",
+      "framing_rule_pass": false,
+      "failure_reason": "Material horizontal directional motion smear/ghosting across keyboard, case/display and monitor/window edges; early image has coherent elongation and doubled contours.",
+      "material_directional_smear": true,
+      "unusable_blocking": false,
+      "fine_detail_softness_vs_late": "strong",
+      "notes": "Late reference has clear case and key edges; early degradation is directional and more severe than a fine-texture softness difference.",
+      "confidence": "high",
+      "early_image": "/tmp/spy-blind-Q12-early.jpg",
+      "late_image": "/tmp/spy-blind-Q12-late.jpg",
+      "image_sha256": {
+        "early": "7a143f238716e7d6bf9852647d809ff519bd9e85278293dddc9ecc2afabd128a",
+        "late": "af27ef232ab7c0d62a4876aeded468ce487706bbeddc3358c96c09f4c6f521f4"
+      },
+      "variant": "framing-fast-zero"
+    }
+  ],
+  "judged_utc": "2026-10-28T05:00:35.727645+00:00",
+  "manifest_sha256": "d86c2eaa530915ef22e7f249a3fade6efafa86f8e9ce853916af98708486d779",
+  "blinding_limit": "Private label key was never read. Some image content had been reviewed earlier; this is label-key-withheld scoring, not a claim of a wholly image-naive judge.",
+  "summary": {
+    "passes": 10,
+    "failures": [
+      "Q08",
+      "Q12"
+    ]
+  }
+}

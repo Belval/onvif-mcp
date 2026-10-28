@@ -7,7 +7,9 @@ MCP stdio, visual tracking and motor control. Python and FFmpeg are not required
 ## Build and configure
 
 Requires Rust 1.89+, a C/C++ compiler, CMake and NASM for bundled OpenH264/TurboJPEG codecs.
-The preview path uses the camera's native JPEG stream and needs no decoder.
+The default preview decodes a persistent H.264 stream and produces 640px JPEG images.
+On this C210 the minor stream is configured at 640×360/15fps; see the measured
+experiments in `benchmarks/i-spy/`. `CAMERA_PREVIEW=jpeg` selects the legacy stream.
 
 ```sh
 cargo build --release --locked
@@ -38,15 +40,15 @@ refresh for loaded threads; no full app restart is needed.
 
 ## Fast operation
 
-- `camera_see(detail=false)`: a native 640×360 JPEG from the persistent buffer,
+- `camera_see(detail=false)`: a 640px JPEG from the persistent H.264 buffer,
   with `frame_id`, dimensions, sequence number, frame age and request time.
-  `detail=true` opens a short-lived native 1280px H.264 connection and returns
+  `detail=true` opens a short-lived main-stream H.264 connection and returns
   up to 1280×960. It closes after the capture so occasional detail requests do
   not keep decoding video or compete with PTZ and preview traffic.
 - `camera_focus(x,y,frame_id,precise=false,rough=false)`: center a selected image point and
   return the resulting image in one call. Coordinates are fractions from the
   top-left: `(0,0)` top-left, `(0.5,0.5)` center. Use `rough=true` for one calibrated
-  move, a 100ms settling wait, and no visual corrections; status is `aimed`, not
+  move, two arrival confirmations, and no visual corrections; status is `aimed`, not
   verified `centered`. Points already within 8% of center are left alone.
   Rough and precise cannot be combined. Ordinary fast framing allows two internal
   corrections to within 4% normalized distance; `precise=true` allows three
@@ -72,10 +74,10 @@ The buffer holds **only the newest frame**. New frames overwrite old ones;
 requests share frame bytes using `Arc`. A bounded history of up to 12 returned
 observations supports scan revisits. Disconnected or old streams do not return
 stale images; the receiver reconnects automatically with bounded backoff.
-Preview pixels are never decoded, resized or recompressed. The camera's JPEG/RTP
-quirk requires restoring eight missing JPEG header bytes, inferred from all
-remaining luminance quantizers; the encoded image data is preserved exactly.
-Unknown layouts/tables and incomplete/out-of-order frames are rejected.
+H.264 decoding uses OpenH264 with assembly acceleration; JPEG encoding uses a
+persistent TurboJPEG compressor. Native-size previews skip resizing; larger
+frames use SIMD resizing. The optional legacy JPEG/RTP path repairs known header
+quirks and drops malformed frames without restarting the whole session.
 
 PTZ position polling runs in the background to avoid network round trips on each
 look. Focus always reads a fresh position before moving. Normal frame IDs are
@@ -91,13 +93,14 @@ and leaves `target` null because the final point has not been visually verified.
 Operations involving movement are serialized. Stop bypasses that lock, and
 cancellation/disconnect attempts to stop via a drop guard. The camera's timed
 velocity command also has a device timeout of at most two seconds. Absolute
-moves wait for reported arrival, settle briefly, and require a frame received
+moves require two arrival reports with 15ms polling, a 50ms settling delay
+(zero for rough framing), and then a frame received
 *after* movement. The C210 reports no ONVIF optical zoom.
 
 ## Calibration and verification
 
 `calibration.json` stores measured image displacement per ONVIF position unit for
-this camera/firmware. The controller uses damped, bounded local visual feedback
+this camera/firmware. The controller uses bounded local visual feedback
 to handle perspective, motor dead zones and reversal backlash.
 
 ```sh

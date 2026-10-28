@@ -34,15 +34,11 @@ struct State {
     latest: String,
     barrier: Option<Instant>,
     last_move: Value,
-    last_motion_pose: Option<[f64; 2]>,
-    last_direction: [i8; 2],
 }
 #[derive(Deserialize)]
 struct Calibration {
     model: Option<String>,
     image_shift_per_pose_unit: [[f64; 2]; 2],
-    #[serde(default)]
-    backlash_pose_units: [f64; 2],
 }
 pub type ObservationResult = (Value, Arc<Frame>);
 
@@ -58,7 +54,6 @@ pub struct Camera {
     pub motion: Mutex<()>,
     cancelled: AtomicBool,
     calibration: Matrix2<f64>,
-    backlash: [f64; 2],
     views: Mutex<HashMap<String, [f64; 2]>>,
     views_path: std::path::PathBuf,
 }
@@ -120,29 +115,14 @@ impl Drop for StopGuard {
         }
     }
 }
-fn backlash_target(
-    pose: [f64; 2],
-    target: [f64; 2],
-    directions: [i8; 2],
-    backlash: [f64; 2],
-) -> ([f64; 2], [f64; 2]) {
-    let mut adjusted = target;
-    for axis in 0..2 {
-        let delta = target[axis] - pose[axis];
-        if delta.abs() > 0.002 {
-            let sign = if delta > 0. { 1 } else { -1 };
-            let fraction = if directions[axis] == 0 {
-                0.5
-            } else if directions[axis] != sign {
-                1.
-            } else {
-                0.
-            };
-            adjusted[axis] += delta.signum() * backlash[axis] * fraction;
-        }
-    }
-    let adjusted = clip(adjusted);
-    (adjusted, [adjusted[0] - target[0], adjusted[1] - target[1]])
+pub(crate) fn arrival_timeout(start: Option<[f64; 2]>, target: [f64; 2]) -> Duration {
+    // Measured C210 axes move sequentially. Whole-room turns can legitimately
+    // exceed six seconds; this changes only the failure budget, not arrival.
+    let seconds = start
+        .filter(|p| p.iter().all(|v| v.is_finite()))
+        .map(|p| 1. + 1.5 * ((target[0] - p[0]).abs() / 0.20 + (target[1] - p[1]).abs() / 0.65))
+        .unwrap_or(20.);
+    Duration::from_secs_f64(seconds.clamp(2., 20.))
 }
 fn max_delta(a: [f64; 2], b: [f64; 2]) -> f64 {
     (a[0] - b[0]).abs().max((a[1] - b[1]).abs())
@@ -158,7 +138,7 @@ fn focus_gain() -> f64 {
         .ok()
         .and_then(|s| s.parse::<f64>().ok())
         .filter(|n| n.is_finite() && (0.5..=1.1).contains(n))
-        .unwrap_or(0.8)
+        .unwrap_or(1.0)
 }
 fn calibrated_delta(matrix: Matrix2<f64>, point: [f64; 2]) -> Result<Vector2<f64>> {
     Ok(-focus_gain()
@@ -198,7 +178,7 @@ impl Camera {
     pub async fn connect(root: &Path) -> Result<Arc<Self>> {
         crate::metrics::result("camera.initialize", async {
             let onvif = Arc::new(Onvif::connect(Config::load()?).await?);
-            let preview_mode = std::env::var("CAMERA_PREVIEW").unwrap_or_default();
+            let preview_mode = std::env::var("CAMERA_PREVIEW").unwrap_or_else(|_| "h264".into());
             let h264_preview = preview_mode.starts_with("h264");
             let profile = onvif
                 .profiles
@@ -256,13 +236,6 @@ impl Camera {
                 calibration.model.as_ref().is_none_or(|m| m == &onvif.model),
                 "Calibration belongs to a different camera model"
             );
-            let backlash = calibration.backlash_pose_units;
-            ensure!(
-                backlash
-                    .iter()
-                    .all(|b| b.is_finite() && (0.0..=0.03).contains(b)),
-                "Invalid backlash calibration"
-            );
             let data = calibration.image_shift_per_pose_unit;
             let calibration = Matrix2::new(data[0][0], data[0][1], data[1][0], data[1][1]);
             ensure!(
@@ -307,7 +280,6 @@ impl Camera {
                 motion: Mutex::new(()),
                 cancelled: AtomicBool::new(false),
                 calibration,
-                backlash,
                 views: Mutex::new(views),
                 views_path,
             }))
@@ -416,8 +388,6 @@ impl Camera {
             let (_lease, result) = stop_barrier(self.command_gate.clone(), self.onvif.stop()).await;
             let mut state = crate::metrics::timed("lock.state_wait", self.state.lock()).await;
             state.barrier = Some(Instant::now() + Duration::from_millis(100));
-            state.last_motion_pose = None;
-            state.last_direction = [0, 0];
             result
         })
         .await
@@ -453,7 +423,7 @@ impl Camera {
     }
     pub async fn goto(&self, target: [f64; 2]) -> Result<[f64; 2]> {
         crate::metrics::result("motion.goto", async {
-            self.goto_with_settle(target, delay("CAMERA_SETTLE_MS", 300))
+            self.goto_with_settle(target, delay("CAMERA_SETTLE_MS", 50))
                 .await
         })
         .await
@@ -461,17 +431,18 @@ impl Camera {
     async fn goto_with_settle(&self, target: [f64; 2], settle: Duration) -> Result<[f64; 2]> {
         crate::metrics::result("motion.goto_with_settle",async {
             self.check_cancelled()?;
-            let poll_delay=delay("CAMERA_POLL_MS",60);
+            let poll_delay=delay("CAMERA_POLL_MS",15);
             let confirmations=parameter("CAMERA_STABLE_SAMPLES",2,1,3);
             let target=clip(target);
             let before_pose=self.onvif.cached_position().map(|(p,_)|p);
+            let arrival_budget=arrival_timeout(before_pose,target);
             let mut guard=self.stop_guard().await?;
             let started=Instant::now();
-            crate::metrics::event("motion.target",json!({"target":target,"settle_ms":settle.as_secs_f64()*1000.,"poll_ms":poll_delay.as_secs_f64()*1000.,"confirmations":confirmations}));
+            crate::metrics::event("motion.target",json!({"target":target,"settle_ms":settle.as_secs_f64()*1000.,"poll_ms":poll_delay.as_secs_f64()*1000.,"confirmations":confirmations,"arrival_timeout_ms":arrival_budget.as_secs_f64()*1000.}));
             let movement=async {
                 self.onvif.absolute(target).await?;
                 let commanded=Instant::now();
-                let deadline=Instant::now()+Duration::from_secs(6);
+                let deadline=Instant::now()+arrival_budget;
                 let mut stable=0;let mut polls=0;
                 let pose=loop {
                     self.check_cancelled()?;
@@ -492,12 +463,7 @@ impl Camera {
             let stopped=guard.finish().await;
             let mut state=crate::metrics::timed("lock.state_wait",self.state.lock()).await;
             state.barrier=Some(Instant::now()+if movement.is_err(){Duration::from_millis(100)}else{Duration::ZERO});
-            if movement.is_err() {state.last_motion_pose=None;state.last_direction=[0,0];}
             let (pose,commanded,arrived,polls)=movement?;
-            if let Some(before)=before_pose {
-                for axis in 0..2 {if (pose[axis]-before[axis]).abs()>0.002 {state.last_direction[axis]=if pose[axis]>before[axis] {1}else{-1};}}
-            } else {state.last_direction=[0,0];}
-            state.last_motion_pose=Some(pose);
             stopped?;
             state.last_move=json!({"command_ms":commanded.duration_since(started).as_secs_f64()*1000.,"arrival_ms":arrived.duration_since(commanded).as_secs_f64()*1000.,"settle_stop_ms":arrived.elapsed().as_secs_f64()*1000.,"polls":polls});
             Ok(pose)
@@ -521,8 +487,6 @@ impl Camera {
             let stopped = guard.finish().await;
             let mut state = crate::metrics::timed("lock.state_wait", self.state.lock()).await;
             state.barrier = Some(Instant::now() + Duration::from_millis(100));
-            state.last_motion_pose = None;
-            state.last_direction = [0, 0];
             movement?;
             stopped?;
             Ok(json!({"stopped":true}))
@@ -536,31 +500,6 @@ impl Camera {
                 .map_err(Into::into)
         })
         .await
-    }
-    async fn compensated_target(
-        &self,
-        pose: [f64; 2],
-        target: [f64; 2],
-        precise: bool,
-    ) -> ([f64; 2], [f64; 2]) {
-        if !precise || !std::env::var("CAMERA_BACKLASH").is_ok_and(|s| s == "1") {
-            return (target, [0., 0.]);
-        }
-        let state = crate::metrics::timed("lock.state_wait", self.state.lock()).await;
-        let directions = if state
-            .last_motion_pose
-            .is_some_and(|p| max_delta(p, pose) < 0.002)
-        {
-            state.last_direction
-        } else {
-            [0, 0]
-        };
-        let (adjusted, compensation) = backlash_target(pose, target, directions, self.backlash);
-        crate::metrics::event(
-            "focus.backlash",
-            json!({"directions":directions,"calibrated_gap":self.backlash,"compensation":compensation}),
-        );
-        (adjusted, compensation)
     }
     pub async fn focus(
         &self,
@@ -634,7 +573,7 @@ impl Camera {
                 return self.record(frame,pose,json!({"focus_status":"mechanical_limit","rough":true,"iterations":0,"target":null}),false).await;
             }
             let actual = self
-                .goto_with_settle(target, delay("CAMERA_ROUGH_SETTLE_MS",100))
+                .goto_with_settle(target, delay("CAMERA_ROUGH_SETTLE_MS",0))
                 .await?;
             frame = self.preview.frame(crate::metrics::timed("lock.state_wait",self.state.lock()).await.barrier).await?;
             let timing = crate::metrics::timed("lock.state_wait",self.state.lock()).await.last_move.clone();
@@ -652,7 +591,6 @@ impl Camera {
             }
             self.check_cancelled()?;
             let target = aim_target(matrix, pose, point)?;
-            let (target,compensation)=self.compensated_target(pose,target,precise).await;
             if max_delta(target, pose) < 0.002 {
                 status = "mechanical_limit";
                 break;
@@ -665,10 +603,10 @@ impl Camera {
                 status = "tracking_lost";
                 break;
             };
-            let movement = Vector2::new(actual[0] - pose[0]-compensation[0], actual[1] - pose[1]-compensation[1]);
+            let movement = Vector2::new(actual[0] - pose[0], actual[1] - pose[1]);
             let shift = Vector2::new(tracked[0] - point[0], tracked[1] - point[1]);
             corrections
-                .push(json!({"before":point,"after":tracked,"pose_delta":[actual[0]-pose[0],actual[1]-pose[1]],"backlash_compensation":compensation,"move_timing":crate::metrics::timed("lock.state_wait",self.state.lock()).await.last_move.clone()}));
+                .push(json!({"before":point,"after":tracked,"pose_delta":movement.as_slice(),"move_timing":crate::metrics::timed("lock.state_wait",self.state.lock()).await.last_move.clone()}));
             if movement.norm_squared() > 1e-6 {
                 let candidate = matrix
                     + (shift - matrix * movement) * movement.transpose() / movement.norm_squared();
@@ -920,18 +858,11 @@ mod tests {
             .unwrap();
     }
     #[test]
-    fn backlash_compensation_respects_direction_and_hard_limits() {
-        let p = [0., 0.];
-        let t = [0.1, 0.];
-        let b = [0.008, 0.];
-        assert_eq!(backlash_target(p, t, [1, 0], b).0, t);
-        assert!((backlash_target(p, t, [-1, 0], b).0[0] - 0.108).abs() < 1e-9);
-        assert!((backlash_target(p, t, [0, 0], b).0[0] - 0.104).abs() < 1e-9);
-        assert_eq!(
-            backlash_target([0.99, 0.], [1., 0.], [-1, 0], b).0,
-            [1., 0.]
-        );
-        assert_eq!(backlash_target(p, p, [-1, 0], b).0, p);
+    fn arrival_budget_covers_whole_room_without_delaying_small_moves() {
+        assert!(arrival_timeout(Some([-1., -1.]), [1., 1.]) > Duration::from_secs(12));
+        assert!(arrival_timeout(Some([0., 0.]), [0.05, 0.]) <= Duration::from_secs(3));
+        assert!(arrival_timeout(None, [0., 0.]) <= Duration::from_secs(20));
+        assert!(arrival_timeout(Some([f64::NAN, 0.]), [0., 0.]) <= Duration::from_secs(20));
     }
     #[test]
     fn point_geometry_and_limits() {

@@ -102,8 +102,9 @@ async fn call(
 }
 async fn goto(onvif: &Onvif, target: [f64; 2]) -> Result<()> {
     let result = async {
+        let start = onvif.position().await?;
         onvif.absolute(target).await?;
-        let deadline = Instant::now() + Duration::from_secs(6);
+        let deadline = Instant::now() + crate::camera::arrival_timeout(Some(start), target);
         let mut stable = 0;
         while stable < 2 {
             ensure!(
@@ -257,7 +258,7 @@ pub async fn run(moving: bool) -> Result<()> {
             .await?;
             ensure!(
                 revisited[0]["focus_status"] == "centered",
-                "Must be able to focus the first scan view after visiting others"
+                "Must be able to focus the first scan view after visiting others: {}", revisited[0]
             );
             eprintln!(
                 "Revisit first scan view: {:0.1}ms",

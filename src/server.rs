@@ -136,7 +136,7 @@ fn picture(result: Result<ObservationResult>, started: Instant) -> CallToolResul
 #[tool_router]
 impl CameraServer {
     #[tool(
-        description = "See a fresh 640x360 camera preview from a persistent native JPEG stream. Returns frame_id, dimensions and frame age. detail=true starts an H264 detail connection and returns up to 1280px. Use camera_focus for centering, camera_scan for searching, and camera_look for remembered objects."
+        description = "See a fresh 640x360 camera preview from a persistent H264 stream. Returns frame_id, dimensions and frame age. detail=true starts an H264 detail connection and returns up to 1280px. Use camera_focus for centering, camera_scan for searching, and camera_look for remembered objects."
     )]
     async fn camera_see(&self, Parameters(args): Parameters<SeeArgs>) -> CallToolResult {
         let started = Instant::now();
@@ -280,7 +280,7 @@ impl ServerHandler for CameraServer {
     }
     fn get_info(&self) -> ServerConfig {
         ServerConfig::new(ServerCapabilities::builder().enable_tools().build()).with_instructions(
-            "Use rough=true for ordinary quick framing; precise=true only when tight centering is needed. Use camera_see for a quick current view; camera_scan batches a search into one call; camera_focus frames an object from any returned image. Save stationary objects with camera_remember and use camera_look to avoid future searches. Coordinates are normalized from image top-left. Frames come from a persistent, latest-only native JPEG buffer; never infer success if focus_status reports otherwise.")
+            "Use rough=true for ordinary quick framing; precise=true only when tight centering is needed. Use camera_see for a quick current view; camera_scan batches a search into one call; camera_focus frames an object from any returned image. Save stationary objects with camera_remember and use camera_look to avoid future searches. Coordinates are normalized from image top-left. Frames come from a persistent, latest-only H264 preview buffer; never infer success if focus_status reports otherwise.")
     }
 }
 
