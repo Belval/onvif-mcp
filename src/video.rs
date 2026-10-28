@@ -1,10 +1,16 @@
-use openh264::formats::YUVSource;
 use crate::onvif::Config;
 use anyhow::{Result, bail, ensure};
 use futures_util::StreamExt;
 use image::{DynamicImage, ImageBuffer, codecs::jpeg::JpegEncoder};
-use retina::{client::{Credentials, PlayOptions, Session, SessionOptions, SetupOptions}, codec::{CodecItem, FrameFormat}};
-use std::sync::{Arc, atomic::{AtomicBool, AtomicU64, Ordering}};
+use openh264::formats::YUVSource;
+use retina::{
+    client::{Credentials, PlayOptions, Session, SessionOptions, SetupOptions},
+    codec::{CodecItem, FrameFormat},
+};
+use std::sync::{
+    Arc,
+    atomic::{AtomicBool, AtomicU64, Ordering},
+};
 use std::time::{Duration, Instant};
 use tokio::{sync::watch, task::JoinHandle};
 use url::Url;
@@ -27,35 +33,89 @@ pub struct Video {
     task: JoinHandle<()>,
     pub metrics: Arc<Metrics>,
 }
-impl Drop for Video { fn drop(&mut self) { self.task.abort(); } }
+impl Drop for Video {
+    fn drop(&mut self) {
+        self.task.abort();
+    }
+}
 impl Video {
-    pub fn start(url: Url, config: Config, jpeg: bool, dimensions: (u32,u32)) -> Self {
+    pub fn start(url: Url, config: Config, jpeg: bool, dimensions: (u32, u32)) -> Self {
         let (tx, receiver) = watch::channel(None);
         let metrics = Arc::new(Metrics::default());
         let counters = metrics.clone();
         let task = tokio::spawn(async move {
             let mut delay = Duration::from_millis(250);
             loop {
-                let _ = Self::receive(url.clone(), config.clone(), jpeg, dimensions, &tx, &counters).await;
+                let _ = Self::receive(
+                    url.clone(),
+                    config.clone(),
+                    jpeg,
+                    dimensions,
+                    &tx,
+                    &counters,
+                )
+                .await;
                 counters.connected.store(false, Ordering::Relaxed);
                 tx.send_replace(None); // A disconnected stream must never serve an old picture.
                 counters.reconnects.fetch_add(1, Ordering::Relaxed);
                 tokio::time::sleep(delay).await;
-                delay = (delay*2).min(Duration::from_secs(3));
-                if tx.is_closed() { break; }
+                delay = (delay * 2).min(Duration::from_secs(3));
+                if tx.is_closed() {
+                    break;
+                }
             }
         });
-        Self { receiver, task, metrics }
+        Self {
+            receiver,
+            task,
+            metrics,
+        }
     }
-    async fn receive(url: Url, config: Config, jpeg: bool, dimensions: (u32,u32), tx: &watch::Sender<Option<Arc<Frame>>>, metrics: &Metrics) -> Result<()> {
-        let creds = Credentials { username: config.username, password: config.password };
-        let mut session = tokio::time::timeout(Duration::from_secs(4), Session::describe(url, SessionOptions::default().creds(Some(creds)))).await??;
-        let index = session.streams().iter().position(|s| matches!(s.media(), "video" | "image") && s.encoding_name() == if jpeg { "jpeg" } else { "h264" })
+    async fn receive(
+        url: Url,
+        config: Config,
+        jpeg: bool,
+        dimensions: (u32, u32),
+        tx: &watch::Sender<Option<Arc<Frame>>>,
+        metrics: &Metrics,
+    ) -> Result<()> {
+        let creds = Credentials {
+            username: config.username,
+            password: config.password,
+        };
+        let mut session = tokio::time::timeout(
+            Duration::from_secs(4),
+            Session::describe(url, SessionOptions::default().creds(Some(creds))),
+        )
+        .await??;
+        let index = session
+            .streams()
+            .iter()
+            .position(|s| {
+                matches!(s.media(), "video" | "image")
+                    && s.encoding_name() == if jpeg { "jpeg" } else { "h264" }
+            })
             .ok_or_else(|| anyhow::anyhow!("Requested video encoding unavailable"))?;
-        tokio::time::timeout(Duration::from_secs(3), session.setup(index, SetupOptions::default().frame_format(FrameFormat::SIMPLE))).await??;
-        let session = tokio::time::timeout(Duration::from_secs(3), session.play(PlayOptions::default())).await??;
+        tokio::time::timeout(
+            Duration::from_secs(3),
+            session.setup(
+                index,
+                SetupOptions::default().frame_format(FrameFormat::SIMPLE),
+            ),
+        )
+        .await??;
+        let session =
+            tokio::time::timeout(Duration::from_secs(3), session.play(PlayOptions::default()))
+                .await??;
+        if jpeg {
+            return Self::receive_jpeg(session, dimensions, tx, metrics).await;
+        }
         let mut frames = session.demuxed()?;
-        let mut decoder = if jpeg { None } else { Some(openh264::decoder::Decoder::new()?) };
+        let mut decoder = if jpeg {
+            None
+        } else {
+            Some(openh264::decoder::Decoder::new()?)
+        };
         let mut encoded_at = Instant::now() - Duration::from_secs(1);
         metrics.connected.store(true, Ordering::Relaxed);
         while let Some(item) = tokio::time::timeout(Duration::from_secs(3), frames.next()).await? {
@@ -63,55 +123,189 @@ impl Video {
                 let received = Instant::now();
                 let (data, width, height) = if let Some(decoder) = decoder.as_mut() {
                     if let Some(yuv) = decoder.decode(frame.data())? {
-                        if encoded_at.elapsed() < Duration::from_millis(150) { continue; }
-                        let (w,h) = yuv.dimensions();
-                        let mut rgb = vec![0;w*h*3]; yuv.write_rgb8(&mut rgb);
-                        let image = DynamicImage::ImageRgb8(ImageBuffer::from_raw(w as u32,h as u32,rgb).ok_or_else(|| anyhow::anyhow!("Invalid video size"))?).thumbnail(1280,960);
-                        let (w,h) = (image.width(),image.height());
-                        let mut data = Vec::new(); JpegEncoder::new_with_quality(&mut data,85).encode_image(&image)?;
+                        if encoded_at.elapsed() < Duration::from_millis(150) {
+                            continue;
+                        }
+                        let (w, h) = yuv.dimensions();
+                        let mut rgb = vec![0; w * h * 3];
+                        yuv.write_rgb8(&mut rgb);
+                        let image = DynamicImage::ImageRgb8(
+                            ImageBuffer::from_raw(w as u32, h as u32, rgb)
+                                .ok_or_else(|| anyhow::anyhow!("Invalid video size"))?,
+                        )
+                        .thumbnail(1280, 960);
+                        let (w, h) = (image.width(), image.height());
+                        let mut data = Vec::new();
+                        JpegEncoder::new_with_quality(&mut data, 85).encode_image(&image)?;
                         encoded_at = Instant::now();
-                        (data,w,h)
-                    } else { continue; }
+                        (data, w, h)
+                    } else {
+                        continue;
+                    }
                 } else {
                     let data = frame.into_data();
-                    ensure!(data.len() <= 4*1024*1024 && data.starts_with(&[0xff,0xd8]) && data.ends_with(&[0xff,0xd9]), "Invalid JPEG frame");
-                    (data,dimensions.0,dimensions.1)
+                    ensure!(
+                        data.len() <= 4 * 1024 * 1024
+                            && data.starts_with(&[0xff, 0xd8])
+                            && data.ends_with(&[0xff, 0xd9]),
+                        "Invalid JPEG frame"
+                    );
+                    (data, dimensions.0, dimensions.1)
                 };
-                let sequence = metrics.frames.fetch_add(1,Ordering::Relaxed)+1;
-                tx.send_replace(Some(Arc::new(Frame { jpeg: Arc::new(data),received,sequence,width,height })));
-                if tx.is_closed() { break; }
+                let sequence = metrics.frames.fetch_add(1, Ordering::Relaxed) + 1;
+                tx.send_replace(Some(Arc::new(Frame {
+                    jpeg: Arc::new(data),
+                    received,
+                    sequence,
+                    width,
+                    height,
+                })));
+                if tx.is_closed() {
+                    break;
+                }
+            }
+        }
+        bail!("Video stream ended")
+    }
+    async fn receive_jpeg(
+        mut session: Session<retina::client::Playing>,
+        dimensions: (u32, u32),
+        tx: &watch::Sender<Option<Arc<Frame>>>,
+        metrics: &Metrics,
+    ) -> Result<()> {
+        use retina::client::PacketItem;
+        let mut assembler = crate::jpeg::NativeJpeg::default();
+        metrics.connected.store(true, Ordering::Relaxed);
+        while let Some(packet) =
+            tokio::time::timeout(Duration::from_secs(3), session.next()).await?
+        {
+            if let PacketItem::Rtp(packet) = packet?
+                && let Some(data) = assembler.push(
+                    packet.timestamp().timestamp(),
+                    packet.sequence_number(),
+                    packet.mark(),
+                    packet.payload(),
+                )?
+            {
+                let sequence = metrics.frames.fetch_add(1, Ordering::Relaxed) + 1;
+                tx.send_replace(Some(Arc::new(Frame {
+                    jpeg: Arc::new(data),
+                    received: Instant::now(),
+                    sequence,
+                    width: dimensions.0,
+                    height: dimensions.1,
+                })));
+                if tx.is_closed() {
+                    break;
+                }
             }
         }
         bail!("Video stream ended")
     }
     pub async fn frame(&self, after: Option<Instant>) -> Result<Arc<Frame>> {
         let mut rx = self.receiver.clone();
-        let deadline = tokio::time::Instant::now()+Duration::from_secs(6);
+        let deadline = tokio::time::Instant::now() + Duration::from_secs(6);
         loop {
-            if let Some(frame) = rx.borrow_and_update().clone() {
-                if frame.received.elapsed() <= Duration::from_millis(400) && after.is_none_or(|t| frame.received >= t) {
-                    return Ok(frame);
-                }
+            if let Some(frame) = rx.borrow_and_update().clone()
+                && frame.received.elapsed() <= Duration::from_millis(400)
+                && after.is_none_or(|t| frame.received >= t)
+            {
+                return Ok(frame);
             }
-            tokio::time::timeout_at(deadline,rx.changed()).await.map_err(|_| anyhow::anyhow!("No fresh camera frame; check connectivity"))?
+            tokio::time::timeout_at(deadline, rx.changed())
+                .await
+                .map_err(|_| anyhow::anyhow!("No fresh camera frame; check connectivity"))?
                 .map_err(|_| anyhow::anyhow!("Video receiver stopped"))?;
         }
     }
-    pub fn age_ms(&self) -> Option<u64> { self.receiver.borrow().as_ref().map(|f| f.received.elapsed().as_millis() as u64) }
+    pub fn age_ms(&self) -> Option<u64> {
+        self.receiver
+            .borrow()
+            .as_ref()
+            .map(|f| f.received.elapsed().as_millis() as u64)
+    }
 }
 
 #[cfg(test)]
 mod tests {
     use super::*;
-    #[tokio::test] async fn latest_only_and_after_barrier() {
-        let (tx,rx)=watch::channel(None);
-        let make=|sequence| Arc::new(Frame { jpeg: Arc::new(vec![sequence as u8]),received:Instant::now(),sequence,width:640,height:360 });
-        tx.send_replace(Some(make(1)));tx.send_replace(Some(make(2)));
-        let video=Video { receiver:rx,task:tokio::spawn(std::future::pending()),metrics:Arc::default() };
-        assert_eq!(video.frame(None).await.unwrap().sequence,2);
-        let barrier=Instant::now();
-        let task=tokio::spawn(async move { tokio::time::sleep(Duration::from_millis(20)).await;tx.send_replace(Some(make(3)));tokio::time::sleep(Duration::from_millis(100)).await; });
-        assert_eq!(video.frame(Some(barrier)).await.unwrap().sequence,3);
+    #[tokio::test]
+    async fn latest_only_and_after_barrier() {
+        let (tx, rx) = watch::channel(None);
+        let make = |sequence| {
+            Arc::new(Frame {
+                jpeg: Arc::new(vec![sequence as u8]),
+                received: Instant::now(),
+                sequence,
+                width: 640,
+                height: 360,
+            })
+        };
+        tx.send_replace(Some(make(1)));
+        tx.send_replace(Some(make(2)));
+        let video = Video {
+            receiver: rx,
+            task: tokio::spawn(std::future::pending()),
+            metrics: Arc::default(),
+        };
+        assert_eq!(video.frame(None).await.unwrap().sequence, 2);
+        let barrier = Instant::now();
+        let task = tokio::spawn(async move {
+            tokio::time::sleep(Duration::from_millis(20)).await;
+            tx.send_replace(Some(make(3)));
+            tokio::time::sleep(Duration::from_millis(100)).await;
+        });
+        assert_eq!(video.frame(Some(barrier)).await.unwrap().sequence, 3);
         task.abort();
+    }
+}
+
+#[cfg(test)]
+mod freshness_tests {
+    use super::*;
+    #[tokio::test]
+    async fn stale_frames_are_not_returned_as_current() {
+        let (tx, rx) = watch::channel(Some(Arc::new(Frame {
+            jpeg: Arc::new(vec![]),
+            received: Instant::now() - Duration::from_secs(2),
+            sequence: 1,
+            width: 640,
+            height: 360,
+        })));
+        let video = Video {
+            receiver: rx,
+            task: tokio::spawn(std::future::pending()),
+            metrics: Arc::default(),
+        };
+        assert!(
+            tokio::time::timeout(Duration::from_millis(25), video.frame(None))
+                .await
+                .is_err()
+        );
+        drop(tx);
+    }
+    #[tokio::test]
+    async fn latest_buffer_releases_superseded_frames() {
+        let (tx, rx) = watch::channel(None);
+        let first = Arc::new(Frame {
+            jpeg: Arc::new(vec![1; 100]),
+            received: Instant::now(),
+            sequence: 1,
+            width: 640,
+            height: 360,
+        });
+        let weak = Arc::downgrade(&first);
+        tx.send_replace(Some(first));
+        for sequence in 2..100 {
+            tx.send_replace(Some(Arc::new(Frame {
+                jpeg: Arc::new(vec![1; 100]),
+                received: Instant::now(),
+                sequence,
+                width: 640,
+                height: 360,
+            })));
+        }
+        assert!(weak.upgrade().is_none());
+        assert_eq!(rx.borrow().as_ref().unwrap().sequence, 99);
     }
 }

@@ -1,22 +1,67 @@
+mod camera;
+mod jpeg;
 mod onvif;
+mod server;
+mod verify;
 mod video;
+mod vision;
 use anyhow::Result;
-use std::{sync::Arc,time::Instant};
-#[tokio::main]
-async fn main() -> Result<()> {
-    let root=std::path::PathBuf::from(env!("CARGO_MANIFEST_DIR"));
-    let _=dotenvy::from_path(root.join(".env"));
-    let start=Instant::now();
-    let camera=Arc::new(onvif::Onvif::connect(onvif::Config::load()?).await?);
-    let profile=camera.profiles.iter().find(|p| p.encoding=="JPEG").ok_or_else(||anyhow::anyhow!("No JPEG profile"))?;
-    let video=video::Video::start(camera.stream_url(&profile.token).await?,camera.config.clone(),true,(profile.width,profile.height));
-    let frame=video.frame(None).await?;
-    eprintln!("Native JPEG ready in {:0.3}s: {}x{}, {} bytes",start.elapsed().as_secs_f64(),frame.width,frame.height,frame.jpeg.len());
-    std::fs::write("/tmp/rust-camera-preview.jpg",frame.jpeg.as_slice())?;
-    for _ in 0..5 {
-        let start=Instant::now();let frame=video.frame(None).await?;
-        eprintln!("Cached fresh frame: {:0.3}ms, age {:0.1}ms",start.elapsed().as_secs_f64()*1000.,frame.received.elapsed().as_secs_f64()*1000.);
-        tokio::time::sleep(std::time::Duration::from_millis(100)).await;
+use rmcp::ServiceExt;
+use std::{path::PathBuf, time::Instant};
+
+fn root() -> PathBuf {
+    std::env::var_os("CAMERA_CONFIG_DIR")
+        .map(PathBuf::from)
+        .unwrap_or_else(|| PathBuf::from(env!("CARGO_MANIFEST_DIR")))
+}
+#[tokio::main(worker_threads = 2)]
+async fn main() {
+    if let Err(error) = run().await {
+        eprintln!("Camera server: {error}");
+        std::process::exit(1);
     }
+}
+async fn run() -> Result<()> {
+    let root = root();
+    let _ = dotenvy::from_path(root.join(".env"));
+    if std::env::args().any(|a| a == "--verify-live" || a == "--verify-motion") {
+        return verify::run(std::env::args().any(|a| a == "--verify-motion")).await;
+    }
+    let started = Instant::now();
+    let camera = camera::Camera::connect(&root).await?;
+    if std::env::args().any(|a| a == "--calibrate") {
+        eprintln!("{}", camera.recalibrate(&root).await?);
+        return Ok(());
+    }
+    if std::env::args().any(|a| a == "--probe") {
+        let (metadata, frame) = camera.observe(false, serde_json::json!({}), false).await?;
+        eprintln!(
+            "First picture: {:.3}s; {}",
+            started.elapsed().as_secs_f64(),
+            metadata
+        );
+        std::fs::write("/tmp/rust-camera-preview.jpg", frame.jpeg.as_slice())?;
+        for _ in 0..10 {
+            let start = Instant::now();
+            let (meta, _) = camera.observe(false, serde_json::json!({}), false).await?;
+            eprintln!(
+                "Observe: {:.3}ms, frame age {}ms",
+                start.elapsed().as_secs_f64() * 1000.,
+                meta["frame_age_ms"]
+            );
+            tokio::time::sleep(std::time::Duration::from_millis(100)).await;
+        }
+        return Ok(());
+    }
+    let server = server::CameraServer {
+        camera: camera.clone(),
+    };
+    let service = server.serve(rmcp::transport::stdio()).await?;
+    let result = tokio::select! {
+        result=service.waiting()=>result.map(|_|()),
+        _=tokio::signal::ctrl_c()=>Ok(()),
+    };
+    let _ = camera.stop().await;
+    result?;
     Ok(())
 }

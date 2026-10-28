@@ -2,7 +2,7 @@
 name = "onvif-sight"
 version = "0.2.0"
 edition = "2024"
-rust-version = "1.88"
+rust-version = "1.89"
 description = "Low-latency ONVIF camera MCP with persistent RTSP and latest-frame buffers"
 license = "MIT"
 
@@ -14,12 +14,12 @@ dotenvy = "0.15"
 futures-util = "0.3"
 image = { version = "0.25", default-features = false, features = ["jpeg"] }
 imageproc = { version = "0.27", default-features = false }
-nalgebra = "0.34"
+nalgebra = "0.35"
 openh264 = "0.9"
 rand = "0.9"
 reqwest = { version = "0.12", default-features = false, features = ["rustls-tls"] }
 retina = "0.4.21"
-rmcp = { version = "3.8", features = ["transport-io"] }
+rmcp = { version = "3.8", features = ["transport-io", "client", "transport-child-process"] }
 roxmltree = "0.21"
 schemars = "1"
 serde = { version = "1", features = ["derive"] }
