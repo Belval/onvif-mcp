@@ -1,7 +1,9 @@
 mod camera;
 mod jpeg;
+mod metrics;
 mod onvif;
 mod server;
+mod transport_metrics;
 mod verify;
 mod video;
 mod vision;
@@ -16,7 +18,9 @@ fn root() -> PathBuf {
 }
 #[tokio::main(worker_threads = 2)]
 async fn main() {
-    if let Err(error) = run().await {
+    let result = run().await;
+    metrics::flush();
+    if let Err(error) = result {
         eprintln!("Camera server: {error}");
         std::process::exit(1);
     }
@@ -24,6 +28,7 @@ async fn main() {
 async fn run() -> Result<()> {
     let root = root();
     let _ = dotenvy::from_path(root.join(".env"));
+    metrics::init();
     if std::env::args().any(|a| a == "--verify-live" || a == "--verify-motion") {
         return verify::run(std::env::args().any(|a| a == "--verify-motion")).await;
     }
@@ -55,7 +60,9 @@ async fn run() -> Result<()> {
     }
     let server = server::CameraServer::new(root);
     let camera_slot = server.camera.clone();
-    let service = server.serve(rmcp::transport::stdio_pipes()).await?;
+    let service = server
+        .serve(transport_metrics::instrument(rmcp::transport::stdio_pipes()))
+        .await?;
     let result = tokio::select! {
         result=service.waiting()=>result.map(|_|()),
         _=tokio::signal::ctrl_c()=>Ok(()),

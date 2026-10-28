@@ -143,3 +143,60 @@ Motor angle, network load and camera scheduling affect movement substantially.
 The previous Python implementation reopened the stream for each snapshot and
 measured about 2.5 seconds per stationary capture. The architectural change,
 not simply compiling the same loop in Rust, removes most of that cost.
+
+## Timing metrics
+
+Metrics are enabled by default. Every MCP tool result carries a generated trace
+ID in `_meta.camera_metrics.request_id`. Call
+`camera_metrics(request_id="…", full=true)` **after that response** to inspect its
+completed trace. Without an ID, the tool returns stage totals, errors,
+cancellations, a rolling 256-sample p50/p95/p99, counters and recent traces.
+It works without opening the camera.
+
+Coverage includes motion/state/view lock waits; lazy initialization and local
+configuration; ONVIF connection setup, WS-Security, HTTP headers/body and XML;
+absolute/velocity commands, each position sample, polling intervals and settling;
+RTSP DESCRIBE/SETUP/PLAY, reconnect backoff, packet waits, JPEG repair/assembly and
+publication; fresh-frame/barrier waits; blocking-worker queue/execution; JPEG
+tracking decode, resize/grayscale, FAST/BRIEF, matching, RANSAC and refit; detail
+H264 decode, RGB conversion and JPEG encoding; base64, metadata JSON, SDK response
+preparation and server pipe writes. Frame metadata includes a source ID, RTP
+clock/timestamp and host receipt age for correlation.
+
+Durations use the **host monotonic wall clock**, including scheduling delays.
+`inclusive_ms` includes children; `exclusive_ms` removes their interval union.
+Do not sum inclusive stages, concurrent spans or background packet statistics.
+`uncovered_ms` reports trace time outside measured spans; parent exclusive time
+includes uninstrumented glue and measurement overhead. ONVIF HTTP duration
+includes network and device processing; it cannot separate them without packet
+or device-side evidence. Position reports are not optical arrival feedback.
+RTP timestamps are camera media time, not verified sensor exposure timestamps.
+Pipe completion excludes client decoding, transport after the pipe, image
+inspection and model thinking. RTSP ingestion is background work, not charged
+as processing time to a request waiting for a frame.
+
+The process retains 64 request traces and 64 connection traces, with at most
+8192 spans per trace. Overflow and logging failures are exposed. Labels are
+static; no credentials, request arguments, SOAP, URLs or image bytes are logged.
+Pose samples are included. To persist full completed traces off the I/O thread:
+
+```sh
+CAMERA_METRICS_FILE='/path/to/metrics/camera-{pid}.jsonl' target/release/onvif-sight
+```
+
+The bounded logger queue holds 32 traces and drops rather than blocking requests.
+Files are created with mode 0600 and rotate at 16 MiB to one `.jsonl.1` backup.
+`{pid}` keeps simultaneous servers separate; old process files require cleanup.
+The checkout's `metrics/` directory is ignored by Git. Metrics do not stream to
+stderr/stdout outside the MCP protocol. Set `CAMERA_METRICS=off` to bypass timing
+and stdio inspection for overhead comparisons. Live verification checks completed
+wire traces and motion phase coverage; rough-focus inspection traces are written
+to `/tmp/rust-rough-trace.json`.
+
+A 2026-10-28 live sample with metrics and JSONL logging enabled measured warm
+previews at 0.63 ms median / 0.80 ms p95, versus 0.64 / 0.86 ms with metrics off
+(20 calls each; overhead below run-to-run variation, not proven zero). A 1909.7 ms
+rough-focus trace isolated 1030.3 ms in fresh-video watch waits, 426.0 ms in poll
+intervals, 341.6 ms in HTTP headers/connect, 101.2 ms settling and 9.2 ms HTTP body
+reads. Only 0.002 ms lay outside measured spans. These are one run's exclusive
+stages, not a general hardware latency guarantee.

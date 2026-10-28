@@ -8,3 +8,5 @@ __pycache__/
 captures/
 /target/
 views.json
+
+/metrics/

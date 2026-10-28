@@ -20,25 +20,28 @@ const ZIGZAG:[usize;64]=[
 35,42,49,56,57,50,43,36,29,22,15,23,30,37,44,51,
 58,59,52,45,38,31,39,46,53,60,61,54,47,55,62,63];
 fn prefix(data: &[u8]) -> Result<Vec<u8>> {
-    if data.starts_with(&[0xff, 0xd8]) {
-        return Ok(vec![]);
-    }
-    ensure!(
-        data.len() >= 68 && data[63..68] == [0xff, 0xdb, 0, 0x43, 1],
-        "Unsupported camera JPEG header layout"
-    );
-    for quality in 1..=100 {
-        let scale = if quality < 50 {
-            5000 / quality
-        } else {
-            200 - 2 * quality
-        };
-        let quant = |index: usize| ((LUMA[ZIGZAG[index]] * scale + 50) / 100).clamp(1, 255) as u8;
-        if (1..64).all(|i| data[i - 1] == quant(i)) {
-            return Ok(vec![0xff, 0xd8, 0xff, 0xdb, 0, 0x43, 0, quant(0)]);
+    crate::metrics::sync_result("jpeg.header_repair", || {
+        if data.starts_with(&[0xff, 0xd8]) {
+            return Ok(vec![]);
         }
-    }
-    anyhow::bail!("Unknown camera JPEG quantization table; refusing to guess image data")
+        ensure!(
+            data.len() >= 68 && data[63..68] == [0xff, 0xdb, 0, 0x43, 1],
+            "Unsupported camera JPEG header layout"
+        );
+        for quality in 1..=100 {
+            let scale = if quality < 50 {
+                5000 / quality
+            } else {
+                200 - 2 * quality
+            };
+            let quant =
+                |index: usize| ((LUMA[ZIGZAG[index]] * scale + 50) / 100).clamp(1, 255) as u8;
+            if (1..64).all(|i| data[i - 1] == quant(i)) {
+                return Ok(vec![0xff, 0xd8, 0xff, 0xdb, 0, 0x43, 0, quant(0)]);
+            }
+        }
+        anyhow::bail!("Unknown camera JPEG quantization table; refusing to guess image data")
+    })
 }
 #[derive(Default)]
 pub struct NativeJpeg {
@@ -55,41 +58,49 @@ impl NativeJpeg {
         marker: bool,
         payload: &[u8],
     ) -> Result<Option<Vec<u8>>> {
-        ensure!(payload.len() >= 8, "Short camera RTP/JPEG packet");
-        let offset =
-            ((payload[1] as usize) << 16) | ((payload[2] as usize) << 8) | payload[3] as usize;
-        let body = &payload[8..];
-        if offset == 0 {
-            self.timestamp = Some(timestamp);
-            self.next_offset = 0;
-            self.next_sequence = sequence;
-            self.data = Vec::with_capacity(64 * 1024);
-            self.data.extend(prefix(body)?);
-        }
-        if self.timestamp != Some(timestamp)
-            || self.next_offset != offset
-            || self.next_sequence != sequence
-        {
-            self.timestamp = None;
-            self.data.clear();
-            return Ok(None);
-        }
-        ensure!(
-            self.data.len() + body.len() <= 4 * 1024 * 1024,
-            "Camera JPEG exceeds size limit"
-        );
-        self.data.extend_from_slice(body);
-        self.next_offset += body.len();
-        self.next_sequence = sequence.wrapping_add(1);
-        if marker {
+        crate::metrics::sync_result("jpeg.packet_assembly", || {
+            ensure!(payload.len() >= 8, "Short camera RTP/JPEG packet");
+            let offset =
+                ((payload[1] as usize) << 16) | ((payload[2] as usize) << 8) | payload[3] as usize;
+            let body = &payload[8..];
+            if offset == 0 {
+                crate::metrics::counter("jpeg.frames_started", 1);
+                if self.timestamp.is_some() {
+                    crate::metrics::counter("jpeg.incomplete_frames_replaced", 1);
+                }
+                self.timestamp = Some(timestamp);
+                self.next_offset = 0;
+                self.next_sequence = sequence;
+                self.data = Vec::with_capacity(64 * 1024);
+                self.data.extend(prefix(body)?);
+            }
+            if self.timestamp != Some(timestamp)
+                || self.next_offset != offset
+                || self.next_sequence != sequence
+            {
+                self.timestamp = None;
+                self.data.clear();
+                crate::metrics::counter("jpeg.fragments_discarded", 1);
+                return Ok(None);
+            }
             ensure!(
-                self.data.ends_with(&[0xff, 0xd9]),
-                "Incomplete camera JPEG frame"
+                self.data.len() + body.len() <= 4 * 1024 * 1024,
+                "Camera JPEG exceeds size limit"
             );
-            self.timestamp = None;
-            return Ok(Some(std::mem::take(&mut self.data)));
-        }
-        Ok(None)
+            self.data.extend_from_slice(body);
+            self.next_offset += body.len();
+            self.next_sequence = sequence.wrapping_add(1);
+            if marker {
+                crate::metrics::counter("jpeg.frames_completed", 1);
+                ensure!(
+                    self.data.ends_with(&[0xff, 0xd9]),
+                    "Incomplete camera JPEG frame"
+                );
+                self.timestamp = None;
+                return Ok(Some(std::mem::take(&mut self.data)));
+            }
+            Ok(None)
+        })
     }
 }
 

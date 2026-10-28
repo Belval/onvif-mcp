@@ -27,7 +27,13 @@ async fn call(
         "Tool {name} failed: {:?}",
         result.content
     );
-    let mut metadata = vec![];
+    let trace_id = result
+        .meta
+        .as_ref()
+        .and_then(|m| m.get("camera_metrics"))
+        .and_then(|m| m["request_id"].as_str())
+        .map(str::to_owned);
+    let mut metadata: Vec<Value> = vec![];
     let mut images = vec![];
     for block in result.content {
         match block {
@@ -37,6 +43,59 @@ async fn call(
                 images.push(STANDARD.decode(image.data)?);
             }
             _ => {}
+        }
+    }
+    if name != "camera_metrics" && name != "camera_see" && crate::metrics::enabled() {
+        let id = trace_id.ok_or_else(|| anyhow::anyhow!("Missing request trace ID"))?;
+        let trace = client
+            .call_tool(
+                CallToolRequestParams::new("camera_metrics").with_arguments(
+                    json!({"request_id":id,"full":true})
+                        .as_object()
+                        .unwrap()
+                        .clone(),
+                ),
+            )
+            .await?;
+        let ContentBlock::Text(text) = &trace.content[0] else {
+            anyhow::bail!("Missing trace")
+        };
+        let value: Value = serde_json::from_str(&text.text)?;
+        ensure!(
+            value["response_complete"] == true && value["trace_complete"] == true,
+            "Trace must include the completed pipe write"
+        );
+        ensure!(
+            value["uncovered_ms"].as_f64().unwrap_or(100.) < 5.,
+            "Unexpected unaccounted time: {value}"
+        );
+        let stages = value["stages"].as_array().unwrap();
+        ensure!(
+            stages
+                .iter()
+                .any(|s| s["stage"] == "transport.response_write"),
+            "Missing wire timing"
+        );
+        if name == "camera_focus"
+            && metadata
+                .first()
+                .is_some_and(|m| m["focus_status"] == "aimed")
+        {
+            for expected in [
+                "motion.poll_interval",
+                "motion.settling_wait",
+                "onvif.GetStatus",
+                "video.fresh_frame_wait",
+            ] {
+                ensure!(
+                    stages.iter().any(|s| s["stage"] == expected),
+                    "Missing phase {expected}"
+                );
+            }
+            std::fs::write(
+                "/tmp/rust-rough-trace.json",
+                serde_json::to_vec_pretty(&value)?,
+            )?;
         }
     }
     Ok((metadata, images))
@@ -76,7 +135,7 @@ pub async fn run(moving: bool) -> Result<()> {
         ))?)
         .await?;
     let tools = client.list_tools(None).await?;
-    ensure!(tools.tools.len() == 8, "Expected all eight camera tools");
+    ensure!(tools.tools.len() == 9, "Expected all nine camera tools");
     let (meta, images) = call(&client, "camera_see", json!({})).await?;
     ensure!(
         meta[0]["width"].as_u64() == Some(640) && meta[0]["height"].as_u64() == Some(360),

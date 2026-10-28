@@ -110,75 +110,89 @@ fn clip(point: [f64; 2]) -> [f64; 2] {
 
 impl Camera {
     pub async fn connect(root: &Path) -> Result<Arc<Self>> {
-        let onvif = Arc::new(Onvif::connect(Config::load()?).await?);
-        let profile = onvif
-            .profiles
-            .iter()
-            .find(|p| p.encoding == "JPEG" && p.width == 640)
-            .ok_or_else(|| {
-                anyhow::anyhow!("This tuned server requires the C210 native 640px JPEG profile")
+        crate::metrics::result("camera.initialize", async {
+            let onvif = Arc::new(Onvif::connect(Config::load()?).await?);
+            let profile = onvif
+                .profiles
+                .iter()
+                .find(|p| p.encoding == "JPEG" && p.width == 640)
+                .ok_or_else(|| {
+                    anyhow::anyhow!("This tuned server requires the C210 native 640px JPEG profile")
+                })?;
+            let preview = Video::start(
+                onvif.stream_url(&profile.token).await?,
+                onvif.config.clone(),
+                true,
+                (profile.width, profile.height),
+            );
+            let detail = onvif
+                .profiles
+                .iter()
+                .filter(|p| p.encoding == "H264" && p.width >= 1280)
+                .min_by_key(|p| p.width)
+                .ok_or_else(|| anyhow::anyhow!("H264 detail profile unavailable"))?;
+            let (detail_token, detail_dimensions) =
+                (detail.token.clone(), (detail.width, detail.height));
+            let calibration: Calibration =
+                crate::metrics::sync_result("config.calibration_load", || -> Result<_> {
+                    Ok(serde_json::from_slice(&std::fs::read(
+                        root.join("calibration.json"),
+                    )?)?)
+                })?;
+            ensure!(
+                calibration.model.as_ref().is_none_or(|m| m == &onvif.model),
+                "Calibration belongs to a different camera model"
+            );
+            let data = calibration.image_shift_per_pose_unit;
+            let calibration = Matrix2::new(data[0][0], data[0][1], data[1][0], data[1][1]);
+            ensure!(
+                calibration.iter().all(|v| v.is_finite()) && calibration.determinant().abs() > 0.01,
+                "Invalid camera calibration"
+            );
+            let views_path = root.join("views.json");
+            let views = crate::metrics::sync_result("config.views_load", || -> Result<_> {
+                Ok(if views_path.exists() {
+                    serde_json::from_slice(&std::fs::read(&views_path)?)?
+                } else {
+                    HashMap::new()
+                })
             })?;
-        let preview = Video::start(
-            onvif.stream_url(&profile.token).await?,
-            onvif.config.clone(),
-            true,
-            (profile.width, profile.height),
-        );
-        let detail = onvif
-            .profiles
-            .iter()
-            .filter(|p| p.encoding == "H264" && p.width >= 1280)
-            .min_by_key(|p| p.width)
-            .ok_or_else(|| anyhow::anyhow!("H264 detail profile unavailable"))?;
-        let (detail_token, detail_dimensions) =
-            (detail.token.clone(), (detail.width, detail.height));
-        let calibration: Calibration =
-            serde_json::from_slice(&std::fs::read(root.join("calibration.json"))?)?;
-        ensure!(
-            calibration.model.as_ref().is_none_or(|m| m == &onvif.model),
-            "Calibration belongs to a different camera model"
-        );
-        let data = calibration.image_shift_per_pose_unit;
-        let calibration = Matrix2::new(data[0][0], data[0][1], data[1][0], data[1][1]);
-        ensure!(
-            calibration.iter().all(|v| v.is_finite()) && calibration.determinant().abs() > 0.01,
-            "Invalid camera calibration"
-        );
-        let views_path = root.join("views.json");
-        let views = if views_path.exists() {
-            serde_json::from_slice(&std::fs::read(&views_path)?)?
-        } else {
-            HashMap::new()
-        };
-        onvif.position().await?;
-        let weak = Arc::downgrade(&onvif);
-        let pose_poller = tokio::spawn(async move {
-            loop {
-                tokio::time::sleep(Duration::from_millis(150)).await;
-                let Some(camera) = weak.upgrade() else {
-                    break;
-                };
-                let _ = camera.position().await;
-            }
-        });
-        Ok(Arc::new(Self {
-            onvif,
-            preview,
-            pose_poller,
-            detail_token,
-            detail_dimensions,
-            state: Mutex::new(State {
-                epoch: rand::random(),
-                ..State::default()
-            }),
-            motion: Mutex::new(()),
-            cancelled: AtomicBool::new(false),
-            calibration,
-            views: Mutex::new(views),
-            views_path,
-        }))
+            onvif.position().await?;
+            let weak = Arc::downgrade(&onvif);
+            let pose_poller = tokio::spawn(async move {
+                loop {
+                    crate::metrics::sleep(
+                        "background.pose_poll_interval",
+                        Duration::from_millis(150),
+                    )
+                    .await;
+                    let Some(camera) = weak.upgrade() else {
+                        break;
+                    };
+                    let _ = camera.position().await;
+                }
+            });
+            Ok(Arc::new(Self {
+                onvif,
+                preview,
+                pose_poller,
+                detail_token,
+                detail_dimensions,
+                state: Mutex::new(State {
+                    epoch: rand::random(),
+                    ..State::default()
+                }),
+                motion: Mutex::new(()),
+                cancelled: AtomicBool::new(false),
+                calibration,
+                views: Mutex::new(views),
+                views_path,
+            }))
+        })
+        .await
     }
     pub async fn status(&self) -> Result<Value> {
+        crate::metrics::result("camera.status", async {
         let pose = self.onvif.position().await?;
         Ok(
             json!({"manufacturer":self.onvif.manufacturer,"model":self.onvif.model,"firmware":self.onvif.firmware,
@@ -186,23 +200,28 @@ impl Camera {
             "video":{"transport":"persistent RTSP/TCP","encoding":"native JPEG passthrough","buffered_frames":1,
                 "connected":self.preview.metrics.connected.load(Ordering::Relaxed),"frames_received":self.preview.metrics.frames.load(Ordering::Relaxed),
                 "reconnects":self.preview.metrics.reconnects.load(Ordering::Relaxed),"frame_age_ms":self.preview.age_ms()},
-            "remembered_views":self.views.lock().await.keys().cloned().collect::<Vec<_>>()}),
+            "remembered_views":crate::metrics::timed("lock.views_wait",self.views.lock()).await.keys().cloned().collect::<Vec<_>>()}),
         )
+
+}).await
     }
     async fn frame(&self, detail: bool, after: Option<Instant>) -> Result<Arc<Frame>> {
-        if detail {
-            // Keep the preview connection hot, but don't let an occasional detail
-            // request consume decoder/encoder or camera resources indefinitely.
-            let source = Video::start(
-                self.onvif.stream_url(&self.detail_token).await?,
-                self.onvif.config.clone(),
-                false,
-                self.detail_dimensions,
-            );
-            source.frame(after).await
-        } else {
-            self.preview.frame(after).await
-        }
+        crate::metrics::result("camera.capture", async {
+            if detail {
+                // Keep the preview connection hot, but don't let an occasional detail
+                // request consume decoder/encoder or camera resources indefinitely.
+                let source = Video::start(
+                    self.onvif.stream_url(&self.detail_token).await?,
+                    self.onvif.config.clone(),
+                    false,
+                    self.detail_dimensions,
+                );
+                source.frame(after).await
+            } else {
+                self.preview.frame(after).await
+            }
+        })
+        .await
     }
     pub async fn observe(
         &self,
@@ -210,15 +229,20 @@ impl Camera {
         metadata: Value,
         revisit: bool,
     ) -> Result<ObservationResult> {
-        let barrier = self.state.lock().await.barrier;
-        let frame = self.frame(detail, barrier).await?;
-        let (pose, pose_at) = match self.onvif.cached_position() {
-            Some(cached) => cached,
-            None => (self.onvif.position().await?, Instant::now()),
-        };
-        let mut metadata = metadata;
-        metadata["pose_age_ms"] = json!(pose_at.elapsed().as_secs_f64() * 1000.);
-        self.record(frame, pose, metadata, revisit).await
+        crate::metrics::result("camera.observe", async {
+            let barrier = crate::metrics::timed("lock.state_wait", self.state.lock())
+                .await
+                .barrier;
+            let frame = self.frame(detail, barrier).await?;
+            let (pose, pose_at) = match self.onvif.cached_position() {
+                Some(cached) => cached,
+                None => (self.onvif.position().await?, Instant::now()),
+            };
+            let mut metadata = metadata;
+            metadata["pose_age_ms"] = json!(pose_at.elapsed().as_secs_f64() * 1000.);
+            self.record(frame, pose, metadata, revisit).await
+        })
+        .await
     }
     async fn record(
         &self,
@@ -227,7 +251,8 @@ impl Camera {
         mut metadata: Value,
         revisit: bool,
     ) -> Result<ObservationResult> {
-        let mut state = self.state.lock().await;
+        crate::metrics::result("camera.record_observation", async {
+        let mut state = crate::metrics::timed("lock.state_wait",self.state.lock()).await;
         state.serial += 1;
         let id = format!(
             "{:016x}-{:x}-{:x}",
@@ -250,13 +275,24 @@ impl Camera {
         metadata["coordinates"] = json!("x,y normalized 0..1 from top-left; center=(0.5,0.5)");
         metadata["frame_age_ms"] = json!(frame.received.elapsed().as_secs_f64() * 1000.);
         metadata["sequence"] = json!(frame.sequence);
+        metadata["source_id"]=json!(frame.source_id);
+        metadata["rtp_timestamp"]=json!(frame.rtp_timestamp);
+        metadata["rtp_clock_rate_hz"]=json!(frame.clock_rate_hz);
+        crate::metrics::event("video.observation",json!({"sequence":frame.sequence,"source_id":frame.source_id,"frame_age_ms":frame.received.elapsed().as_secs_f64()*1000.,"pose":pose,"rtp_timestamp":frame.rtp_timestamp}));
         Ok((metadata, frame))
+
+}).await
     }
     pub async fn stop(&self) -> Result<()> {
-        self.cancelled.store(true, Ordering::SeqCst);
-        let result = self.onvif.stop().await;
-        self.state.lock().await.barrier = Some(Instant::now() + Duration::from_millis(100));
-        result
+        crate::metrics::result("camera.stop", async {
+            self.cancelled.store(true, Ordering::SeqCst);
+            let result = self.onvif.stop().await;
+            crate::metrics::timed("lock.state_wait", self.state.lock())
+                .await
+                .barrier = Some(Instant::now() + Duration::from_millis(100));
+            result
+        })
+        .await
     }
     pub fn begin_motion(&self) {
         self.cancelled.store(false, Ordering::SeqCst);
@@ -269,10 +305,14 @@ impl Camera {
         Ok(())
     }
     pub async fn goto(&self, target: [f64; 2]) -> Result<[f64; 2]> {
-        self.goto_with_settle(target, Duration::from_millis(300))
-            .await
+        crate::metrics::result("motion.goto", async {
+            self.goto_with_settle(target, Duration::from_millis(300))
+                .await
+        })
+        .await
     }
     async fn goto_with_settle(&self, target: [f64; 2], settle: Duration) -> Result<[f64; 2]> {
+        crate::metrics::result("motion.goto_with_settle", async {
         self.check_cancelled()?;
         let target = clip(target);
         let mut guard = StopGuard {
@@ -280,6 +320,7 @@ impl Camera {
             armed: true,
         };
         let started = Instant::now();
+        crate::metrics::event("motion.target",json!({"target":target,"settle_ms":settle.as_secs_f64()*1000.}));
         self.onvif.absolute(target).await?;
         let commanded = Instant::now();
         let mut polls = 0;
@@ -291,7 +332,7 @@ impl Camera {
                 Instant::now() < deadline,
                 "Camera did not reach target position"
             );
-            tokio::time::sleep(Duration::from_millis(60)).await;
+            crate::metrics::sleep("motion.poll_interval",Duration::from_millis(60)).await;
             let actual = self.onvif.position().await?;
             polls += 1;
             stable = if max_delta(actual, target) < 0.002 {
@@ -299,40 +340,52 @@ impl Camera {
             } else {
                 0
             };
+            crate::metrics::event("motion.poll",json!({"actual":actual,"target":target,"max_error":max_delta(actual,target),"stable_readings":stable,"poll":polls}));
             if stable >= 2 {
+                crate::metrics::event("motion.reported_arrival",json!({"actual":actual,"polls":polls}));
                 break actual;
             }
         };
         let arrived = Instant::now();
         // The device position can lead optical arrival; hold briefly, then require a new video frame.
-        tokio::time::sleep(settle).await;
+        crate::metrics::sleep("motion.settling_wait",settle).await;
         self.check_cancelled()?;
         guard.finish().await?;
-        let mut state = self.state.lock().await;
+        let mut state = crate::metrics::timed("lock.state_wait",self.state.lock()).await;
         state.barrier = Some(Instant::now());
         state.last_move = json!({"command_ms":commanded.duration_since(started).as_secs_f64()*1000.,"arrival_ms":arrived.duration_since(commanded).as_secs_f64()*1000.,"settle_stop_ms":arrived.elapsed().as_secs_f64()*1000.,"polls":polls});
         Ok(pose)
+
+}).await
     }
     pub async fn movement(&self, pan: f64, tilt: f64, seconds: f64) -> Result<Value> {
-        self.begin_motion();
-        let mut guard = StopGuard {
-            onvif: self.onvif.clone(),
-            armed: true,
-        };
-        self.onvif.velocity(pan, tilt, seconds).await?;
-        let deadline = Instant::now() + Duration::from_secs_f64(seconds);
-        while Instant::now() < deadline {
-            self.check_cancelled()?;
-            tokio::time::sleep(Duration::from_millis(20)).await;
-        }
-        guard.finish().await?;
-        self.state.lock().await.barrier = Some(Instant::now() + Duration::from_millis(100));
-        Ok(json!({"stopped":true}))
+        crate::metrics::result("motion.velocity", async {
+            self.begin_motion();
+            let mut guard = StopGuard {
+                onvif: self.onvif.clone(),
+                armed: true,
+            };
+            self.onvif.velocity(pan, tilt, seconds).await?;
+            let deadline = Instant::now() + Duration::from_secs_f64(seconds);
+            while Instant::now() < deadline {
+                self.check_cancelled()?;
+                crate::metrics::sleep("motion.velocity_interval", Duration::from_millis(20)).await;
+            }
+            guard.finish().await?;
+            crate::metrics::timed("lock.state_wait", self.state.lock())
+                .await
+                .barrier = Some(Instant::now() + Duration::from_millis(100));
+            Ok(json!({"stopped":true}))
+        })
+        .await
     }
     async fn track(a: Arc<Frame>, b: Arc<Frame>, point: [f64; 2]) -> Result<Option<[f64; 2]>> {
-        tokio::task::spawn_blocking(move || vision::track(&a.jpeg, &b.jpeg, point))
-            .await
-            .map_err(Into::into)
+        crate::metrics::result("vision.dispatch", async {
+            crate::metrics::blocking(move || vision::track(&a.jpeg, &b.jpeg, point))
+                .await
+                .map_err(Into::into)
+        })
+        .await
     }
     pub async fn focus(
         &self,
@@ -342,6 +395,7 @@ impl Camera {
         precise: bool,
         rough: bool,
     ) -> Result<ObservationResult> {
+        crate::metrics::result("camera.focus", async {
         ensure!(!(rough && precise), "Choose rough or precise, not both");
         ensure!(
             [x, y]
@@ -350,7 +404,7 @@ impl Camera {
             "Point coordinates must be in 0..1"
         );
         let observation = {
-            let state = self.state.lock().await;
+            let state = crate::metrics::timed("lock.state_wait",self.state.lock()).await;
             state
                 .observations
                 .iter()
@@ -371,7 +425,7 @@ impl Camera {
         let barrier = if pose_changed {
             Some(Instant::now())
         } else {
-            self.state.lock().await.barrier
+            crate::metrics::timed("lock.state_wait",self.state.lock()).await.barrier
         };
         let mut frame = self.preview.frame(barrier).await?;
         let mut point = [x, y];
@@ -406,8 +460,8 @@ impl Camera {
             let actual = self
                 .goto_with_settle(target, Duration::from_millis(100))
                 .await?;
-            frame = self.preview.frame(self.state.lock().await.barrier).await?;
-            let timing = self.state.lock().await.last_move.clone();
+            frame = self.preview.frame(crate::metrics::timed("lock.state_wait",self.state.lock()).await.barrier).await?;
+            let timing = crate::metrics::timed("lock.state_wait",self.state.lock()).await.last_move.clone();
             return self.record(frame,actual,json!({"focus_status":"aimed","rough":true,"iterations":1,"target":null,"move_timing":timing,"detail":"Single calibrated move; centering not visually verified"}),false).await;
         }
         let threshold = if precise { 0.02 } else { 0.04 };
@@ -427,7 +481,7 @@ impl Camera {
                 break;
             }
             let actual = self.goto(target).await?;
-            let after = self.preview.frame(self.state.lock().await.barrier).await?;
+            let after = self.preview.frame(crate::metrics::timed("lock.state_wait",self.state.lock()).await.barrier).await?;
             let Some(tracked) = Self::track(frame.clone(), after.clone(), point).await? else {
                 frame = after;
                 pose = actual;
@@ -437,7 +491,7 @@ impl Camera {
             let movement = Vector2::new(actual[0] - pose[0], actual[1] - pose[1]);
             let shift = Vector2::new(tracked[0] - point[0], tracked[1] - point[1]);
             corrections
-                .push(json!({"before":point,"after":tracked,"pose_delta":movement.as_slice(),"move_timing":self.state.lock().await.last_move.clone()}));
+                .push(json!({"before":point,"after":tracked,"pose_delta":movement.as_slice(),"move_timing":crate::metrics::timed("lock.state_wait",self.state.lock()).await.last_move.clone()}));
             if movement.norm_squared() > 1e-6 {
                 let candidate = matrix
                     + (shift - matrix * movement) * movement.transpose() / movement.norm_squared();
@@ -461,6 +515,8 @@ impl Camera {
             status = "centered";
         }
         self.record(frame,pose,json!({"focus_status":status,"iterations":corrections.len(),"target":if status=="tracking_lost"{None}else{Some(point)},"corrections":corrections,"precise":precise}),false).await
+
+}).await
     }
     pub async fn scan(
         &self,
@@ -468,6 +524,7 @@ impl Camera {
         views: usize,
         step: f64,
     ) -> Result<Vec<ObservationResult>> {
+        crate::metrics::result("camera.scan", async {
         ensure!(
             matches!(direction, "left" | "right")
                 && (2..=6).contains(&views)
@@ -489,43 +546,53 @@ impl Camera {
                 }
                 self.goto(target).await?;
             }
-            result.push(self.observe(false,json!({"scan_index":index,"direction":direction,"revisitable":true,"pose":target,"move_timing":if index>0{self.state.lock().await.last_move.clone()}else{Value::Null}}),true).await?);
+            result.push(self.observe(false,json!({"scan_index":index,"direction":direction,"revisitable":true,"pose":target,"move_timing":if index>0{crate::metrics::timed("lock.state_wait",self.state.lock()).await.last_move.clone()}else{Value::Null}}),true).await?);
         }
         Ok(result)
+
+}).await
     }
     pub async fn remember(&self, name: &str) -> Result<Value> {
-        ensure!(
-            !name.is_empty()
-                && name.len() <= 64
-                && name
-                    .chars()
-                    .all(|c| c.is_alphanumeric() || " _-".contains(c)),
-            "Use a short view name with letters, digits, spaces, hyphens or underscores"
-        );
-        let pose = self.onvif.position().await?;
-        let mut views = self.views.lock().await;
-        views.insert(name.to_owned(), pose);
-        let temp = self.views_path.with_extension("tmp");
-        std::fs::write(&temp, serde_json::to_vec_pretty(&*views)?)?;
-        std::fs::rename(temp, &self.views_path)?;
-        Ok(json!({"name":name,"pose":pose,"saved":true}))
+        crate::metrics::result("camera.remember", async {
+            ensure!(
+                !name.is_empty()
+                    && name.len() <= 64
+                    && name
+                        .chars()
+                        .all(|c| c.is_alphanumeric() || " _-".contains(c)),
+                "Use a short view name with letters, digits, spaces, hyphens or underscores"
+            );
+            let pose = self.onvif.position().await?;
+            let mut views = crate::metrics::timed("lock.views_wait", self.views.lock()).await;
+            views.insert(name.to_owned(), pose);
+            crate::metrics::sync_result("views.persist", || -> Result<()> {
+                let temp = self.views_path.with_extension("tmp");
+                std::fs::write(&temp, serde_json::to_vec_pretty(&*views)?)?;
+                std::fs::rename(temp, &self.views_path)?;
+                Ok(())
+            })?;
+            Ok(json!({"name":name,"pose":pose,"saved":true}))
+        })
+        .await
     }
     pub async fn look(&self, name: &str) -> Result<ObservationResult> {
-        let pose = *self
-            .views
-            .lock()
-            .await
-            .get(name)
-            .ok_or_else(|| anyhow::anyhow!("Unknown remembered view"))?;
-        self.begin_motion();
-        self.goto(pose).await?;
-        self.observe(false, json!({"view":name}), false).await
+        crate::metrics::result("camera.look", async {
+            let pose = *crate::metrics::timed("lock.views_wait", self.views.lock())
+                .await
+                .get(name)
+                .ok_or_else(|| anyhow::anyhow!("Unknown remembered view"))?;
+            self.begin_motion();
+            self.goto(pose).await?;
+            self.observe(false, json!({"view":name}), false).await
+        })
+        .await
     }
 }
 
 impl Camera {
     pub async fn recalibrate(&self, root: &Path) -> Result<Value> {
-        let _lock = self.motion.lock().await;
+        crate::metrics::result("camera.calibrate", async {
+        let _lock = crate::metrics::timed("lock.motion_wait",self.motion.lock()).await;
         self.begin_motion();
         let origin = self.onvif.position().await?;
         let baseline = self.preview.frame(None).await?;
@@ -534,7 +601,7 @@ impl Camera {
             for (axis,amount) in [(0,0.04),(1,0.12)] {
                 let mut target=origin;target[axis]+=if origin[axis]+amount<0.95 {amount}else{-amount};
                 let actual=self.goto(target).await?;
-                let after=self.preview.frame(self.state.lock().await.barrier).await?;
+                let after=self.preview.frame(crate::metrics::timed("lock.state_wait",self.state.lock()).await.barrier).await?;
                 let mut shifts=vec![];
                 for x in [0.3,0.5,0.7] {for y in [0.3,0.5,0.7] {
                     if let Some(point)=Self::track(baseline.clone(),after.clone(),[x,y]).await? {
@@ -557,9 +624,13 @@ impl Camera {
         let value = measured?;
         let path = root.join("calibration.json");
         let temp = root.join("calibration.tmp");
-        std::fs::write(&temp, serde_json::to_vec_pretty(&value)?)?;
-        std::fs::rename(temp, path)?;
+        crate::metrics::sync_result("config.calibration_persist", || -> Result<()> {
+            std::fs::write(&temp, serde_json::to_vec_pretty(&value)?)?;
+            std::fs::rename(temp, path)?; Ok(())
+        })?;
         Ok(value)
+
+}).await
     }
 }
 

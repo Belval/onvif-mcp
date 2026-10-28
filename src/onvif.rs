@@ -25,28 +25,32 @@ pub struct Config {
 }
 impl Config {
     pub fn load() -> Result<Self> {
-        Ok(Self {
-            host: env::var("CAMERA_HOST").unwrap_or_else(|_| "192.168.0.62".into()),
-            port: env::var("CAMERA_PORT")
-                .unwrap_or_else(|_| "2020".into())
-                .parse()?,
-            username: env::var("CAMERA_USERNAME")
-                .map_err(|_| anyhow::anyhow!("Set CAMERA_USERNAME in the local .env"))?,
-            password: env::var("CAMERA_PASSWORD")
-                .map_err(|_| anyhow::anyhow!("Set CAMERA_PASSWORD in the local .env"))?,
+        crate::metrics::sync_result("config.environment", || {
+            Ok(Self {
+                host: env::var("CAMERA_HOST").unwrap_or_else(|_| "192.168.0.62".into()),
+                port: env::var("CAMERA_PORT")
+                    .unwrap_or_else(|_| "2020".into())
+                    .parse()?,
+                username: env::var("CAMERA_USERNAME")
+                    .map_err(|_| anyhow::anyhow!("Set CAMERA_USERNAME in the local .env"))?,
+                password: env::var("CAMERA_PASSWORD")
+                    .map_err(|_| anyhow::anyhow!("Set CAMERA_PASSWORD in the local .env"))?,
+            })
         })
     }
     pub fn validate_url(&self, input: &str, scheme: &str) -> Result<Url> {
-        let url = Url::parse(input).map_err(|_| anyhow::anyhow!("Invalid camera endpoint"))?;
-        ensure!(
-            url.scheme() == scheme && url.host_str() == Some(self.host.as_str()),
-            "Unexpected camera endpoint"
-        );
-        ensure!(
-            url.username().is_empty() && url.password().is_none(),
-            "Unexpected endpoint credentials"
-        );
-        Ok(url)
+        crate::metrics::sync_result("config.endpoint_validation", || {
+            let url = Url::parse(input).map_err(|_| anyhow::anyhow!("Invalid camera endpoint"))?;
+            ensure!(
+                url.scheme() == scheme && url.host_str() == Some(self.host.as_str()),
+                "Unexpected camera endpoint"
+            );
+            ensure!(
+                url.username().is_empty() && url.password().is_none(),
+                "Unexpected endpoint credentials"
+            );
+            Ok(url)
+        })
     }
 }
 
@@ -83,7 +87,7 @@ pub fn escape(text: &str) -> String {
         .replace('\'', "&apos;")
 }
 fn text(xml: &str, name: &str) -> Result<String> {
-    let doc = Document::parse(xml)?;
+    let doc = crate::metrics::sync_result("onvif.xml_parse", || Document::parse(xml))?;
     Ok(doc
         .descendants()
         .find(|n| n.has_tag_name(name))
@@ -112,123 +116,130 @@ pub fn validate_movement(pan: f64, tilt: f64, seconds: f64) -> Result<()> {
 }
 impl Onvif {
     pub async fn connect(config: Config) -> Result<Self> {
-        let endpoint = format!(
-            "http://{}:{}/onvif/device_service",
-            config.host, config.port
-        );
-        config.validate_url(&endpoint, "http")?;
-        let mut camera = Self {
-            config,
-            client: reqwest::Client::builder()
-                .no_proxy()
-                .connect_timeout(Duration::from_secs(3))
-                .timeout(Duration::from_secs(5))
-                .pool_idle_timeout(Duration::from_secs(90))
-                .build()?,
-            device_url: endpoint.clone(),
-            media_url: endpoint.clone(),
-            ptz_url: endpoint,
-            clock_ms: 0,
-            pose_cache: RwLock::new(None),
-            profiles: vec![],
-            profile: String::new(),
-            manufacturer: String::new(),
-            model: String::new(),
-            firmware: String::new(),
-        };
-        let date = camera
-            .call(&camera.device_url, DEVICE, "GetSystemDateAndTime", "")
-            .await?;
-        let doc = Document::parse(&date)?;
-        if let Some(utc) = doc.descendants().find(|n| n.has_tag_name("UTCDateTime")) {
-            let number = |name: &str| child_text(utc, name).parse::<u32>().unwrap_or(0);
-            if let Some(date) = Utc
-                .with_ymd_and_hms(
-                    number("Year") as i32,
-                    number("Month"),
-                    number("Day"),
-                    number("Hour"),
-                    number("Minute"),
-                    number("Second"),
-                )
-                .single()
-            {
-                camera.clock_ms = date.timestamp_millis() - Utc::now().timestamp_millis();
+        crate::metrics::result("onvif.initialize", async {
+            let endpoint = format!(
+                "http://{}:{}/onvif/device_service",
+                config.host, config.port
+            );
+            config.validate_url(&endpoint, "http")?;
+            let mut camera = Self {
+                config,
+                client: reqwest::Client::builder()
+                    .no_proxy()
+                    .connector_layer(crate::metrics::ConnectorLayer)
+                    .connect_timeout(Duration::from_secs(3))
+                    .timeout(Duration::from_secs(5))
+                    .pool_idle_timeout(Duration::from_secs(90))
+                    .build()?,
+                device_url: endpoint.clone(),
+                media_url: endpoint.clone(),
+                ptz_url: endpoint,
+                clock_ms: 0,
+                pose_cache: RwLock::new(None),
+                profiles: vec![],
+                profile: String::new(),
+                manufacturer: String::new(),
+                model: String::new(),
+                firmware: String::new(),
+            };
+            let date = camera
+                .call(&camera.device_url, DEVICE, "GetSystemDateAndTime", "")
+                .await?;
+            let doc = crate::metrics::sync_result("onvif.xml_parse", || Document::parse(&date))?;
+            if let Some(utc) = doc.descendants().find(|n| n.has_tag_name("UTCDateTime")) {
+                let number = |name: &str| child_text(utc, name).parse::<u32>().unwrap_or(0);
+                if let Some(date) = Utc
+                    .with_ymd_and_hms(
+                        number("Year") as i32,
+                        number("Month"),
+                        number("Day"),
+                        number("Hour"),
+                        number("Minute"),
+                        number("Second"),
+                    )
+                    .single()
+                {
+                    camera.clock_ms = date.timestamp_millis() - Utc::now().timestamp_millis();
+                }
             }
-        }
-        let caps = camera
-            .call(
-                &camera.device_url,
-                DEVICE,
-                "GetCapabilities",
-                "<s:Category>All</s:Category>",
-            )
-            .await?;
-        let doc = Document::parse(&caps)?;
-        for (name, dest) in [
-            ("Media", &mut camera.media_url),
-            ("PTZ", &mut camera.ptz_url),
-        ] {
-            let node = doc
-                .descendants()
-                .find(|n| n.has_tag_name(name))
-                .ok_or_else(|| anyhow::anyhow!("Camera service unavailable"))?;
-            let endpoint = child_text(node, "XAddr");
-            camera.config.validate_url(&endpoint, "http")?;
-            *dest = endpoint;
-        }
-        let info = camera
-            .call(&camera.device_url, DEVICE, "GetDeviceInformation", "")
-            .await?;
-        camera.manufacturer = text(&info, "Manufacturer")?;
-        camera.model = text(&info, "Model")?;
-        camera.firmware = text(&info, "FirmwareVersion")?;
-        let profiles = camera
-            .call(&camera.media_url, MEDIA, "GetProfiles", "")
-            .await?;
-        let doc = Document::parse(&profiles)?;
-        for node in doc.descendants().filter(|n| n.has_tag_name("Profiles")) {
-            let video = node
-                .descendants()
-                .find(|n| n.has_tag_name("VideoEncoderConfiguration"));
-            camera.profiles.push(Profile {
-                token: node.attribute("token").unwrap_or("").to_owned(),
-                name: child_text(node, "Name"),
-                encoding: video.map(|n| child_text(n, "Encoding")).unwrap_or_default(),
-                width: video
-                    .and_then(|n| child_text(n, "Width").parse().ok())
-                    .unwrap_or(0),
-                height: video
-                    .and_then(|n| child_text(n, "Height").parse().ok())
-                    .unwrap_or(0),
-                ptz: node
+            let caps = camera
+                .call(
+                    &camera.device_url,
+                    DEVICE,
+                    "GetCapabilities",
+                    "<s:Category>All</s:Category>",
+                )
+                .await?;
+            let doc = crate::metrics::sync_result("onvif.xml_parse", || Document::parse(&caps))?;
+            for (name, dest) in [
+                ("Media", &mut camera.media_url),
+                ("PTZ", &mut camera.ptz_url),
+            ] {
+                let node = doc
                     .descendants()
-                    .any(|n| n.has_tag_name("PTZConfiguration")),
-            });
-        }
-        camera.profile = camera
-            .profiles
-            .iter()
-            .find(|p| p.ptz)
-            .ok_or_else(|| anyhow::anyhow!("No pan/tilt profile"))?
-            .token
-            .clone();
-        Ok(camera)
+                    .find(|n| n.has_tag_name(name))
+                    .ok_or_else(|| anyhow::anyhow!("Camera service unavailable"))?;
+                let endpoint = child_text(node, "XAddr");
+                camera.config.validate_url(&endpoint, "http")?;
+                *dest = endpoint;
+            }
+            let info = camera
+                .call(&camera.device_url, DEVICE, "GetDeviceInformation", "")
+                .await?;
+            camera.manufacturer = text(&info, "Manufacturer")?;
+            camera.model = text(&info, "Model")?;
+            camera.firmware = text(&info, "FirmwareVersion")?;
+            let profiles = camera
+                .call(&camera.media_url, MEDIA, "GetProfiles", "")
+                .await?;
+            let doc =
+                crate::metrics::sync_result("onvif.xml_parse", || Document::parse(&profiles))?;
+            for node in doc.descendants().filter(|n| n.has_tag_name("Profiles")) {
+                let video = node
+                    .descendants()
+                    .find(|n| n.has_tag_name("VideoEncoderConfiguration"));
+                camera.profiles.push(Profile {
+                    token: node.attribute("token").unwrap_or("").to_owned(),
+                    name: child_text(node, "Name"),
+                    encoding: video.map(|n| child_text(n, "Encoding")).unwrap_or_default(),
+                    width: video
+                        .and_then(|n| child_text(n, "Width").parse().ok())
+                        .unwrap_or(0),
+                    height: video
+                        .and_then(|n| child_text(n, "Height").parse().ok())
+                        .unwrap_or(0),
+                    ptz: node
+                        .descendants()
+                        .any(|n| n.has_tag_name("PTZConfiguration")),
+                });
+            }
+            camera.profile = camera
+                .profiles
+                .iter()
+                .find(|p| p.ptz)
+                .ok_or_else(|| anyhow::anyhow!("No pan/tilt profile"))?
+                .token
+                .clone();
+            Ok(camera)
+        })
+        .await
     }
 
     fn security(&self, created: DateTime<Utc>, nonce: &[u8]) -> String {
-        let created = created.to_rfc3339_opts(SecondsFormat::Millis, true);
-        let mut digest = Sha1::new();
-        digest.update(nonce);
-        digest.update(created.as_bytes());
-        digest.update(self.config.password.as_bytes());
-        format!(
-            r#"<wsse:Security xmlns:wsse="http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-wssecurity-secext-1.0.xsd" xmlns:wsu="http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-wssecurity-utility-1.0.xsd"><wsse:UsernameToken><wsse:Username>{}</wsse:Username><wsse:Password Type="http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-username-token-profile-1.0#PasswordDigest">{}</wsse:Password><wsse:Nonce EncodingType="http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-soap-message-security-1.0#Base64Binary">{}</wsse:Nonce><wsu:Created>{}</wsu:Created></wsse:UsernameToken></wsse:Security>"#,
-            escape(&self.config.username),
-            STANDARD.encode(digest.finalize()),
-            STANDARD.encode(nonce),
-            created
-        )
+        crate::metrics::sync("onvif.wsse_digest", || {
+            let created = created.to_rfc3339_opts(SecondsFormat::Millis, true);
+            let mut digest = Sha1::new();
+            digest.update(nonce);
+            digest.update(created.as_bytes());
+            digest.update(self.config.password.as_bytes());
+            format!(
+                r#"<wsse:Security xmlns:wsse="http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-wssecurity-secext-1.0.xsd" xmlns:wsu="http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-wssecurity-utility-1.0.xsd"><wsse:UsernameToken><wsse:Username>{}</wsse:Username><wsse:Password Type="http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-username-token-profile-1.0#PasswordDigest">{}</wsse:Password><wsse:Nonce EncodingType="http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-soap-message-security-1.0#Base64Binary">{}</wsse:Nonce><wsu:Created>{}</wsu:Created></wsse:UsernameToken></wsse:Security>"#,
+                escape(&self.config.username),
+                STANDARD.encode(digest.finalize()),
+                STANDARD.encode(nonce),
+                created
+            )
+        })
     }
 
     async fn call(
@@ -238,6 +249,7 @@ impl Onvif {
         action: &str,
         body: &str,
     ) -> Result<String> {
+        crate::metrics::result(action_stage(action), async {
         let mut nonce = [0u8; 20];
         rand::rng().fill_bytes(&mut nonce);
         let security = self.security(
@@ -247,7 +259,7 @@ impl Onvif {
         let xml = format!(
             r#"<env:Envelope xmlns:env="http://www.w3.org/2003/05/soap-envelope" xmlns:s="{namespace}" xmlns:tt="http://www.onvif.org/ver10/schema"><env:Header>{security}</env:Header><env:Body><s:{action}>{body}</s:{action}></env:Body></env:Envelope>"#
         );
-        let response = self
+        let response = crate::metrics::result("onvif.http_headers", self
             .client
             .post(endpoint)
             .header(
@@ -255,22 +267,25 @@ impl Onvif {
                 format!("application/soap+xml; charset=utf-8; action=\"{namespace}/{action}\""),
             )
             .body(xml)
-            .send()
+            .send())
             .await
             .map_err(|_| anyhow::anyhow!("ONVIF {action} connection failed"))?;
         let success = response.status().is_success();
-        let result = response
-            .text()
+        crate::metrics::event("onvif.response",serde_json::json!({"status":response.status().as_u16()}));
+        let result = crate::metrics::result("onvif.http_body",response.text())
             .await
             .map_err(|_| anyhow::anyhow!("ONVIF response unavailable"))?;
         let doc =
-            Document::parse(&result).map_err(|_| anyhow::anyhow!("Invalid ONVIF response"))?;
+            crate::metrics::sync_result("onvif.xml_parse",||Document::parse(&result)).map_err(|_| anyhow::anyhow!("Invalid ONVIF response"))?;
         if !success || doc.descendants().any(|n| n.has_tag_name("Fault")) {
             bail!("ONVIF {action} rejected; check camera account and connectivity");
         }
         Ok(result)
+
+}).await
     }
     pub async fn stream_url(&self, token: &str) -> Result<Url> {
+        crate::metrics::result("onvif.stream_discovery", async {
         let body = format!(
             "<s:StreamSetup><tt:Stream>RTP-Unicast</tt:Stream><tt:Transport><tt:Protocol>RTSP</tt:Protocol></tt:Transport></s:StreamSetup><s:ProfileToken>{}</s:ProfileToken>",
             escape(token)
@@ -279,40 +294,57 @@ impl Onvif {
             .call(&self.media_url, MEDIA, "GetStreamUri", &body)
             .await?;
         self.config.validate_url(&text(&xml, "Uri")?, "rtsp")
+
+}).await
     }
     pub async fn position(&self) -> Result<[f64; 2]> {
-        let xml = self
-            .call(
-                &self.ptz_url,
-                PTZ,
-                "GetStatus",
-                &format!("<s:ProfileToken>{}</s:ProfileToken>", escape(&self.profile)),
-            )
-            .await?;
-        let doc = Document::parse(&xml)?;
-        let pan = doc
-            .descendants()
-            .find(|n| n.has_tag_name("Position"))
-            .and_then(|p| p.descendants().find(|n| n.has_tag_name("PanTilt")))
-            .ok_or_else(|| anyhow::anyhow!("Camera position unavailable"))?;
-        let pose = [
-            pan.attribute("x").unwrap_or("").parse()?,
-            pan.attribute("y").unwrap_or("").parse()?,
-        ];
-        *self.pose_cache.write().unwrap() = Some((pose, Instant::now()));
-        Ok(pose)
+        crate::metrics::result("onvif.position", async {
+            let xml = self
+                .call(
+                    &self.ptz_url,
+                    PTZ,
+                    "GetStatus",
+                    &format!("<s:ProfileToken>{}</s:ProfileToken>", escape(&self.profile)),
+                )
+                .await?;
+            let doc = crate::metrics::sync_result("onvif.xml_parse", || Document::parse(&xml))?;
+            let pan = doc
+                .descendants()
+                .find(|n| n.has_tag_name("Position"))
+                .and_then(|p| p.descendants().find(|n| n.has_tag_name("PanTilt")))
+                .ok_or_else(|| anyhow::anyhow!("Camera position unavailable"))?;
+            let pose = [
+                pan.attribute("x").unwrap_or("").parse()?,
+                pan.attribute("y").unwrap_or("").parse()?,
+            ];
+            crate::metrics::sync("lock.pose_cache_write", || {
+                *self.pose_cache.write().unwrap() = Some((pose, Instant::now()));
+            });
+            crate::metrics::event(
+                "onvif.position_sample",
+                serde_json::json!({"position":pose}),
+            );
+            Ok(pose)
+        })
+        .await
     }
     pub fn cached_position(&self) -> Option<([f64; 2], Instant)> {
-        self.pose_cache
-            .read()
-            .unwrap()
-            .filter(|(_, when)| when.elapsed() < Duration::from_millis(500))
+        crate::metrics::sync("onvif.pose_cache", || {
+            self.pose_cache
+                .read()
+                .unwrap()
+                .filter(|(_, when)| when.elapsed() < Duration::from_millis(500))
+        })
     }
     pub async fn stop(&self) -> Result<()> {
+        crate::metrics::result("onvif.stop", async {
         self.call(&self.ptz_url, PTZ, "Stop", &format!("<s:ProfileToken>{}</s:ProfileToken><s:PanTilt>true</s:PanTilt><s:Zoom>true</s:Zoom>", escape(&self.profile))).await?;
         Ok(())
+
+}).await
     }
     pub async fn absolute(&self, target: [f64; 2]) -> Result<()> {
+        crate::metrics::result("onvif.absolute", async {
         ensure!(
             target
                 .iter()
@@ -321,11 +353,16 @@ impl Onvif {
         );
         self.call(&self.ptz_url, PTZ, "AbsoluteMove", &format!("<s:ProfileToken>{}</s:ProfileToken><s:Position><tt:PanTilt x=\"{}\" y=\"{}\"/></s:Position>", escape(&self.profile), target[0], target[1])).await?;
         Ok(())
+
+}).await
     }
     pub async fn velocity(&self, pan: f64, tilt: f64, seconds: f64) -> Result<()> {
+        crate::metrics::result("onvif.velocity", async {
         validate_movement(pan, tilt, seconds)?;
         self.call(&self.ptz_url, PTZ, "ContinuousMove", &format!("<s:ProfileToken>{}</s:ProfileToken><s:Velocity><tt:PanTilt x=\"{pan}\" y=\"{tilt}\"/></s:Velocity><s:Timeout>PT{}S</s:Timeout>", escape(&self.profile), seconds.ceil())).await?;
         Ok(())
+
+}).await
     }
 }
 
@@ -372,5 +409,20 @@ mod movement_tests {
             assert!(validate_movement(pan, tilt, seconds).is_err());
         }
         assert!(validate_movement(1., -1., 2.).is_ok());
+    }
+}
+
+fn action_stage(action: &str) -> &'static str {
+    match action {
+        "GetStatus" => "onvif.GetStatus",
+        "AbsoluteMove" => "onvif.AbsoluteMove",
+        "ContinuousMove" => "onvif.ContinuousMove",
+        "Stop" => "onvif.Stop",
+        "GetStreamUri" => "onvif.GetStreamUri",
+        "GetProfiles" => "onvif.GetProfiles",
+        "GetCapabilities" => "onvif.GetCapabilities",
+        "GetDeviceInformation" => "onvif.GetDeviceInformation",
+        "GetSystemDateAndTime" => "onvif.GetSystemDateAndTime",
+        _ => "onvif.other",
     }
 }

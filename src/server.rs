@@ -2,9 +2,11 @@ use crate::camera::{Camera, ObservationResult};
 use anyhow::Result;
 use base64::{Engine, engine::general_purpose::STANDARD};
 use rmcp::{
-    ServerHandler,
+    RoleServer, ServerHandler,
     handler::server::wrapper::Parameters,
+    model::{CallToolRequestParams, CallToolResponse},
     model::{CallToolResult, ContentBlock, ServerCapabilities, ServerConfig},
+    service::RequestContext,
     tool, tool_handler, tool_router,
 };
 use schemars::JsonSchema;
@@ -26,10 +28,13 @@ impl CameraServer {
         }
     }
     async fn connected_camera(&self) -> Result<Arc<Camera>> {
-        self.camera
-            .get_or_try_init(|| Camera::connect(&self.root))
-            .await
-            .cloned()
+        crate::metrics::result("server.camera_init", async {
+            self.camera
+                .get_or_try_init(|| Camera::connect(&self.root))
+                .await
+                .cloned()
+        })
+        .await
     }
 }
 #[derive(Deserialize, JsonSchema)]
@@ -78,6 +83,17 @@ fn default_step() -> f64 {
     0.25
 }
 #[derive(Deserialize, JsonSchema)]
+pub struct MetricsArgs {
+    pub request_id: Option<String>,
+    #[serde(default)]
+    pub full: bool,
+    #[serde(default = "metrics_limit")]
+    pub limit: usize,
+}
+fn metrics_limit() -> usize {
+    8
+}
+#[derive(Deserialize, JsonSchema)]
 pub struct NameArgs {
     pub name: String,
 }
@@ -87,17 +103,29 @@ fn failure(error: anyhow::Error) -> CallToolResult {
 }
 fn plain(result: Result<Value>) -> CallToolResult {
     match result {
-        Ok(value) => CallToolResult::success(vec![ContentBlock::text(value.to_string())]),
+        Ok(value) => CallToolResult::success(vec![ContentBlock::text(crate::metrics::sync(
+            "response.plain_json",
+            || value.to_string(),
+        ))]),
         Err(e) => failure(e),
     }
 }
 fn content((mut metadata, frame): ObservationResult, started: Instant) -> Vec<ContentBlock> {
-    metadata["frame_age_ms"] = json!(frame.received.elapsed().as_secs_f64() * 1000.);
-    metadata["elapsed_ms"] = json!(started.elapsed().as_secs_f64() * 1000.);
-    vec![
-        ContentBlock::text(metadata.to_string()),
-        ContentBlock::image(STANDARD.encode(frame.jpeg.as_slice()), "image/jpeg"),
-    ]
+    crate::metrics::sync("server.response_content", || {
+        metadata["frame_age_ms"] = json!(frame.received.elapsed().as_secs_f64() * 1000.);
+        metadata["elapsed_ms"] = json!(started.elapsed().as_secs_f64() * 1000.);
+        vec![
+            ContentBlock::text(crate::metrics::sync("response.metadata_json", || {
+                metadata.to_string()
+            })),
+            ContentBlock::image(
+                crate::metrics::sync("response.image_base64", || {
+                    STANDARD.encode(frame.jpeg.as_slice())
+                }),
+                "image/jpeg",
+            ),
+        ]
+    })
 }
 fn picture(result: Result<ObservationResult>, started: Instant) -> CallToolResult {
     match result {
@@ -116,7 +144,7 @@ impl CameraServer {
             Ok(camera) => camera,
             Err(error) => return failure(error),
         };
-        let _lock = camera.motion.lock().await;
+        let _lock = crate::metrics::timed("lock.motion_wait", camera.motion.lock()).await;
         picture(
             camera
                 .observe(
@@ -137,7 +165,7 @@ impl CameraServer {
             Ok(camera) => camera,
             Err(error) => return failure(error),
         };
-        let _lock = camera.motion.lock().await;
+        let _lock = crate::metrics::timed("lock.motion_wait", camera.motion.lock()).await;
         picture(
             camera
                 .focus(args.x, args.y, &args.frame_id, args.precise, args.rough)
@@ -154,7 +182,7 @@ impl CameraServer {
             Ok(camera) => camera,
             Err(error) => return failure(error),
         };
-        let _lock = camera.motion.lock().await;
+        let _lock = crate::metrics::timed("lock.motion_wait", camera.motion.lock()).await;
         match camera.scan(&args.direction, args.views, args.step).await {
             Ok(observations) => CallToolResult::success(
                 observations
@@ -183,7 +211,7 @@ impl CameraServer {
             Ok(camera) => camera,
             Err(error) => return failure(error),
         };
-        let _lock = camera.motion.lock().await;
+        let _lock = crate::metrics::timed("lock.motion_wait", camera.motion.lock()).await;
         plain(camera.movement(args.pan, args.tilt, args.seconds).await)
     }
     #[tool(
@@ -204,7 +232,7 @@ impl CameraServer {
             Ok(camera) => camera,
             Err(error) => return failure(error),
         };
-        let _lock = camera.motion.lock().await;
+        let _lock = crate::metrics::timed("lock.motion_wait", camera.motion.lock()).await;
         plain(camera.remember(&args.name).await)
     }
     #[tool(
@@ -216,12 +244,40 @@ impl CameraServer {
             Ok(camera) => camera,
             Err(error) => return failure(error),
         };
-        let _lock = camera.motion.lock().await;
+        let _lock = crate::metrics::timed("lock.motion_wait", camera.motion.lock()).await;
         picture(camera.look(&args.name).await, started)
+    }
+    #[tool(
+        description = "Read timing metrics without opening the camera. Pass a request_id from a result's _meta.camera_metrics to see a complete request breakdown; full=true includes nested spans and position samples. Without an ID returns rolling stage statistics and recent request IDs. Timings use host monotonic wall time; nested/background spans overlap and must not be summed. Stdio completion covers server pipe writes, not client parsing or model thinking."
+    )]
+    async fn camera_metrics(&self, Parameters(args): Parameters<MetricsArgs>) -> CallToolResult {
+        if args.limit > 64 {
+            return failure(anyhow::anyhow!("Metrics limit must be <=64"));
+        }
+        let value = crate::metrics::sync("metrics.snapshot", || {
+            crate::metrics::snapshot(args.request_id.as_deref(), args.full, args.limit)
+        });
+        CallToolResult::success(vec![ContentBlock::text(crate::metrics::sync(
+            "response.metrics_json",
+            || value.to_string(),
+        ))])
     }
 }
 #[tool_handler]
 impl ServerHandler for CameraServer {
+    async fn call_tool(
+        &self,
+        request: CallToolRequestParams,
+        context: RequestContext<RoleServer>,
+    ) -> Result<CallToolResponse, rmcp::ErrorData> {
+        let id = context.id.clone();
+        let name = request.name.clone();
+        crate::metrics::request(&id, &name, async {
+            let call = rmcp::handler::server::tool::ToolCallContext::new(self, request, context);
+            Self::tool_router().call(call).await
+        })
+        .await
+    }
     fn get_info(&self) -> ServerConfig {
         ServerConfig::new(ServerCapabilities::builder().enable_tools().build()).with_instructions(
             "Use rough=true for ordinary quick framing; precise=true only when tight centering is needed. Use camera_see for a quick current view; camera_scan batches a search into one call; camera_focus frames an object from any returned image. Save stationary objects with camera_remember and use camera_look to avoid future searches. Coordinates are normalized from image top-left. Frames come from a persistent, latest-only native JPEG buffer; never infer success if focus_status reports otherwise.")
@@ -241,7 +297,7 @@ mod tests {
         let client = ().serve(client_io).await.unwrap();
         let server = serving.await.unwrap();
         let tools = client.list_tools(None).await.unwrap();
-        assert_eq!(tools.tools.len(), 8);
+        assert_eq!(tools.tools.len(), 9);
         assert!(
             slot.get().is_none(),
             "Schema discovery must work without camera credentials or network"
