@@ -16,3 +16,5 @@ views.json
 
 /models/*.bin
 /models/*.download
+
+/models/sherpa-onnx-*/

@@ -273,9 +273,39 @@ reported. Only 128 events are retained in memory; raw audio is not saved.
 `camera_hearing_stop` releases the stream; server shutdown also stops hearing.
 One-shot recording is unavailable while continuous hearing is active.
 
+Install the independent acoustic wake model once:
+
+```sh
+scripts/install-wake-model.sh
+```
+
+The installer verifies the archive SHA-256. The default 3.3M-parameter English
+Zipformer keyword model runs locally on one CPU thread. The build links the
+pinned sherpa-onnx native runtime; its Cargo build script downloads the native
+archive at build time. Inference requires no network connection.
+Set `CAMERA_WAKE_MODEL_DIR` to relocate the extracted model directory.
+
 Wake phrases can be set per start or through `CAMERA_WAKE_PHRASE` in `.env`.
-An empty phrase disables wake detection. Matching uses whole words without case
-or punctuation sensitivity. Speech recognition can still mishear a phrase.
+An empty phrase disables wake detection, including aliases. Matching uses whole
+words without case or punctuation sensitivity. `wake_aliases=["Hey Remy"]` can
+accept alternative spellings of a name. The environment default is
+`CAMERA_WAKE_ALIASES`, with aliases separated by semicolons; pass `[]` to override.
+Aliases require the same acoustic verification as the primary phrase.
+
+Wake requests require **both** a transcript match and an independent acoustic
+keyword match on that utterance's PCM samples. Whisper receives no wake-phrase
+prompt. Each acoustic check starts with fresh state; lost audio resets utterance
+assembly. If the wake model cannot load, hearing startup fails rather than
+falling back to transcript-only activation. Ordinary transcription with
+`wake_phrase=""` does not require the acoustic model.
+
+The acoustic threshold defaults to 0.35 with the upstream keyword score of 1.0; optionally set
+`CAMERA_WAKE_THRESHOLD` (0.1–1, higher is stricter). A keyword threshold is a model
+setting, not a calibrated probability that a user spoke. The chosen setting has
+been checked against local room noise and synthetic speech; your voice and room
+still need testing. Playback or another speaker can trigger a genuine phrase;
+this is not speaker verification. Status reports `acoustic_threshold` and
+`acoustic_rejections`; transcript events include `acoustic_wake_detected`.
 
 To wake a local Codex agent, also pass its loaded `codex_thread_id`. A detected
 wake phrase starts a turn when idle or steers the current turn when active.

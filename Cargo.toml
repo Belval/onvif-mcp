@@ -32,6 +32,8 @@ fast_image_resize = { version = "6.1.0", default-features = false, features = ["
 whisper-rs = { version = "0.16.0", default-features = false }
 webrtc-vad = "0.4.0"
 tokio-tungstenite = { version = "0.28.0", default-features = false, features = ["handshake"] }
+sherpa-onnx = "=2.0.1"
+sentencepiece-rs = "=0.2.2"
 
 [profile.release]
 lto = "thin"

@@ -43,6 +43,9 @@ struct State {
     last_delivery_error: Option<String>,
     wake_phrase: Option<String>,
     wake_events: u64,
+    acoustic_rejections: u64,
+    wake_aliases: Vec<String>,
+    acoustic_threshold: Option<f32>,
 }
 
 struct Runtime {
@@ -97,7 +100,7 @@ impl Hearing {
         json!({"running":s.running,"connected":s.connected,"transcribing":s.transcribing,"language":s.language,
             "retained_events":s.events.len(),"cursor":format!("{}:{}",self.epoch,s.next_id),"last_error":s.last_error,
             "dropped_audio_chunks":s.dropped_audio_chunks,"dropped_utterances":s.dropped_utterances,"audio_gaps":s.audio_gaps,
-            "recognition":"local Whisper","wake_phrase":s.wake_phrase,"wake_events":s.wake_events,"codex_thread_id":s.codex_thread_id,"delivered_events":s.delivered_events,"delivery_errors":s.delivery_errors,"last_delivery_error":s.last_delivery_error,
+            "recognition":"local Whisper","wake_phrase":s.wake_phrase,"wake_events":s.wake_events,"acoustic_rejections":s.acoustic_rejections,"wake_aliases":s.wake_aliases,"acoustic_threshold":s.acoustic_threshold,"wake_verification":"sherpa-onnx acoustic keyword spotter + unbiased transcript match","codex_thread_id":s.codex_thread_id,"delivered_events":s.delivered_events,"delivery_errors":s.delivery_errors,"last_delivery_error":s.last_delivery_error,
             "delivery":if s.codex_thread_id.is_some(){if s.ambient_context {"ambient context plus wake-phrase voice requests"} else {"wake-phrase voice requests only"}}else{"read with camera_heard; does not wake an agent automatically"}})
     }
     pub async fn start(
@@ -106,9 +109,26 @@ impl Hearing {
         model: PathBuf,
         language: String,
         delivery: Option<crate::codex_audio::Delivery>,
-        wake_phrase: Option<String>,
+        wake_settings: crate::wake::Settings,
     ) -> Result<Value> {
+        let crate::wake::Settings {
+            phrase: wake_phrase,
+            aliases: wake_aliases,
+            model_dir: wake_model,
+        } = wake_settings;
         validate_start(&model, &language)?;
+        ensure!(
+            wake_aliases.len() <= 8,
+            "At most 8 wake aliases are supported"
+        );
+        for alias in &wake_aliases {
+            validate_wake_phrase(Some(alias))?;
+        }
+        let phrases: Vec<String> = wake_phrase
+            .iter()
+            .chain(wake_aliases.iter().filter(|_| wake_phrase.is_some()))
+            .cloned()
+            .collect();
         validate_wake_phrase(wake_phrase.as_deref())?;
         let mut slot = self.runtime.lock().await;
         ensure!(
@@ -126,6 +146,9 @@ impl Hearing {
             s.events.clear();
             s.wake_phrase = wake_phrase.clone();
             s.wake_events = 0;
+            s.acoustic_rejections = 0;
+            s.wake_aliases = wake_aliases;
+            s.acoustic_threshold = None;
             s.codex_thread_id = delivery.as_ref().map(|d| d.thread_id.clone());
             s.ambient_context = delivery.as_ref().is_some_and(|d| d.ambient_context);
             s.delivered_events = 0;
@@ -145,6 +168,22 @@ impl Hearing {
         let state = self.state.clone();
         let changed = self.changed.clone();
         let asr = tokio::task::spawn_blocking(move || {
+            let acoustic = match wake_phrase
+                .as_deref()
+                .map(|_| {
+                    crate::metrics::sync_result("hearing.wake_model_load", || {
+                        crate::wake::Detector::load(&wake_model, &phrases)
+                    })
+                })
+                .transpose()
+            {
+                Ok(detector) => detector,
+                Err(error) => {
+                    let _ = ready_tx.send(Err(error));
+                    return;
+                }
+            };
+            state.lock().unwrap().acoustic_threshold = acoustic.as_ref().map(|d| d.threshold);
             let loaded = crate::metrics::sync_result("hearing.model_load", || {
                 WhisperContext::new_with_params(&model, WhisperContextParameters::default())
                     .and_then(|ctx| ctx.create_state())
@@ -171,10 +210,24 @@ impl Hearing {
                         &mut recognizer,
                         &utterance,
                         &language,
-                        wake_phrase.as_deref(),
                         worker_cancel.clone(),
                     )
                 });
+                let transcription_ms = started.elapsed().as_secs_f64() * 1000.;
+                let verification_started = Instant::now();
+                let transcript_match = result
+                    .as_ref()
+                    .ok()
+                    .is_some_and(|text| phrases.iter().any(|p| wake_command(text, p).is_some()));
+                let acoustic_match = if transcript_match {
+                    crate::metrics::sync("hearing.acoustic_verify", || {
+                        acoustic
+                            .as_ref()
+                            .is_some_and(|d| d.detects(&utterance.samples, &worker_cancel))
+                    })
+                } else {
+                    false
+                };
                 let mut s = state.lock().unwrap();
                 s.transcribing = false;
                 if worker_cancel.load(Ordering::SeqCst) {
@@ -187,15 +240,20 @@ impl Hearing {
                         if s.events.len() == 128 {
                             s.events.pop_front();
                         }
-                        let command = wake_phrase.as_ref().and_then(|p| wake_command(&text, p));
-                        let wake =
-                            command.is_some() && now_ms().saturating_sub(last_wake_ms) >= 2000;
+                        let command = phrases.iter().find_map(|p| wake_command(&text, p));
+                        let verified = crate::wake::verified(command.is_some(), acoustic_match);
+                        if command.is_some() && !acoustic_match {
+                            s.acoustic_rejections += 1;
+                        }
+                        let wake = verified
+                            && !worker_cancel.load(Ordering::SeqCst)
+                            && now_ms().saturating_sub(last_wake_ms) >= 2000;
                         if wake {
                             last_wake_ms = now_ms();
                             s.wake_events += 1;
                         }
-                        s.events.push_back(json!({"id":id,"event_key":format!("camera-{}-{}",self_epoch,id),"source":"camera_microphone","text":text,"wake_detected":wake,"voice_request":command,"wake_phrase":wake_phrase,"started_at_unix_ms":utterance.start_ms,
-                            "ended_at_unix_ms":utterance.end_ms,"emitted_at_unix_ms":now_ms(),"inference_ms":started.elapsed().as_secs_f64()*1000.,
+                        s.events.push_back(json!({"id":id,"event_key":format!("camera-{}-{}",self_epoch,id),"source":"camera_microphone","text":text,"wake_detected":wake,"voice_request":if wake {command} else {None},"acoustic_wake_detected":acoustic_match,"wake_phrase":wake_phrase,"started_at_unix_ms":utterance.start_ms,
+                            "ended_at_unix_ms":utterance.end_ms,"emitted_at_unix_ms":now_ms(),"inference_ms":transcription_ms,"wake_verification_ms":verification_started.elapsed().as_secs_f64()*1000.,
                             "max_duration_split":utterance.split,"requests_response":wake,"speaker_identity_verified":false}));
                         if has_delivery
                             && (wake || ambient_context)
@@ -425,7 +483,6 @@ fn recognize(
     recognizer: &mut whisper_rs::WhisperState,
     utterance: &Utterance,
     language: &str,
-    wake_phrase: Option<&str>,
     cancel: Arc<AtomicBool>,
 ) -> Result<String> {
     let mut params = FullParams::new(SamplingStrategy::Greedy { best_of: 1 });
@@ -440,10 +497,6 @@ fn recognize(
         Some(language)
     });
     params.set_no_context(true);
-    let prompt = wake_phrase.map(|p| format!("Wake phrase: {p}."));
-    if let Some(prompt) = &prompt {
-        params.set_initial_prompt(prompt);
-    }
     params.set_print_realtime(false);
     params.set_print_progress(false);
     params.set_print_timestamps(false);
@@ -632,7 +685,6 @@ mod tests {
             &mut recognizer,
             &utterance,
             "en",
-            None,
             Arc::new(AtomicBool::new(false)),
         )
         .unwrap();
@@ -641,6 +693,30 @@ mod tests {
             started.elapsed().as_secs_f64() * 1000.,
             text
         );
+        if let Ok(expected) = std::env::var("CAMERA_STT_WAKE_EXPECT") {
+            let phrase =
+                std::env::var("CAMERA_WAKE_TEST_PHRASE").unwrap_or_else(|_| "Hey Remi".into());
+            let mut phrases = vec![phrase];
+            phrases.extend(
+                std::env::var("CAMERA_WAKE_TEST_ALIASES")
+                    .unwrap_or_default()
+                    .split(';')
+                    .filter(|s| !s.is_empty())
+                    .map(str::to_owned),
+            );
+            let detector = crate::wake::Detector::load(
+                &crate::wake::model_dir(Path::new(env!("CARGO_MANIFEST_DIR"))),
+                &phrases,
+            )
+            .unwrap();
+            let acoustic = detector.detects(&utterance.samples, &AtomicBool::new(false));
+            let transcript = phrases.iter().any(|p| wake_command(&text, p).is_some());
+            assert_eq!(
+                crate::wake::verified(transcript, acoustic),
+                expected == "true",
+                "Acoustic={acoustic}, transcript={transcript}"
+            );
+        }
         let expected = std::env::var("CAMERA_STT_EXPECT").unwrap_or_else(|_| "country".into());
         assert!(
             text.to_lowercase().contains(&expected.to_lowercase()),

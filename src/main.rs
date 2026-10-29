@@ -12,6 +12,7 @@ mod verify;
 mod video;
 mod views;
 mod vision;
+mod wake;
 use anyhow::Result;
 use rmcp::ServiceExt;
 use std::{path::PathBuf, time::Instant};
