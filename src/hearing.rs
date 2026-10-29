@@ -15,7 +15,7 @@ use tokio::{
     sync::{Mutex as AsyncMutex, Notify, mpsc, oneshot, watch},
     task::JoinHandle,
 };
-use whisper_rs::{FullParams, SamplingStrategy, WhisperContext, WhisperContextParameters};
+use whisper_rs::{FullParams, SamplingStrategy};
 
 fn now_ms() -> u64 {
     SystemTime::now()
@@ -48,6 +48,7 @@ struct State {
     acoustic_threshold: Option<f32>,
     diagnostic_dir: Option<PathBuf>,
     diagnostic_error: Option<String>,
+    recognizer: Option<Value>,
 }
 
 struct Runtime {
@@ -80,11 +81,11 @@ impl Default for Hearing {
 }
 
 pub fn model_path(root: &Path) -> PathBuf {
-    std::env::var_os("CAMERA_STT_MODEL")
-        .map(PathBuf::from)
-        .unwrap_or_else(|| root.join("models/ggml-base-q5_1.bin"))
+    crate::stt::model_path(root)
 }
+
 pub fn validate_start(model: &Path, language: &str) -> Result<()> {
+    crate::stt::validate_device()?;
     ensure!(
         model.is_file(),
         "Local speech model missing; install models/ggml-base-q5_1.bin or set CAMERA_STT_MODEL"
@@ -102,7 +103,7 @@ impl Hearing {
         json!({"running":s.running,"connected":s.connected,"transcribing":s.transcribing,"language":s.language,
             "retained_events":s.events.len(),"cursor":format!("{}:{}",self.epoch,s.next_id),"last_error":s.last_error,
             "dropped_audio_chunks":s.dropped_audio_chunks,"dropped_utterances":s.dropped_utterances,"audio_gaps":s.audio_gaps,
-            "diagnostic_dir":s.diagnostic_dir,"diagnostic_error":s.diagnostic_error,"recognition":"local Whisper","wake_phrase":s.wake_phrase,"wake_events":s.wake_events,"acoustic_rejections":s.acoustic_rejections,"wake_aliases":s.wake_aliases,"acoustic_threshold":s.acoustic_threshold,"wake_verification":"sherpa-onnx acoustic keyword spotter + unbiased transcript match","codex_thread_id":s.codex_thread_id,"delivered_events":s.delivered_events,"delivery_errors":s.delivery_errors,"last_delivery_error":s.last_delivery_error,
+            "diagnostic_dir":s.diagnostic_dir,"diagnostic_error":s.diagnostic_error,"recognizer":s.recognizer,"recognition":"local Whisper","wake_phrase":s.wake_phrase,"wake_events":s.wake_events,"acoustic_rejections":s.acoustic_rejections,"wake_aliases":s.wake_aliases,"acoustic_threshold":s.acoustic_threshold,"wake_verification":"sherpa-onnx acoustic keyword spotter + unbiased transcript match","codex_thread_id":s.codex_thread_id,"delivered_events":s.delivered_events,"delivery_errors":s.delivery_errors,"last_delivery_error":s.last_delivery_error,
             "delivery":if s.codex_thread_id.is_some(){if s.ambient_context {"ambient context plus wake-phrase voice requests"} else {"wake-phrase voice requests only"}}else{"read with camera_heard; does not wake an agent automatically"}})
     }
     pub async fn start(
@@ -154,6 +155,7 @@ impl Hearing {
             s.acoustic_threshold = None;
             s.diagnostic_dir = None;
             s.diagnostic_error = None;
+            s.recognizer = None;
             s.codex_thread_id = delivery.as_ref().map(|d| d.thread_id.clone());
             s.ambient_context = delivery.as_ref().is_some_and(|d| d.ambient_context);
             s.delivered_events = 0;
@@ -200,17 +202,17 @@ impl Hearing {
                 }
             };
             state.lock().unwrap().acoustic_threshold = acoustic.as_ref().map(|d| d.threshold);
-            let loaded = crate::metrics::sync_result("hearing.model_load", || {
-                WhisperContext::new_with_params(&model, WhisperContextParameters::default())
-                    .and_then(|ctx| ctx.create_state())
-            });
-            let mut recognizer = match loaded {
-                Ok(recognizer) => {
+            let loaded =
+                crate::metrics::sync_result("hearing.model_load", || crate::stt::load(&model));
+            let (mut recognizer, beam_size) = match loaded {
+                Ok((recognizer, info)) => {
+                    let beam = info["beam_size"].as_i64().unwrap_or(1) as i32;
+                    state.lock().unwrap().recognizer = Some(info);
                     let _ = ready_tx.send(Ok(()));
-                    recognizer
+                    (recognizer, beam)
                 }
-                Err(_) => {
-                    let _ = ready_tx.send(Err(anyhow!("Could not load local Whisper model")));
+                Err(error) => {
+                    let _ = ready_tx.send(Err(error));
                     return;
                 }
             };
@@ -239,6 +241,7 @@ impl Hearing {
                         &mut recognizer,
                         &utterance,
                         &language,
+                        beam_size,
                         worker_cancel.clone(),
                     )
                 });
@@ -357,7 +360,7 @@ impl Hearing {
             signal,
             tasks: vec![asr, vad],
         };
-        tokio::time::timeout(Duration::from_secs(20), ready_rx)
+        tokio::time::timeout(Duration::from_secs(90), ready_rx)
             .await
             .map_err(|_| anyhow!("Local speech model startup timed out"))???;
         let state = self.state.clone();
@@ -508,13 +511,31 @@ impl Hearing {
     }
 }
 
+fn has_signal(samples: &[i16]) -> bool {
+    samples.iter().any(|s| i32::from(*s).abs() > 32)
+}
+
 fn recognize(
     recognizer: &mut whisper_rs::WhisperState,
     utterance: &Utterance,
     language: &str,
+    beam_size: i32,
     cancel: Arc<AtomicBool>,
 ) -> Result<String> {
-    let mut params = FullParams::new(SamplingStrategy::Greedy { best_of: 1 });
+    // G.711 comfort noise is typically +/-8. Do not ask a generative model to
+    // invent words for silence, even when called directly without the VAD stage.
+    if !has_signal(&utterance.samples) {
+        return Ok(String::new());
+    }
+    let strategy = if beam_size > 1 {
+        SamplingStrategy::BeamSearch {
+            beam_size,
+            patience: 1.0,
+        }
+    } else {
+        SamplingStrategy::Greedy { best_of: 1 }
+    };
+    let mut params = FullParams::new(strategy);
     params.set_n_threads(
         std::thread::available_parallelism()
             .map(|n| n.get().min(4))
@@ -566,7 +587,11 @@ fn recognize(
             text.push_str(&segment.to_str_lossy()?);
         }
     }
-    Ok(text.trim().to_owned())
+    Ok(if text.chars().any(char::is_alphanumeric) {
+        text.trim().to_owned()
+    } else {
+        String::new()
+    })
 }
 
 pub fn validate_wake_phrase(phrase: Option<&str>) -> Result<()> {
@@ -686,6 +711,56 @@ fn resample(samples: &[i16], rate: u32) -> Vec<i16> {
 mod tests {
     use super::*;
     #[test]
+    fn silence_and_g711_comfort_noise_do_not_reach_whisper() {
+        assert!(!has_signal(&[]));
+        assert!(!has_signal(&[0; 16000]));
+        assert!(!has_signal(&[8, -8, 24, -24]));
+        assert!(has_signal(&[0, 300, -300, 0]));
+        assert!(has_signal(&[i16::MIN]));
+    }
+    #[test]
+    #[ignore = "requires local models and CAMERA_STT_BENCH_DIR"]
+    fn local_model_benchmark() {
+        let root = Path::new(env!("CARGO_MANIFEST_DIR"));
+        let (mut recognizer, info) = crate::stt::load(&model_path(root)).unwrap();
+        eprintln!("BENCHMARK_MODEL {info}");
+        let mut paths = std::fs::read_dir(std::env::var("CAMERA_STT_BENCH_DIR").unwrap())
+            .unwrap()
+            .map(|p| p.unwrap().path())
+            .filter(|p| p.extension().is_some_and(|e| e == "pcm"))
+            .collect::<Vec<_>>();
+        paths.sort();
+        for path in paths {
+            let data = std::fs::read(&path).unwrap();
+            let samples: Vec<i16> = data
+                .as_chunks::<2>()
+                .0
+                .iter()
+                .map(|b| i16::from_le_bytes(*b))
+                .collect();
+            let duration_ms = samples.len() as f64 / 16.;
+            let utterance = Utterance {
+                samples,
+                start_ms: 0,
+                end_ms: 0,
+                split: false,
+            };
+            let start = Instant::now();
+            let result = recognize(
+                &mut recognizer,
+                &utterance,
+                "en",
+                info["beam_size"].as_i64().unwrap() as i32,
+                Arc::new(AtomicBool::new(false)),
+            );
+            let text = result.unwrap();
+            eprintln!(
+                "BENCHMARK {}",
+                json!({"fixture":path.file_name().unwrap().to_string_lossy(),"duration_ms":duration_ms,"inference_ms":start.elapsed().as_secs_f64()*1000.,"text":text})
+            );
+        }
+    }
+    #[test]
     #[ignore = "requires local model and CAMERA_STT_FIXTURE_PCM"]
     fn local_model_transcribes_known_fixture() {
         let model = model_path(Path::new(env!("CARGO_MANIFEST_DIR")));
@@ -704,16 +779,14 @@ mod tests {
             end_ms: 0,
             split: false,
         };
-        let mut recognizer =
-            WhisperContext::new_with_params(model, WhisperContextParameters::default())
-                .unwrap()
-                .create_state()
-                .unwrap();
+        let (mut recognizer, info) = crate::stt::load(&model).unwrap();
+        eprintln!("Recognizer: {info}");
         let started = Instant::now();
         let text = recognize(
             &mut recognizer,
             &utterance,
             "en",
+            info["beam_size"].as_i64().unwrap_or(1) as i32,
             Arc::new(AtomicBool::new(false)),
         )
         .unwrap();

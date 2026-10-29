@@ -327,3 +327,53 @@ Status reports `diagnostic_dir`/`diagnostic_error`; events report
 sidecar timestamps before associating a file with an older event. Files remain
 on disk after stopping; remove the session folder when diagnosis is finished.
 Diagnostics are off by default.
+
+## GPU transcription on the GTX 1080 Ti
+
+CPU-only builds and the original base Whisper model remain supported. This host
+also has a local CUDA build of the same Rust/whisper.cpp pipeline, using the
+unquantized Whisper Large v3 Turbo model and beam search with five candidates.
+No audio is sent to an inference API.
+
+One-time setup (the installer checks pinned NVIDIA archive hashes):
+
+```sh
+python3 scripts/install-cuda-12.2.py
+scripts/install-whisper-model.sh turbo
+scripts/cuda-cargo.sh build --release --locked
+```
+
+The local CUDA 12.2 toolchain supports this Pascal GPU and the installed driver;
+it does not install or replace the NVIDIA driver. `CUDA_PATH` overrides its
+location. The wrapper targets compute capability 6.1; override
+`CMAKE_CUDA_ARCHITECTURES` when building for another GPU. The binary embeds the
+CUDA library search path, so MCP does not need a shell activation script.
+Python is used by the setup installer only; inference remains native Rust/C++.
+
+`CAMERA_STT_DEVICE=auto` (default) selects CUDA when compiled and available,
+otherwise CPU. `cpu` forces the original path; `cuda` fails with an error if GPU
+support is unavailable. With CUDA available, the installed Turbo model is chosen
+by default; the CPU default remains `ggml-base-q5_1.bin`.
+`CAMERA_STT_GPU_MODEL` overrides the GPU model only. `CAMERA_STT_MODEL` overrides
+both paths. Use absolute paths for these overrides.
+`CAMERA_STT_BEAM_SIZE=1..8` controls decoding (default 5 on GPU, 1 on CPU).
+Hearing status includes model filename/size, selected/requested device, beam size,
+and any fallback reason. CUDA initialization failure in auto mode retries on CPU;
+the explicit model override remains in effect in that case.
+
+For the full Large v3 model, run `scripts/install-whisper-model.sh large-v3` and
+set `CAMERA_STT_GPU_MODEL` to its absolute path. On the saved test recording,
+Turbo recovered the wake phrase that both base and full Large v3 omitted; it was
+also faster. See `benchmarks/audio-models/` for the measured comparison and its
+limits. A larger checkpoint is not automatically better on every utterance.
+
+The Tapo C210 queried here advertises only G.711/8 kHz in
+`GetAudioEncoderConfigurationOptions`, shared by its two profiles. GPU inference
+improves recognition; it does not improve the encoded source audio. Silence and
+G.711 comfort-noise samples are filtered before inference, and punctuation-only
+outputs are not emitted as speech. These guards do not guarantee that all noise
+hallucinations are eliminated. The independent acoustic wake gate remains in use.
+
+Upstream references: [whisper.cpp](https://github.com/ggml-org/whisper.cpp),
+[model files](https://huggingface.co/ggerganov/whisper.cpp),
+[CUDA 12.2 redistribution manifests](https://developer.download.nvidia.com/compute/cuda/redist/).

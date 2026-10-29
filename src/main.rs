@@ -8,6 +8,7 @@ mod jpeg;
 mod metrics;
 mod onvif;
 mod server;
+mod stt;
 mod transport_metrics;
 mod verify;
 mod video;

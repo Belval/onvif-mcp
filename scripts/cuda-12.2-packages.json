@@ -1,0 +1,30 @@
+{
+  "release": "12.2.2",
+  "base_url": "https://developer.download.nvidia.com/compute/cuda/redist/",
+  "packages": {
+    "cuda_nvcc": {
+      "relative_path": "cuda_nvcc/linux-x86_64/cuda_nvcc-linux-x86_64-12.2.140-archive.tar.xz",
+      "sha256": "3feaab191e1ae3fded02c02b0f24453069ada96b2e3a750251293b36079dc2f1",
+      "md5": "65d90cb219e8e7a204ec2f4e642c3e43",
+      "size": "46728284"
+    },
+    "cuda_cudart": {
+      "relative_path": "cuda_cudart/linux-x86_64/cuda_cudart-linux-x86_64-12.2.140-archive.tar.xz",
+      "sha256": "baebd331249bca0edf36776ead90e6b2024ffee01ea26cd9dd07344bebeaff08",
+      "md5": "030e85f4d0305c2924e2b76e84e2da32",
+      "size": "1058992"
+    },
+    "cuda_cccl": {
+      "relative_path": "cuda_cccl/linux-x86_64/cuda_cccl-linux-x86_64-12.2.140-archive.tar.xz",
+      "sha256": "90fa538e41f7f444896b61d573d502ea501f44126f8ff64442987e192a8a39dd",
+      "md5": "00ea502586a8c17e086292690d6680d6",
+      "size": "1150676"
+    },
+    "libcublas": {
+      "relative_path": "libcublas/linux-x86_64/libcublas-linux-x86_64-12.2.5.6-archive.tar.xz",
+      "sha256": "56ccf7ffbe7ea204fbb0c5c4c55829ef3fb81b2e811f8073fcd0bbef438b262e",
+      "md5": "dfd9fc6f65d0d2200cbbf0c28d5c7067",
+      "size": "505014804"
+    }
+  }
+}

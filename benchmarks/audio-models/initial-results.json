@@ -1,0 +1,128 @@
+[
+  {
+    "duration_ms": 11000.0,
+    "fixture": "01-jfk.pcm",
+    "inference_ms": 2380.5375369999997,
+    "text": "And so my fellow Americans ask not what your country can do for you, ask what you can do for your country.",
+    "model": "base-cpu"
+  },
+  {
+    "duration_ms": 2633.625,
+    "fixture": "02-synthetic-wake-g711.pcm",
+    "inference_ms": 2222.812117,
+    "text": "Hey Remy! What time is it?",
+    "model": "base-cpu"
+  },
+  {
+    "duration_ms": 15000.0,
+    "fixture": "03-camera-speech.pcm",
+    "inference_ms": 2265.1921669999997,
+    "text": "How are you doing?",
+    "model": "base-cpu"
+  },
+  {
+    "duration_ms": 15000.0,
+    "fixture": "04-room-noise.pcm",
+    "inference_ms": 3276.235341,
+    "text": "",
+    "model": "base-cpu"
+  },
+  {
+    "duration_ms": 3362.9375,
+    "fixture": "05-near-wake.pcm",
+    "inference_ms": 2276.33346,
+    "text": "Are you ready? Are you ready? Read me a webber.",
+    "model": "base-cpu"
+  },
+  {
+    "duration_ms": 2000.0,
+    "fixture": "06-silence.pcm",
+    "inference_ms": 2232.817149,
+    "text": "you",
+    "model": "base-cpu"
+  },
+  {
+    "duration_ms": 11000.0,
+    "fixture": "01-jfk.pcm",
+    "inference_ms": 792.2166269999999,
+    "text": "And so, my fellow Americans, ask not what your country can do for you, ask what you can do for your country.",
+    "model": "turbo-cuda"
+  },
+  {
+    "duration_ms": 2633.625,
+    "fixture": "02-synthetic-wake-g711.pcm",
+    "inference_ms": 544.411487,
+    "text": "Hey Remy, what time is it?",
+    "model": "turbo-cuda"
+  },
+  {
+    "duration_ms": 15000.0,
+    "fixture": "03-camera-speech.pcm",
+    "inference_ms": 554.35194,
+    "text": "Hey Remy, how are you doing?",
+    "model": "turbo-cuda"
+  },
+  {
+    "duration_ms": 15000.0,
+    "fixture": "04-room-noise.pcm",
+    "inference_ms": 593.919,
+    "text": ".",
+    "model": "turbo-cuda"
+  },
+  {
+    "duration_ms": 3362.9375,
+    "fixture": "05-near-wake.pcm",
+    "inference_ms": 611.198943,
+    "text": "Hey, are you ready? Hey Randy, read me the weather.",
+    "model": "turbo-cuda"
+  },
+  {
+    "duration_ms": 2000.0,
+    "fixture": "06-silence.pcm",
+    "inference_ms": 481.95993599999997,
+    "text": "Thank you.",
+    "model": "turbo-cuda"
+  },
+  {
+    "duration_ms": 11000.0,
+    "fixture": "01-jfk.pcm",
+    "inference_ms": 1487.3029840000002,
+    "text": "And so, my fellow Americans, ask not what your country can do for you, ask what you can do for your country.",
+    "model": "large-v3-cuda"
+  },
+  {
+    "duration_ms": 2633.625,
+    "fixture": "02-synthetic-wake-g711.pcm",
+    "inference_ms": 817.607202,
+    "text": "Hey Remy. What time is it?",
+    "model": "large-v3-cuda"
+  },
+  {
+    "duration_ms": 15000.0,
+    "fixture": "03-camera-speech.pcm",
+    "inference_ms": 833.5542849999999,
+    "text": "How are you doing?",
+    "model": "large-v3-cuda"
+  },
+  {
+    "duration_ms": 15000.0,
+    "fixture": "04-room-noise.pcm",
+    "inference_ms": 686.1776160000001,
+    "text": ".",
+    "model": "large-v3-cuda"
+  },
+  {
+    "duration_ms": 3362.9375,
+    "fixture": "05-near-wake.pcm",
+    "inference_ms": 1074.784449,
+    "text": "Hey, are you ready? Hey Randy, read me the weather.",
+    "model": "large-v3-cuda"
+  },
+  {
+    "duration_ms": 2000.0,
+    "fixture": "06-silence.pcm",
+    "inference_ms": 640.158458,
+    "text": "Thank you.",
+    "model": "large-v3-cuda"
+  }
+]

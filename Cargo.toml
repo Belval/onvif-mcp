@@ -5,6 +5,10 @@ edition = "2024"
 rust-version = "1.89"
 description = "Low-latency ONVIF camera MCP with persistent RTSP and latest-frame buffers"
 
+[features]
+default = []
+cuda = ["whisper-rs/cuda"]
+
 [dependencies]
 anyhow = "1"
 base64 = "0.22"

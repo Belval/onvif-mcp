@@ -1,9 +1,9 @@
 [mcp_servers.camera]
 command = "/mnt/main/Git/onvif-mcp/target/release/onvif-sight"
 startup_timeout_sec = 20
-tool_timeout_sec = 45
+tool_timeout_sec = 120
 
 [mcp_servers.camera.env]
 CAMERA_CONFIG_DIR = "/mnt/main/Git/onvif-mcp"
-CAMERA_MCP_REVISION = "rust-native-v9-exact-audio-diagnostics"
+CAMERA_MCP_REVISION = "rust-native-v10-cuda-whisper"
 CAMERA_METRICS_FILE = "/mnt/main/Git/onvif-mcp/metrics/camera-{pid}.jsonl"
