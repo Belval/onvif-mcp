@@ -40,6 +40,11 @@ refresh for loaded threads; no full app restart is needed.
 
 ## Fast operation
 
+- `camera_listen(seconds=3)`: capture 0.25–15 seconds from the camera microphone
+  and return a mono PCM16 WAV audio clip with timing and packet-loss metadata.
+  This uses your existing local account; it does not require Tapo cloud access,
+  transcribe speech, or play sound through the speaker. Video and movement can
+  continue while recording.
 - `camera_snapshot(detail=false)`: a 640px JPEG from the persistent H.264 buffer,
   with `frame_id`, dimensions, sequence number, frame age and request time.
   `detail=true` opens a short-lived main-stream H.264 connection and returns
@@ -221,3 +226,62 @@ Tool names were clarified: `camera_see`→`camera_snapshot`, `camera_focus`→
 `camera_goto_view`. Old names are no longer advertised. `camera_scan` returns
 images for the caller to inspect; it does not perform object recognition.
 Saved views contain pan/tilt positions only; saving an existing name replaces it.
+
+## Microphone capture
+
+`camera_listen` discovers the microphone track through RTSP. Mono G.711 A-law (PCMA) and mu-law (PCMU) streams are decoded in Rust
+and returned as a WAV `AudioContent` block alongside JSON metadata. No Python,
+FFmpeg, cloud API, speech model or additional credentials are needed.
+
+Each recording opens a microphone connection and closes it on completion,
+cancellation, stream failure or timeout. The server rejects overlapping recording
+requests on the same instance and does not record between calls. It does not save
+audio files automatically. Each active call uses one camera RTSP stream slot.
+
+Packet-loss gaps up to half a second are filled with silence and reported in
+`gap_samples`/`lost_packets`; larger estimated gaps, stalls and premature stream
+ends return errors rather than silently claiming a complete recording.
+`duration_seconds` is the returned sample duration; `first_sample_delay_ms`,
+`capture_wall_ms` and the request trace separate stream startup from capture and
+response encoding. These are host timings, not measured sensor latency.
+
+
+The C210 firmware tested requires SETUP of both video and audio for audio packets
+to arrive. The server automatically retries with the minor video track and discards
+video without decoding it. Packet timestamps on this firmware are inconsistent;
+sample positions use decoded sample counts and sequence-loss estimates instead.
+
+## Continuous local speech and wake phrases
+
+Install the multilingual base model once (about 60 MB):
+
+```sh
+mkdir -p models
+curl -fL https://huggingface.co/ggerganov/whisper.cpp/resolve/main/ggml-base-q5_1.bin -o models/ggml-base-q5_1.bin
+```
+
+Set `CAMERA_STT_MODEL` to use another compatible local Whisper model.
+`camera_hearing_start(language="en", wake_phrase="Hey Remi")` starts persistent
+microphone capture, WebRTC speech detection and local whisper.cpp inference on CPU.
+`language="fr"` or `"auto"` also work. No transcription API or Tapo cloud account
+is involved. Model loading and transcription have separate metrics.
+
+Read incremental events with `camera_heard(cursor=previous_cursor, wait_seconds=15)`.
+The cursor resets after a server restart; missed events and dropped audio are
+reported. Only 128 events are retained in memory; raw audio is not saved.
+`camera_hearing_status` reports connectivity, inference and delivery errors.
+`camera_hearing_stop` releases the stream; server shutdown also stops hearing.
+One-shot recording is unavailable while continuous hearing is active.
+
+Wake phrases can be set per start or through `CAMERA_WAKE_PHRASE` in `.env`.
+An empty phrase disables wake detection. Matching uses whole words without case
+or punctuation sensitivity. Speech recognition can still mishear a phrase.
+
+To wake a local Codex agent, also pass its loaded `codex_thread_id`. A detected
+wake phrase starts a turn when idle or steers the current turn when active.
+Ordinary transcripts stay in the buffer by default. `ambient_context=true` opts
+into adding every transcript to chat as passive context. Delivered transcripts
+become part of that Codex thread's context; speaker identity is unverified.
+The adapter uses the local Codex control socket, optionally overridden through
+`CAMERA_CODEX_SOCKET`. Other MCP clients can poll events and implement their own
+wake handling without this adapter.

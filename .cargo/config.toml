@@ -1,3 +1,7 @@
 # This camera runs on this host. Rebuild before moving the binary to another CPU.
 [build]
 rustflags = ["-C", "target-cpu=native"]
+
+# Use bindings bundled with the pinned whisper.cpp version; no libclang needed.
+[env]
+WHISPER_DONT_GENERATE_BINDINGS = "1"

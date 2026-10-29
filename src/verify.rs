@@ -136,7 +136,7 @@ pub async fn run(moving: bool) -> Result<()> {
         ))?)
         .await?;
     let tools = client.list_tools(None).await?;
-    ensure!(tools.tools.len() == 11, "Expected all eleven camera tools");
+    ensure!(tools.tools.len() == 16, "Expected all sixteen camera tools");
     let (meta, images) = call(&client, "camera_snapshot", json!({})).await?;
     ensure!(
         meta[0]["width"].as_u64() == Some(640) && meta[0]["height"].as_u64() == Some(360),
@@ -258,7 +258,8 @@ pub async fn run(moving: bool) -> Result<()> {
             .await?;
             ensure!(
                 revisited[0]["focus_status"] == "centered",
-                "Must be able to focus the first scan view after visiting others: {}", revisited[0]
+                "Must be able to focus the first scan view after visiting others: {}",
+                revisited[0]
             );
             eprintln!(
                 "Revisit first scan view: {:0.1}ms",

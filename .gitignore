@@ -13,3 +13,6 @@ views.json
 
 /views.lock
 /views.tmp
+
+/models/*.bin
+/models/*.download

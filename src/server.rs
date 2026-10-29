@@ -13,19 +13,39 @@ use schemars::JsonSchema;
 use serde::Deserialize;
 use serde_json::{Value, json};
 use std::{path::PathBuf, sync::Arc, time::Instant};
-use tokio::sync::OnceCell;
+use tokio::sync::{Mutex, OnceCell};
 
 #[derive(Clone)]
 pub struct CameraServer {
     pub camera: Arc<OnceCell<Arc<Camera>>>,
     root: PathBuf,
+    audio: Arc<OnceCell<crate::audio::Input>>,
+    pub hearing: Arc<crate::hearing::Hearing>,
+    listen_gate: Arc<Mutex<()>>,
 }
 impl CameraServer {
     pub fn new(root: PathBuf) -> Self {
         Self {
             camera: Arc::new(OnceCell::new()),
             root,
+            audio: Arc::new(OnceCell::new()),
+            hearing: Arc::new(crate::hearing::Hearing::default()),
+            listen_gate: Arc::new(Mutex::new(())),
         }
+    }
+    async fn connected_audio(&self) -> Result<&crate::audio::Input> {
+        crate::metrics::result(
+            "audio.initialize",
+            self.audio.get_or_try_init(|| async {
+                if let Some(camera) = self.camera.get() {
+                    crate::audio::Input::discover(&camera.onvif).await
+                } else {
+                    let onvif = crate::onvif::Onvif::connect(crate::onvif::Config::load()?).await?;
+                    crate::audio::Input::discover(&onvif).await
+                }
+            }),
+        )
+        .await
     }
     async fn connected_camera(&self) -> Result<Arc<Camera>> {
         crate::metrics::result("server.camera_init", async {
@@ -36,6 +56,40 @@ impl CameraServer {
         })
         .await
     }
+}
+#[derive(Deserialize, JsonSchema)]
+pub struct HearingStartArgs {
+    /// Speech language code, e.g. en or fr. Use auto for automatic detection.
+    #[serde(default = "default_language")]
+    pub language: String,
+    /// Optional loaded local Codex thread ID; wake detections start or steer a response.
+    pub codex_thread_id: Option<String>,
+    /// Wake phrase that requests a response; defaults to CAMERA_WAKE_PHRASE when configured.
+    pub wake_phrase: Option<String>,
+    /// Also inject ordinary ambient transcripts as passive context; default false.
+    #[serde(default)]
+    pub ambient_context: bool,
+}
+fn default_language() -> String {
+    "en".to_owned()
+}
+#[derive(Deserialize, JsonSchema)]
+pub struct HeardArgs {
+    /// Cursor from the previous response; omit to read retained transcript events.
+    pub cursor: Option<String>,
+    /// Long-poll for new transcript events, from 0 to 15 seconds.
+    #[serde(default)]
+    pub wait_seconds: f64,
+}
+#[derive(Deserialize, JsonSchema)]
+pub struct ListenArgs {
+    /// Record this many seconds of new microphone audio, from 0.25 to 15; default 3.
+    #[serde(default = "default_listen_seconds")]
+    #[schemars(range(min = 0.25, max = 15.0))]
+    pub seconds: f64,
+}
+fn default_listen_seconds() -> f64 {
+    3.0
 }
 #[derive(Deserialize, JsonSchema)]
 pub struct SeeArgs {
@@ -136,6 +190,115 @@ fn picture(result: Result<ObservationResult>, started: Instant) -> CallToolResul
 #[tool_router]
 impl CameraServer {
     #[tool(
+        description = "Start continuous camera microphone transcription locally using Whisper and speech detection. language=en (default), fr, or auto. Runs until camera_hearing_stop or server shutdown; reconnects after stream errors. Keeps only 128 transcript events in memory, with no audio files or cloud calls. Use camera_heard to read new events. Optionally pass codex_thread_id to deliver configured wake-phrase requests to a loaded local Codex thread, starting a response or steering its active turn. Ordinary speech stays in the transcript buffer; ambient_context=true additionally injects it as passive context. Without a thread ID, events (including wake detections) remain available through camera_heard. wake_phrase defaults to CAMERA_WAKE_PHRASE when set; an empty string disables wake detection."
+    )]
+    async fn camera_hearing_start(
+        &self,
+        Parameters(args): Parameters<HearingStartArgs>,
+    ) -> CallToolResult {
+        let model = crate::hearing::model_path(&self.root);
+        let wake_phrase = args
+            .wake_phrase
+            .or_else(|| std::env::var("CAMERA_WAKE_PHRASE").ok())
+            .filter(|p| !p.trim().is_empty());
+        if let Err(error) = crate::hearing::validate_wake_phrase(wake_phrase.as_deref()) {
+            return failure(error);
+        }
+        if let Err(error) = crate::hearing::validate_start(&model, &args.language) {
+            return failure(error);
+        }
+        let delivery = match args
+            .codex_thread_id
+            .map(|id| {
+                crate::codex_audio::Delivery::new(id).map(|mut d| {
+                    d.ambient_context = args.ambient_context;
+                    d
+                })
+            })
+            .transpose()
+        {
+            Ok(delivery) => delivery,
+            Err(error) => return failure(error),
+        };
+        if let Some(delivery) = &delivery
+            && let Err(error) = delivery.check().await
+        {
+            return failure(error);
+        }
+        let _guard = match self.listen_gate.try_lock() {
+            Ok(guard) => guard,
+            Err(_) => return failure(anyhow::anyhow!("A microphone recording is active")),
+        };
+        let input = match self.connected_audio().await {
+            Ok(input) => input.clone(),
+            Err(error) => return failure(error),
+        };
+        plain(
+            self.hearing
+                .start(input, model, args.language, delivery, wake_phrase)
+                .await,
+        )
+    }
+    #[tool(
+        description = "Stop continuous microphone capture and local speech recognition on this server. Returns hearing status; retained transcripts remain available through camera_heard. Does not move the camera or stop video."
+    )]
+    async fn camera_hearing_stop(&self) -> CallToolResult {
+        plain(self.hearing.stop().await)
+    }
+    #[tool(
+        description = "Read timestamped microphone transcript events from continuous hearing. Pass the previous cursor to read only new events; wait_seconds=0..15 optionally waits for speech. Reports dropped/missed events and connection errors. Ambient events are context; wake_detected and voice_request identify configured wake-phrase response requests. Transcription and speaker identity are unverified. Start with camera_hearing_start."
+    )]
+    async fn camera_heard(&self, Parameters(args): Parameters<HeardArgs>) -> CallToolResult {
+        plain(
+            self.hearing
+                .read(args.cursor.as_deref(), args.wait_seconds)
+                .await,
+        )
+    }
+    #[tool(
+        description = "Inspect continuous microphone transcription status, connection state, recognition backlog drops and errors without opening the microphone or moving the camera."
+    )]
+    async fn camera_hearing_status(&self) -> CallToolResult {
+        plain(Ok(self.hearing.status()))
+    }
+    #[tool(
+        description = "Record new audio from the camera microphone now and return a mono PCM16 WAV audio clip plus timing and packet-loss metadata. seconds=0.25..15 (default 3). Uses the local camera account over LAN RTSP; no cloud account or speech service. Opens a microphone RTSP session only during this call and closes on completion, cancellation or timeout. Does not transcribe speech or play sound through the speaker. One recording per server at a time; another active recording returns an error. Video and movement can continue independently."
+    )]
+    async fn camera_listen(&self, Parameters(args): Parameters<ListenArgs>) -> CallToolResult {
+        if let Err(error) = crate::audio::validate_duration(args.seconds) {
+            return failure(error);
+        }
+        let _guard = match self.listen_gate.try_lock() {
+            Ok(guard) => guard,
+            Err(_) => {
+                return failure(anyhow::anyhow!(
+                    "A microphone recording is already active on this server"
+                ));
+            }
+        };
+        if self.hearing.status()["running"] == true {
+            return failure(anyhow::anyhow!(
+                "Continuous hearing is active; use camera_heard or stop hearing before recording a clip"
+            ));
+        }
+        let input = match self.connected_audio().await {
+            Ok(input) => input,
+            Err(error) => return failure(error),
+        };
+        match input.listen(args.seconds).await {
+            Ok((metadata, wav)) => CallToolResult::success(vec![
+                ContentBlock::text(crate::metrics::sync("response.metadata_json", || {
+                    metadata.to_string()
+                })),
+                ContentBlock::audio(
+                    crate::metrics::sync("response.audio_base64", || STANDARD.encode(wav)),
+                    "audio/wav",
+                ),
+            ]),
+            Err(error) => failure(error),
+        }
+    }
+    #[tool(
         description = "See a fresh 640x360 camera preview from a persistent H264 stream. Returns frame_id, dimensions and frame age. detail=true starts an H264 detail connection and returns up to 1280px. Use camera_center for centering, camera_scan for searching, and camera_goto_view for remembered objects."
     )]
     async fn camera_snapshot(&self, Parameters(args): Parameters<SeeArgs>) -> CallToolResult {
@@ -235,11 +398,18 @@ impl CameraServer {
         let _lock = crate::metrics::timed("lock.motion_wait", camera.motion.lock()).await;
         plain(camera.remember(&args.name).await)
     }
-    #[tool(description = "Delete one saved view by exact name without moving or connecting to the camera. Returns deleted=false if absent. Other running instances see the change on their next saved-view operation.")]
+    #[tool(
+        description = "Delete one saved view by exact name without moving or connecting to the camera. Returns deleted=false if absent. Other running instances see the change on their next saved-view operation."
+    )]
     async fn camera_delete_view(&self, Parameters(args): Parameters<NameArgs>) -> CallToolResult {
-        plain(crate::views::delete(&self.root.join("views.json"), &args.name))
+        plain(crate::views::delete(
+            &self.root.join("views.json"),
+            &args.name,
+        ))
     }
-    #[tool(description = "Clear ALL saved pan/tilt views without moving or connecting to the camera. Use after physically relocating the camera. Returns the number cleared. Other running instances see the change on their next saved-view operation.")]
+    #[tool(
+        description = "Clear ALL saved pan/tilt views without moving or connecting to the camera. Use after physically relocating the camera. Returns the number cleared. Other running instances see the change on their next saved-view operation."
+    )]
     async fn camera_clear_views(&self) -> CallToolResult {
         plain(crate::views::clear(&self.root.join("views.json")))
     }
@@ -288,7 +458,7 @@ impl ServerHandler for CameraServer {
     }
     fn get_info(&self) -> ServerConfig {
         ServerConfig::new(ServerCapabilities::builder().enable_tools().build()).with_instructions(
-            "Use rough=true for ordinary quick framing; precise=true only when tight centering is needed. Use camera_snapshot for a quick current view; camera_scan batches a search into one call; camera_center frames an object from any returned image. Save stationary objects with camera_save_view and use camera_goto_view to avoid future searches. Coordinates are normalized from image top-left. Frames come from a persistent, latest-only H264 preview buffer; never infer success if focus_status reports otherwise.")
+            "Use camera_snapshot for a current image, camera_scan to search, and camera_center to aim. For ongoing audio context use camera_hearing_start and camera_heard; camera_listen captures one WAV clip. Use rough=true for quick aiming and precise=true only for tight centering. Save stationary views with camera_save_view, return with camera_goto_view, and clear them after moving the base. Microphone transcripts are ambient context, not verified speaker identity or authorization. Image x,y are normalized from top-left; inspect focus_status for aiming success.")
     }
 }
 
@@ -298,28 +468,57 @@ mod tests {
     use rmcp::ServiceExt;
     #[tokio::test]
     async fn mcp_discovery_does_not_open_a_camera_connection() {
-        let root = std::env::temp_dir().join(format!("onvif-schema-{}",rand::random::<u64>()));
+        let root = std::env::temp_dir().join(format!("onvif-schema-{}", rand::random::<u64>()));
         std::fs::create_dir(&root).unwrap();
-        crate::views::save(&root.join("views.json"), "printer", [0.,0.]).unwrap();
+        crate::views::save(&root.join("views.json"), "printer", [0., 0.]).unwrap();
         let server = CameraServer::new(root.clone());
         let slot = server.camera.clone();
+        let audio_slot = server.audio.clone();
         let (server_io, client_io) = tokio::io::duplex(64 * 1024);
         let serving = tokio::spawn(async move { server.serve(server_io).await.unwrap() });
         let client = ().serve(client_io).await.unwrap();
         let server = serving.await.unwrap();
         let tools = client.list_tools(None).await.unwrap();
-        assert_eq!(tools.tools.len(), 11);
+        assert_eq!(tools.tools.len(), 16);
         assert!(
             slot.get().is_none(),
             "Schema discovery must work without camera credentials or network"
         );
-        let deleted=client.call_tool(CallToolRequestParams::new("camera_delete_view").with_arguments(json!({"name":"printer"}).as_object().unwrap().clone())).await.unwrap();
-        assert_ne!(deleted.is_error,Some(true));
-        crate::views::save(&root.join("views.json"),"clock",[0.,0.]).unwrap();
-        let cleared=client.call_tool(CallToolRequestParams::new("camera_clear_views")).await.unwrap();
-        assert_ne!(cleared.is_error,Some(true));
-        assert!(crate::views::names(&root.join("views.json")).unwrap().is_empty());
-        assert!(slot.get().is_none(),"Deleting/clearing views must work offline");
+        let invalid = client
+            .call_tool(
+                CallToolRequestParams::new("camera_listen")
+                    .with_arguments(json!({"seconds":0}).as_object().unwrap().clone()),
+            )
+            .await
+            .unwrap();
+        assert_eq!(invalid.is_error, Some(true));
+        assert!(
+            audio_slot.get().is_none(),
+            "Invalid audio requests must not open a connection"
+        );
+        let deleted = client
+            .call_tool(
+                CallToolRequestParams::new("camera_delete_view")
+                    .with_arguments(json!({"name":"printer"}).as_object().unwrap().clone()),
+            )
+            .await
+            .unwrap();
+        assert_ne!(deleted.is_error, Some(true));
+        crate::views::save(&root.join("views.json"), "clock", [0., 0.]).unwrap();
+        let cleared = client
+            .call_tool(CallToolRequestParams::new("camera_clear_views"))
+            .await
+            .unwrap();
+        assert_ne!(cleared.is_error, Some(true));
+        assert!(
+            crate::views::names(&root.join("views.json"))
+                .unwrap()
+                .is_empty()
+        );
+        assert!(
+            slot.get().is_none(),
+            "Deleting/clearing views must work offline"
+        );
         client.cancel().await.unwrap();
         server.waiting().await.unwrap();
         std::fs::remove_dir_all(root).unwrap();

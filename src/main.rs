@@ -1,5 +1,8 @@
+mod audio;
 mod camera;
+mod codex_audio;
 mod experiments;
+mod hearing;
 mod jpeg;
 mod metrics;
 mod onvif;
@@ -7,8 +10,8 @@ mod server;
 mod transport_metrics;
 mod verify;
 mod video;
-mod vision;
 mod views;
+mod vision;
 use anyhow::Result;
 use rmcp::ServiceExt;
 use std::{path::PathBuf, time::Instant};
@@ -20,7 +23,7 @@ fn root() -> PathBuf {
 }
 #[tokio::main(worker_threads = 2)]
 async fn main() {
-    let result = run().await;
+    let result = Box::pin(run()).await;
     metrics::flush();
     if let Err(error) = result {
         eprintln!("Camera server: {error}");
@@ -68,6 +71,7 @@ async fn run() -> Result<()> {
     }
     let server = server::CameraServer::new(root);
     let camera_slot = server.camera.clone();
+    let hearing = server.hearing.clone();
     let service = server
         .serve(transport_metrics::instrument(rmcp::transport::stdio_pipes()))
         .await?;
@@ -75,6 +79,7 @@ async fn run() -> Result<()> {
         result=service.waiting()=>result.map(|_|()),
         _=tokio::signal::ctrl_c()=>Ok(()),
     };
+    let _ = hearing.stop().await;
     if let Some(camera) = camera_slot.get() {
         let _ = camera.stop().await;
     }
