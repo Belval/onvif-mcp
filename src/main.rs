@@ -1,4 +1,5 @@
 mod audio;
+mod audio_diagnostics;
 mod camera;
 mod codex_audio;
 mod experiments;

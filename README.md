@@ -268,7 +268,7 @@ is involved. Model loading and transcription have separate metrics.
 
 Read incremental events with `camera_heard(cursor=previous_cursor, wait_seconds=15)`.
 The cursor resets after a server restart; missed events and dropped audio are
-reported. Only 128 events are retained in memory; raw audio is not saved.
+reported. Only 128 events are retained in memory; raw audio is not saved by default.
 `camera_hearing_status` reports connectivity, inference and delivery errors.
 `camera_hearing_stop` releases the stream; server shutdown also stops hearing.
 One-shot recording is unavailable while continuous hearing is active.
@@ -315,3 +315,15 @@ become part of that Codex thread's context; speaker identity is unverified.
 The adapter uses the local Codex control socket, optionally overridden through
 `CAMERA_CODEX_SOCKET`. Other MCP clients can poll events and implement their own
 wake handling without this adapter.
+
+
+For local calibration, `camera_hearing_start(diagnostics=true)` retains the last
+eight exact resampled utterances in an ignored, private `captures/hearing-*`
+folder. Each `.pcm` file is 16 kHz mono signed PCM16 little-endian; its `.json`
+sidecar records sample count and timestamps. This is the audio actually passed
+to Whisper and the acoustic verifier, without opening another RTSP session.
+Status reports `diagnostic_dir`/`diagnostic_error`; events report
+`diagnostic_audio_path`. Slots are overwritten after eight utterances, so check
+sidecar timestamps before associating a file with an older event. Files remain
+on disk after stopping; remove the session folder when diagnosis is finished.
+Diagnostics are off by default.

@@ -46,6 +46,8 @@ struct State {
     acoustic_rejections: u64,
     wake_aliases: Vec<String>,
     acoustic_threshold: Option<f32>,
+    diagnostic_dir: Option<PathBuf>,
+    diagnostic_error: Option<String>,
 }
 
 struct Runtime {
@@ -100,7 +102,7 @@ impl Hearing {
         json!({"running":s.running,"connected":s.connected,"transcribing":s.transcribing,"language":s.language,
             "retained_events":s.events.len(),"cursor":format!("{}:{}",self.epoch,s.next_id),"last_error":s.last_error,
             "dropped_audio_chunks":s.dropped_audio_chunks,"dropped_utterances":s.dropped_utterances,"audio_gaps":s.audio_gaps,
-            "recognition":"local Whisper","wake_phrase":s.wake_phrase,"wake_events":s.wake_events,"acoustic_rejections":s.acoustic_rejections,"wake_aliases":s.wake_aliases,"acoustic_threshold":s.acoustic_threshold,"wake_verification":"sherpa-onnx acoustic keyword spotter + unbiased transcript match","codex_thread_id":s.codex_thread_id,"delivered_events":s.delivered_events,"delivery_errors":s.delivery_errors,"last_delivery_error":s.last_delivery_error,
+            "diagnostic_dir":s.diagnostic_dir,"diagnostic_error":s.diagnostic_error,"recognition":"local Whisper","wake_phrase":s.wake_phrase,"wake_events":s.wake_events,"acoustic_rejections":s.acoustic_rejections,"wake_aliases":s.wake_aliases,"acoustic_threshold":s.acoustic_threshold,"wake_verification":"sherpa-onnx acoustic keyword spotter + unbiased transcript match","codex_thread_id":s.codex_thread_id,"delivered_events":s.delivered_events,"delivery_errors":s.delivery_errors,"last_delivery_error":s.last_delivery_error,
             "delivery":if s.codex_thread_id.is_some(){if s.ambient_context {"ambient context plus wake-phrase voice requests"} else {"wake-phrase voice requests only"}}else{"read with camera_heard; does not wake an agent automatically"}})
     }
     pub async fn start(
@@ -110,6 +112,7 @@ impl Hearing {
         language: String,
         delivery: Option<crate::codex_audio::Delivery>,
         wake_settings: crate::wake::Settings,
+        diagnostic_root: Option<PathBuf>,
     ) -> Result<Value> {
         let crate::wake::Settings {
             phrase: wake_phrase,
@@ -149,6 +152,8 @@ impl Hearing {
             s.acoustic_rejections = 0;
             s.wake_aliases = wake_aliases;
             s.acoustic_threshold = None;
+            s.diagnostic_dir = None;
+            s.diagnostic_error = None;
             s.codex_thread_id = delivery.as_ref().map(|d| d.thread_id.clone());
             s.ambient_context = delivery.as_ref().is_some_and(|d| d.ambient_context);
             s.delivered_events = 0;
@@ -168,6 +173,17 @@ impl Hearing {
         let state = self.state.clone();
         let changed = self.changed.clone();
         let asr = tokio::task::spawn_blocking(move || {
+            let mut diagnostics = match diagnostic_root
+                .map(|root| crate::audio_diagnostics::Recorder::create(&root))
+                .transpose()
+            {
+                Ok(recorder) => recorder,
+                Err(error) => {
+                    let _ = ready_tx.send(Err(error));
+                    return;
+                }
+            };
+            state.lock().unwrap().diagnostic_dir = diagnostics.as_ref().map(|d| d.dir.clone());
             let acoustic = match wake_phrase
                 .as_deref()
                 .map(|_| {
@@ -203,6 +219,19 @@ impl Hearing {
                 if worker_cancel.load(Ordering::SeqCst) {
                     break;
                 }
+                let diagnostic_audio_path = if let Some(recorder) = &mut diagnostics {
+                    match crate::metrics::sync_result("hearing.diagnostic_write", || {
+                        recorder.save(&utterance.samples, utterance.start_ms, utterance.end_ms)
+                    }) {
+                        Ok(path) => Some(path),
+                        Err(error) => {
+                            state.lock().unwrap().diagnostic_error = Some(error.to_string());
+                            None
+                        }
+                    }
+                } else {
+                    None
+                };
                 state.lock().unwrap().transcribing = true;
                 let started = Instant::now();
                 let result = crate::metrics::sync_result("hearing.transcribe", || {
@@ -252,7 +281,7 @@ impl Hearing {
                             last_wake_ms = now_ms();
                             s.wake_events += 1;
                         }
-                        s.events.push_back(json!({"id":id,"event_key":format!("camera-{}-{}",self_epoch,id),"source":"camera_microphone","text":text,"wake_detected":wake,"voice_request":if wake {command} else {None},"acoustic_wake_detected":acoustic_match,"wake_phrase":wake_phrase,"started_at_unix_ms":utterance.start_ms,
+                        s.events.push_back(json!({"id":id,"event_key":format!("camera-{}-{}",self_epoch,id),"source":"camera_microphone","diagnostic_audio_path":diagnostic_audio_path,"text":text,"wake_detected":wake,"voice_request":if wake {command} else {None},"acoustic_wake_detected":acoustic_match,"wake_phrase":wake_phrase,"started_at_unix_ms":utterance.start_ms,
                             "ended_at_unix_ms":utterance.end_ms,"emitted_at_unix_ms":now_ms(),"inference_ms":transcription_ms,"wake_verification_ms":verification_started.elapsed().as_secs_f64()*1000.,
                             "max_duration_split":utterance.split,"requests_response":wake,"speaker_identity_verified":false}));
                         if has_delivery

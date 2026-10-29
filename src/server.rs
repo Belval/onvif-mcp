@@ -71,6 +71,9 @@ pub struct HearingStartArgs {
     /// Also inject ordinary ambient transcripts as passive context; default false.
     #[serde(default)]
     pub ambient_context: bool,
+    /// Save the last eight exact PCM utterances under ignored captures/ for calibration; default false.
+    #[serde(default)]
+    pub diagnostics: bool,
 }
 fn default_language() -> String {
     "en".to_owned()
@@ -192,7 +195,7 @@ fn picture(result: Result<ObservationResult>, started: Instant) -> CallToolResul
 #[tool_router]
 impl CameraServer {
     #[tool(
-        description = "Start continuous camera microphone transcription locally using Whisper and speech detection. language=en (default), fr, or auto. Runs until camera_hearing_stop or server shutdown; reconnects after stream errors. Keeps only 128 transcript events in memory, with no audio files or cloud calls. Use camera_heard to read new events. Optionally pass codex_thread_id to deliver configured wake-phrase requests to a loaded local Codex thread, starting a response or steering its active turn only when an independent acoustic keyword spotter also confirms the wake phrase. Requires the local English wake model (scripts/install-wake-model.sh) when wake_phrase is set; missing models fail startup. Ordinary speech stays in the transcript buffer; ambient_context=true additionally injects it as passive context. Without a thread ID, events (including wake detections) remain available through camera_heard. wake_phrase defaults to CAMERA_WAKE_PHRASE when set; an empty string disables wake detection."
+        description = "Start continuous camera microphone transcription locally using Whisper and speech detection. language=en (default), fr, or auto. Runs until camera_hearing_stop or server shutdown; reconnects after stream errors. By default keeps only 128 transcript events in memory, with no audio files or cloud calls. diagnostics=true additionally retains eight exact PCM utterances locally for calibration. Use camera_heard to read new events. Optionally pass codex_thread_id to deliver configured wake-phrase requests to a loaded local Codex thread, starting a response or steering its active turn only when an independent acoustic keyword spotter also confirms the wake phrase. Requires the local English wake model (scripts/install-wake-model.sh) when wake_phrase is set; missing models fail startup. Ordinary speech stays in the transcript buffer; ambient_context=true additionally injects it as passive context. Without a thread ID, events (including wake detections) remain available through camera_heard. wake_phrase defaults to CAMERA_WAKE_PHRASE when set; an empty string disables wake detection."
     )]
     async fn camera_hearing_start(
         &self,
@@ -255,6 +258,7 @@ impl CameraServer {
                         aliases: wake_aliases,
                         model_dir: crate::wake::model_dir(&self.root),
                     },
+                    args.diagnostics.then(|| self.root.join("captures")),
                 )
                 .await,
         )
