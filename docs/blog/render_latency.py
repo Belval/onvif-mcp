@@ -67,8 +67,8 @@ plt.rcParams.update({'font.family':'DejaVu Sans','font.size':16,'text.color':COL
     'figure.facecolor':COLORS['paper'],'axes.facecolor':COLORS['paper'],
     'savefig.facecolor':COLORS['paper'],'svg.fonttype':'none','svg.hashsalt':'peek-seek-rsi'})
 fig,axes=plt.subplots(2,1,figsize=(15.2,12.6),dpi=100)
-fig.subplots_adjust(left=.10,right=.96,top=.83,bottom=.10,hspace=.80)
-fig.text(.048,.955,'03 / LATENCY HISTORY',fontsize=15,color=COLORS['muted'])
+fig.subplots_adjust(left=.10,right=.96,top=.83,bottom=.14,hspace=.80)
+fig.text(.048,.955,'04 / BEFORE AND AFTER',fontsize=15,color=COLORS['muted'])
 fig.text(.048,.905,'Faster tools. Agent time excluded.',fontfamily='DejaVu Serif',fontsize=31)
 for ax in axes:
     ax.spines[['top','right']].set_visible(False)
@@ -77,7 +77,7 @@ for ax in axes:
     ax.set_axisbelow(True)
 
 ax=axes[0];xs=list(range(len(snapshots)))
-ax.set_title('Warm snapshots: the expensive stalls disappear',loc='left',fontsize=19,pad=22)
+ax.set_title('Selected snapshot checkpoints (200 calls per setting)',loc='left',fontsize=19,pad=22)
 ax.plot(xs,[r['max_ms'] for r in snapshots],color=COLORS['ink'],marker='o',linewidth=3,label='Observed maximum (200 calls)')
 ax.plot(xs,[r['median_ms'] for r in snapshots],color=COLORS['return'],marker='o',linewidth=2,linestyle='--',label='Median')
 ax.set_yscale('log');ax.set_ylim(.45,15000)
@@ -88,21 +88,23 @@ for x,row in enumerate(snapshots):
     ax.annotate(f'{row["max_ms"]:,.2f} ms',(x,row['max_ms']),xytext=(0,13),textcoords='offset points',ha='center',fontsize=14,fontweight='bold')
 ax.legend(loc='upper right',frameon=False,fontsize=14)
 
-ax=axes[1];xs=list(range(len(motion)))
-ax.set_title('Motion tuning: faster is useful only if the image passes',loc='left',fontsize=19,pad=22)
-ax.plot(xs,[r['median_ms'] for r in motion],color=COLORS['ink'],linewidth=2)
-ax.plot(xs,[r['p95_ms'] for r in motion],color=COLORS['return'],linewidth=2,linestyle='--',label='p95')
-for x,row in enumerate(motion):
-    rejected=row['status']=='rejected';accepted=row['status']=='accepted'
-    ax.scatter([x],[row['median_ms']],marker='x' if rejected else 'o',s=110 if rejected else 80,color=COLORS['return'] if rejected else COLORS['ink'],zorder=5)
-    suffix='\nrejected' if rejected else ('\naccepted' if accepted else '')
-    ax.annotate(f'{row["median_ms"]:.0f} ms'+suffix,(x,row['median_ms']),xytext=(0,-42 if rejected else 14),textcoords='offset points',ha='center',fontsize=13,fontweight='bold' if accepted else 'normal')
-ax.set_ylim(350,1400);ax.set_ylabel('Milliseconds',fontsize=15)
-ax.set_xticks(xs,[r['label'] for r in motion],fontsize=12)
-ax.legend(loc='upper right',frameon=False,fontsize=14)
-fig.text(.10,.045,'18 moves per motion setting · selected sweeps recorded in 978d768; final runtime 9c83345',fontsize=13,color=COLORS['muted'])
+ax=axes[1]
+ax.set_title('Move + receive an image: the final matched comparison',loc='left',fontsize=19,pad=22)
+pair=motion[-2:]
+for y,row,color in [(1,pair[0],COLORS['return']),(0,pair[1],COLORS['ink'])]:
+    ax.barh(y,row['median_ms'],height=.43,color=color)
+    ax.text(row['median_ms']+22,y,f'{row["median_ms"]:.0f} ms',va='center',fontsize=21,fontweight='bold')
+ax.set_ylim(-.6,1.6);ax.set_xlim(0,1200)
+ax.set_yticks([]);ax.set_ylabel('')
+ax.grid(False);ax.grid(axis='x',color=COLORS['line'])
+ax.text(0,1.38,'BEFORE · 300 ms settling / 60 ms polling',fontsize=15,color=COLORS['muted'])
+ax.text(0,.38,'AFTER · 50 ms settling / 15 ms polling',fontsize=15,color=COLORS['muted'])
+ax.set_xlabel('Median milliseconds per move + image call · lower is better',fontsize=15,labelpad=12)
+ax.spines['left'].set_visible(False)
+fig.text(.10,.025,'34% faster · same starting pose · 18 moves per setting · 18/18 geometry passes for both',fontsize=13,color=COLORS['muted'])
 fig.savefig(OUT/'latency-history.png',dpi=160)
 fig.savefig(OUT/'latency-history.svg',metadata={'Date':None})
 svg=OUT/'latency-history.svg'
 svg.write_text('\n'.join(line.rstrip() for line in svg.read_text().splitlines())+'\n')
-print('Wrote latency-history PNG / SVG / JSON / CSV; no agent timing fields used.')
+
+print('Wrote latency summary and source data; no agent timing fields used.')

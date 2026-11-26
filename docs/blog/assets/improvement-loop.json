@@ -120,21 +120,21 @@
     {
       "x": 100,
       "y": 215,
-      "text": "34%",
+      "text": "7 games",
       "role": "metric",
       "color": "ink"
     },
     {
-      "x": 450,
+      "x": 650,
       "y": 246,
-      "text": "Lower median move-plus-image time.",
+      "text": "216 physical motion trials",
       "role": "feature",
       "color": "ink"
     },
     {
-      "x": 454,
+      "x": 654,
       "y": 315,
-      "text": "933 → 614 ms · 18/18 geometry passes in each block",
+      "text": "10 timing variants + 36 final comparison moves",
       "role": "body",
       "color": "ink"
     }

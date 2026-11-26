@@ -1,0 +1,217 @@
+trial,batch,within_batch,setting,settle_ms,poll_ms,arrival_checks,axis,direction,duration_ms,geometry_pass,active_start_ms,active_end_ms,utc_start,source,sample_index
+1,1,1,300 ms settle / 60 ms poll / 2 arrival checks,300,60,2,pan,1,967.942456,True,0.0,967.942456,,benchmarks/i-spy/framing-baseline.json,0
+2,1,2,300 ms settle / 60 ms poll / 2 arrival checks,300,60,2,pan,-1,926.375098,True,967.942456,1894.317554,,benchmarks/i-spy/framing-baseline.json,1
+3,1,3,300 ms settle / 60 ms poll / 2 arrival checks,300,60,2,tilt,1,739.158094,True,1894.317554,2633.475648,,benchmarks/i-spy/framing-baseline.json,2
+4,1,4,300 ms settle / 60 ms poll / 2 arrival checks,300,60,2,tilt,-1,741.725233,True,2633.475648,3375.200881,,benchmarks/i-spy/framing-baseline.json,3
+5,1,5,300 ms settle / 60 ms poll / 2 arrival checks,300,60,2,diagonal,1,1156.5196099999998,True,3375.200881,4531.720491,,benchmarks/i-spy/framing-baseline.json,4
+6,1,6,300 ms settle / 60 ms poll / 2 arrival checks,300,60,2,diagonal,-1,1208.425727,True,4531.720491,5740.146218,,benchmarks/i-spy/framing-baseline.json,5
+7,1,7,300 ms settle / 60 ms poll / 2 arrival checks,300,60,2,pan,1,926.574502,True,5740.146218,6666.72072,,benchmarks/i-spy/framing-baseline.json,6
+8,1,8,300 ms settle / 60 ms poll / 2 arrival checks,300,60,2,pan,-1,947.214588,True,6666.72072,7613.935308,,benchmarks/i-spy/framing-baseline.json,7
+9,1,9,300 ms settle / 60 ms poll / 2 arrival checks,300,60,2,tilt,1,765.651307,True,7613.935308,8379.586615,,benchmarks/i-spy/framing-baseline.json,8
+10,1,10,300 ms settle / 60 ms poll / 2 arrival checks,300,60,2,tilt,-1,796.176832,True,8379.586615,9175.763447,,benchmarks/i-spy/framing-baseline.json,9
+11,1,11,300 ms settle / 60 ms poll / 2 arrival checks,300,60,2,diagonal,1,1268.3849380000001,True,9175.763447,10444.148385,,benchmarks/i-spy/framing-baseline.json,10
+12,1,12,300 ms settle / 60 ms poll / 2 arrival checks,300,60,2,diagonal,-1,1143.5325659999999,True,10444.148385,11587.680951,,benchmarks/i-spy/framing-baseline.json,11
+13,1,13,300 ms settle / 60 ms poll / 2 arrival checks,300,60,2,pan,1,874.296285,True,11587.680951,12461.977236,,benchmarks/i-spy/framing-baseline.json,12
+14,1,14,300 ms settle / 60 ms poll / 2 arrival checks,300,60,2,pan,-1,927.2283150000001,True,12461.977236,13389.205551000001,,benchmarks/i-spy/framing-baseline.json,13
+15,1,15,300 ms settle / 60 ms poll / 2 arrival checks,300,60,2,tilt,1,695.510195,True,13389.205551000001,14084.715746000002,,benchmarks/i-spy/framing-baseline.json,14
+16,1,16,300 ms settle / 60 ms poll / 2 arrival checks,300,60,2,tilt,-1,808.112252,True,14084.715746000002,14892.827998000002,,benchmarks/i-spy/framing-baseline.json,15
+17,1,17,300 ms settle / 60 ms poll / 2 arrival checks,300,60,2,diagonal,1,1211.999304,True,14892.827998000002,16104.827302000002,,benchmarks/i-spy/framing-baseline.json,16
+18,1,18,300 ms settle / 60 ms poll / 2 arrival checks,300,60,2,diagonal,-1,1144.205454,True,16104.827302000002,17249.032756,,benchmarks/i-spy/framing-baseline.json,17
+19,2,1,0 ms settle / 15 ms poll / 1 arrival check,0,15,1,pan,1,638.405258,True,17249.032756,17887.438014,,benchmarks/i-spy/framing-fast-zero.json,0
+20,2,2,0 ms settle / 15 ms poll / 1 arrival check,0,15,1,pan,-1,553.434543,True,17887.438014,18440.872557,,benchmarks/i-spy/framing-fast-zero.json,1
+21,2,3,0 ms settle / 15 ms poll / 1 arrival check,0,15,1,tilt,1,353.514695,True,18440.872557,18794.387252,,benchmarks/i-spy/framing-fast-zero.json,2
+22,2,4,0 ms settle / 15 ms poll / 1 arrival check,0,15,1,tilt,-1,342.46483500000005,True,18794.387252,19136.852087,,benchmarks/i-spy/framing-fast-zero.json,3
+23,2,5,0 ms settle / 15 ms poll / 1 arrival check,0,15,1,diagonal,1,763.017318,False,19136.852087,19899.869404999998,,benchmarks/i-spy/framing-fast-zero.json,4
+24,2,6,0 ms settle / 15 ms poll / 1 arrival check,0,15,1,diagonal,-1,803.8272589999999,True,19899.869404999998,20703.696664,,benchmarks/i-spy/framing-fast-zero.json,5
+25,2,7,0 ms settle / 15 ms poll / 1 arrival check,0,15,1,pan,1,574.436689,True,20703.696664,21278.133352999997,,benchmarks/i-spy/framing-fast-zero.json,6
+26,2,8,0 ms settle / 15 ms poll / 1 arrival check,0,15,1,pan,-1,550.7593320000001,True,21278.133352999997,21828.892685,,benchmarks/i-spy/framing-fast-zero.json,7
+27,2,9,0 ms settle / 15 ms poll / 1 arrival check,0,15,1,tilt,1,303.250807,True,21828.892685,22132.143492,,benchmarks/i-spy/framing-fast-zero.json,8
+28,2,10,0 ms settle / 15 ms poll / 1 arrival check,0,15,1,tilt,-1,359.139984,True,22132.143492,22491.283476,,benchmarks/i-spy/framing-fast-zero.json,9
+29,2,11,0 ms settle / 15 ms poll / 1 arrival check,0,15,1,diagonal,1,789.180929,True,22491.283476,23280.464405,,benchmarks/i-spy/framing-fast-zero.json,10
+30,2,12,0 ms settle / 15 ms poll / 1 arrival check,0,15,1,diagonal,-1,843.4317580000001,True,23280.464405,24123.896162999998,,benchmarks/i-spy/framing-fast-zero.json,11
+31,2,13,0 ms settle / 15 ms poll / 1 arrival check,0,15,1,pan,1,558.0249510000001,True,24123.896162999998,24681.921113999997,,benchmarks/i-spy/framing-fast-zero.json,12
+32,2,14,0 ms settle / 15 ms poll / 1 arrival check,0,15,1,pan,-1,528.0071670000001,False,24681.921113999997,25209.928280999997,,benchmarks/i-spy/framing-fast-zero.json,13
+33,2,15,0 ms settle / 15 ms poll / 1 arrival check,0,15,1,tilt,1,378.570218,True,25209.928280999997,25588.498498999998,,benchmarks/i-spy/framing-fast-zero.json,14
+34,2,16,0 ms settle / 15 ms poll / 1 arrival check,0,15,1,tilt,-1,294.071308,True,25588.498498999998,25882.569806999996,,benchmarks/i-spy/framing-fast-zero.json,15
+35,2,17,0 ms settle / 15 ms poll / 1 arrival check,0,15,1,diagonal,1,721.7375139999999,False,25882.569806999996,26604.307320999997,,benchmarks/i-spy/framing-fast-zero.json,16
+36,2,18,0 ms settle / 15 ms poll / 1 arrival check,0,15,1,diagonal,-1,786.758065,True,26604.307320999997,27391.065385999995,,benchmarks/i-spy/framing-fast-zero.json,17
+37,3,1,100 ms settle / 15 ms poll / 1 arrival check,100,15,1,pan,1,704.702602,True,27391.065385999995,28095.767987999996,,benchmarks/i-spy/framing-fast100.json,0
+38,3,2,100 ms settle / 15 ms poll / 1 arrival check,100,15,1,pan,-1,745.526335,True,28095.767987999996,28841.294322999995,,benchmarks/i-spy/framing-fast100.json,1
+39,3,3,100 ms settle / 15 ms poll / 1 arrival check,100,15,1,tilt,1,464.54425399999997,True,28841.294322999995,29305.838576999995,,benchmarks/i-spy/framing-fast100.json,2
+40,3,4,100 ms settle / 15 ms poll / 1 arrival check,100,15,1,tilt,-1,416.801806,True,29305.838576999995,29722.640382999994,,benchmarks/i-spy/framing-fast100.json,3
+41,3,5,100 ms settle / 15 ms poll / 1 arrival check,100,15,1,diagonal,1,876.7724460000001,True,29722.640382999994,30599.412828999994,,benchmarks/i-spy/framing-fast100.json,4
+42,3,6,100 ms settle / 15 ms poll / 1 arrival check,100,15,1,diagonal,-1,851.239462,True,30599.412828999994,31450.652290999995,,benchmarks/i-spy/framing-fast100.json,5
+43,3,7,100 ms settle / 15 ms poll / 1 arrival check,100,15,1,pan,1,654.4597319999999,True,31450.652290999995,32105.112022999994,,benchmarks/i-spy/framing-fast100.json,6
+44,3,8,100 ms settle / 15 ms poll / 1 arrival check,100,15,1,pan,-1,618.8528570000001,True,32105.112022999994,32723.964879999996,,benchmarks/i-spy/framing-fast100.json,7
+45,3,9,100 ms settle / 15 ms poll / 1 arrival check,100,15,1,tilt,1,442.74485899999996,True,32723.964879999996,33166.709739,,benchmarks/i-spy/framing-fast100.json,8
+46,3,10,100 ms settle / 15 ms poll / 1 arrival check,100,15,1,tilt,-1,394.55273,True,33166.709739,33561.262469,,benchmarks/i-spy/framing-fast100.json,9
+47,3,11,100 ms settle / 15 ms poll / 1 arrival check,100,15,1,diagonal,1,821.078967,True,33561.262469,34382.341436,,benchmarks/i-spy/framing-fast100.json,10
+48,3,12,100 ms settle / 15 ms poll / 1 arrival check,100,15,1,diagonal,-1,891.180477,True,34382.341436,35273.521913000004,,benchmarks/i-spy/framing-fast100.json,11
+49,3,13,100 ms settle / 15 ms poll / 1 arrival check,100,15,1,pan,1,623.487656,True,35273.521913000004,35897.009569,,benchmarks/i-spy/framing-fast100.json,12
+50,3,14,100 ms settle / 15 ms poll / 1 arrival check,100,15,1,pan,-1,626.623467,True,35897.009569,36523.633036,,benchmarks/i-spy/framing-fast100.json,13
+51,3,15,100 ms settle / 15 ms poll / 1 arrival check,100,15,1,tilt,1,447.43242,True,36523.633036,36971.065456,,benchmarks/i-spy/framing-fast100.json,14
+52,3,16,100 ms settle / 15 ms poll / 1 arrival check,100,15,1,tilt,-1,414.356628,True,36971.065456,37385.422084,,benchmarks/i-spy/framing-fast100.json,15
+53,3,17,100 ms settle / 15 ms poll / 1 arrival check,100,15,1,diagonal,1,986.941509,True,37385.422084,38372.363592999995,,benchmarks/i-spy/framing-fast100.json,16
+54,3,18,100 ms settle / 15 ms poll / 1 arrival check,100,15,1,diagonal,-1,838.624539,True,38372.363592999995,39210.98813199999,,benchmarks/i-spy/framing-fast100.json,17
+55,4,1,50 ms settle / 15 ms poll / 1 arrival check,50,15,1,pan,1,630.5628829999999,True,39210.98813199999,39841.55101499999,,benchmarks/i-spy/framing-fast50.json,0
+56,4,2,50 ms settle / 15 ms poll / 1 arrival check,50,15,1,pan,-1,577.829202,True,39841.55101499999,40419.38021699999,,benchmarks/i-spy/framing-fast50.json,1
+57,4,3,50 ms settle / 15 ms poll / 1 arrival check,50,15,1,tilt,1,442.163027,True,40419.38021699999,40861.54324399999,,benchmarks/i-spy/framing-fast50.json,2
+58,4,4,50 ms settle / 15 ms poll / 1 arrival check,50,15,1,tilt,-1,366.249866,True,40861.54324399999,41227.79310999999,,benchmarks/i-spy/framing-fast50.json,3
+59,4,5,50 ms settle / 15 ms poll / 1 arrival check,50,15,1,diagonal,1,886.39063,True,41227.79310999999,42114.18373999999,,benchmarks/i-spy/framing-fast50.json,4
+60,4,6,50 ms settle / 15 ms poll / 1 arrival check,50,15,1,diagonal,-1,826.287059,True,42114.18373999999,42940.470798999995,,benchmarks/i-spy/framing-fast50.json,5
+61,4,7,50 ms settle / 15 ms poll / 1 arrival check,50,15,1,pan,1,621.685294,True,42940.470798999995,43562.156093,,benchmarks/i-spy/framing-fast50.json,6
+62,4,8,50 ms settle / 15 ms poll / 1 arrival check,50,15,1,pan,-1,621.725849,True,43562.156093,44183.881942,,benchmarks/i-spy/framing-fast50.json,7
+63,4,9,50 ms settle / 15 ms poll / 1 arrival check,50,15,1,tilt,1,382.26516100000003,True,44183.881942,44566.147103,,benchmarks/i-spy/framing-fast50.json,8
+64,4,10,50 ms settle / 15 ms poll / 1 arrival check,50,15,1,tilt,-1,415.427304,True,44566.147103,44981.574407,,benchmarks/i-spy/framing-fast50.json,9
+65,4,11,50 ms settle / 15 ms poll / 1 arrival check,50,15,1,diagonal,1,819.759153,True,44981.574407,45801.33356,,benchmarks/i-spy/framing-fast50.json,10
+66,4,12,50 ms settle / 15 ms poll / 1 arrival check,50,15,1,diagonal,-1,886.540178,True,45801.33356,46687.873738,,benchmarks/i-spy/framing-fast50.json,11
+67,4,13,50 ms settle / 15 ms poll / 1 arrival check,50,15,1,pan,1,648.554529,True,46687.873738,47336.428267,,benchmarks/i-spy/framing-fast50.json,12
+68,4,14,50 ms settle / 15 ms poll / 1 arrival check,50,15,1,pan,-1,615.2644750000001,True,47336.428267,47951.69274200001,,benchmarks/i-spy/framing-fast50.json,13
+69,4,15,50 ms settle / 15 ms poll / 1 arrival check,50,15,1,tilt,1,361.058997,True,47951.69274200001,48312.75173900001,,benchmarks/i-spy/framing-fast50.json,14
+70,4,16,50 ms settle / 15 ms poll / 1 arrival check,50,15,1,tilt,-1,408.68878199999995,True,48312.75173900001,48721.440521000004,,benchmarks/i-spy/framing-fast50.json,15
+71,4,17,50 ms settle / 15 ms poll / 1 arrival check,50,15,1,diagonal,1,842.427562,True,48721.440521000004,49563.868083,,benchmarks/i-spy/framing-fast50.json,16
+72,4,18,50 ms settle / 15 ms poll / 1 arrival check,50,15,1,diagonal,-1,888.059093,True,49563.868083,50451.927176000005,,benchmarks/i-spy/framing-fast50.json,17
+73,5,1,150 ms settle / 30 ms poll / 1 arrival check,150,30,1,pan,1,699.236701,True,50451.927176000005,51151.163877000006,,benchmarks/i-spy/framing-final150.json,0
+74,5,2,150 ms settle / 30 ms poll / 1 arrival check,150,30,1,pan,-1,694.746664,True,51151.163877000006,51845.910541000005,,benchmarks/i-spy/framing-final150.json,1
+75,5,3,150 ms settle / 30 ms poll / 1 arrival check,150,30,1,tilt,1,475.715285,True,51845.910541000005,52321.625826,,benchmarks/i-spy/framing-final150.json,2
+76,5,4,150 ms settle / 30 ms poll / 1 arrival check,150,30,1,tilt,-1,489.329935,True,52321.625826,52810.955761000005,,benchmarks/i-spy/framing-final150.json,3
+77,5,5,150 ms settle / 30 ms poll / 1 arrival check,150,30,1,diagonal,1,905.900992,True,52810.955761000005,53716.85675300001,,benchmarks/i-spy/framing-final150.json,4
+78,5,6,150 ms settle / 30 ms poll / 1 arrival check,150,30,1,diagonal,-1,950.0118600000001,True,53716.85675300001,54666.868613000006,,benchmarks/i-spy/framing-final150.json,5
+79,5,7,150 ms settle / 30 ms poll / 1 arrival check,150,30,1,pan,1,745.9732879999999,True,54666.868613000006,55412.84190100001,,benchmarks/i-spy/framing-final150.json,6
+80,5,8,150 ms settle / 30 ms poll / 1 arrival check,150,30,1,pan,-1,725.9630860000001,True,55412.84190100001,56138.80498700001,,benchmarks/i-spy/framing-final150.json,7
+81,5,9,150 ms settle / 30 ms poll / 1 arrival check,150,30,1,tilt,1,458.523568,True,56138.80498700001,56597.32855500001,,benchmarks/i-spy/framing-final150.json,8
+82,5,10,150 ms settle / 30 ms poll / 1 arrival check,150,30,1,tilt,-1,452.615273,True,56597.32855500001,57049.94382800001,,benchmarks/i-spy/framing-final150.json,9
+83,5,11,150 ms settle / 30 ms poll / 1 arrival check,150,30,1,diagonal,1,985.4528310000001,True,57049.94382800001,58035.39665900001,,benchmarks/i-spy/framing-final150.json,10
+84,5,12,150 ms settle / 30 ms poll / 1 arrival check,150,30,1,diagonal,-1,994.800759,True,58035.39665900001,59030.19741800001,,benchmarks/i-spy/framing-final150.json,11
+85,5,13,150 ms settle / 30 ms poll / 1 arrival check,150,30,1,pan,1,718.8184640000001,True,59030.19741800001,59749.015882000014,,benchmarks/i-spy/framing-final150.json,12
+86,5,14,150 ms settle / 30 ms poll / 1 arrival check,150,30,1,pan,-1,662.589093,True,59749.015882000014,60411.60497500002,,benchmarks/i-spy/framing-final150.json,13
+87,5,15,150 ms settle / 30 ms poll / 1 arrival check,150,30,1,tilt,1,513.960209,True,60411.60497500002,60925.565184000014,,benchmarks/i-spy/framing-final150.json,14
+88,5,16,150 ms settle / 30 ms poll / 1 arrival check,150,30,1,tilt,-1,488.20192099999997,True,60925.565184000014,61413.76710500001,,benchmarks/i-spy/framing-final150.json,15
+89,5,17,150 ms settle / 30 ms poll / 1 arrival check,150,30,1,diagonal,1,946.141832,True,61413.76710500001,62359.908937000015,,benchmarks/i-spy/framing-final150.json,16
+90,5,18,150 ms settle / 30 ms poll / 1 arrival check,150,30,1,diagonal,-1,1013.5152949999999,True,62359.908937000015,63373.42423200001,,benchmarks/i-spy/framing-final150.json,17
+91,6,1,200 ms settle / 30 ms poll / 1 arrival check,200,30,1,pan,1,717.067802,True,63373.42423200001,64090.49203400001,,benchmarks/i-spy/framing-final200.json,0
+92,6,2,200 ms settle / 30 ms poll / 1 arrival check,200,30,1,pan,-1,746.268358,True,64090.49203400001,64836.76039200001,,benchmarks/i-spy/framing-final200.json,1
+93,6,3,200 ms settle / 30 ms poll / 1 arrival check,200,30,1,tilt,1,533.515835,True,64836.76039200001,65370.27622700001,,benchmarks/i-spy/framing-final200.json,2
+94,6,4,200 ms settle / 30 ms poll / 1 arrival check,200,30,1,tilt,-1,593.398336,True,65370.27622700001,65963.67456300001,,benchmarks/i-spy/framing-final200.json,3
+95,6,5,200 ms settle / 30 ms poll / 1 arrival check,200,30,1,diagonal,1,1039.0238590000001,True,65963.67456300001,67002.698422,,benchmarks/i-spy/framing-final200.json,4
+96,6,6,200 ms settle / 30 ms poll / 1 arrival check,200,30,1,diagonal,-1,1007.801688,True,67002.698422,68010.50011000001,,benchmarks/i-spy/framing-final200.json,5
+97,6,7,200 ms settle / 30 ms poll / 1 arrival check,200,30,1,pan,1,784.3071190000001,True,68010.50011000001,68794.80722900001,,benchmarks/i-spy/framing-final200.json,6
+98,6,8,200 ms settle / 30 ms poll / 1 arrival check,200,30,1,pan,-1,759.475049,True,68794.80722900001,69554.28227800001,,benchmarks/i-spy/framing-final200.json,7
+99,6,9,200 ms settle / 30 ms poll / 1 arrival check,200,30,1,tilt,1,496.507233,True,69554.28227800001,70050.78951100001,,benchmarks/i-spy/framing-final200.json,8
+100,6,10,200 ms settle / 30 ms poll / 1 arrival check,200,30,1,tilt,-1,488.18832299999997,False,70050.78951100001,70538.977834,,benchmarks/i-spy/framing-final200.json,9
+101,6,11,200 ms settle / 30 ms poll / 1 arrival check,200,30,1,diagonal,1,972.544767,True,70538.977834,71511.522601,,benchmarks/i-spy/framing-final200.json,10
+102,6,12,200 ms settle / 30 ms poll / 1 arrival check,200,30,1,diagonal,-1,945.989098,True,71511.522601,72457.51169900001,,benchmarks/i-spy/framing-final200.json,11
+103,6,13,200 ms settle / 30 ms poll / 1 arrival check,200,30,1,pan,1,775.416979,True,72457.51169900001,73232.92867800001,,benchmarks/i-spy/framing-final200.json,12
+104,6,14,200 ms settle / 30 ms poll / 1 arrival check,200,30,1,pan,-1,746.352305,True,73232.92867800001,73979.280983,,benchmarks/i-spy/framing-final200.json,13
+105,6,15,200 ms settle / 30 ms poll / 1 arrival check,200,30,1,tilt,1,549.951422,True,73979.280983,74529.232405,,benchmarks/i-spy/framing-final200.json,14
+106,6,16,200 ms settle / 30 ms poll / 1 arrival check,200,30,1,tilt,-1,556.90056,True,74529.232405,75086.132965,,benchmarks/i-spy/framing-final200.json,15
+107,6,17,200 ms settle / 30 ms poll / 1 arrival check,200,30,1,diagonal,1,1008.8951690000001,True,75086.132965,76095.028134,,benchmarks/i-spy/framing-final200.json,16
+108,6,18,200 ms settle / 30 ms poll / 1 arrival check,200,30,1,diagonal,-1,965.075551,True,76095.028134,77060.103685,,benchmarks/i-spy/framing-final200.json,17
+109,7,1,Main stream: 50 ms settle / 30 ms poll / 1 arrival check,50,30,1,pan,1,667.371757,True,77060.103685,77727.475442,,benchmarks/i-spy/framing-main50.json,0
+110,7,2,Main stream: 50 ms settle / 30 ms poll / 1 arrival check,50,30,1,pan,-1,639.784489,True,77727.475442,78367.259931,,benchmarks/i-spy/framing-main50.json,1
+111,7,3,Main stream: 50 ms settle / 30 ms poll / 1 arrival check,50,30,1,tilt,1,402.06148,True,78367.259931,78769.321411,,benchmarks/i-spy/framing-main50.json,2
+112,7,4,Main stream: 50 ms settle / 30 ms poll / 1 arrival check,50,30,1,tilt,-1,406.373021,True,78769.321411,79175.694432,,benchmarks/i-spy/framing-main50.json,3
+113,7,5,Main stream: 50 ms settle / 30 ms poll / 1 arrival check,50,30,1,diagonal,1,848.264619,True,79175.694432,80023.959051,,benchmarks/i-spy/framing-main50.json,4
+114,7,6,Main stream: 50 ms settle / 30 ms poll / 1 arrival check,50,30,1,diagonal,-1,819.259313,False,80023.959051,80843.218364,,benchmarks/i-spy/framing-main50.json,5
+115,7,7,Main stream: 50 ms settle / 30 ms poll / 1 arrival check,50,30,1,pan,1,580.722938,True,80843.218364,81423.941302,,benchmarks/i-spy/framing-main50.json,6
+116,7,8,Main stream: 50 ms settle / 30 ms poll / 1 arrival check,50,30,1,pan,-1,576.460662,True,81423.941302,82000.401964,,benchmarks/i-spy/framing-main50.json,7
+117,7,9,Main stream: 50 ms settle / 30 ms poll / 1 arrival check,50,30,1,tilt,1,367.021481,True,82000.401964,82367.42344500001,,benchmarks/i-spy/framing-main50.json,8
+118,7,10,Main stream: 50 ms settle / 30 ms poll / 1 arrival check,50,30,1,tilt,-1,361.77905599999997,True,82367.42344500001,82729.202501,,benchmarks/i-spy/framing-main50.json,9
+119,7,11,Main stream: 50 ms settle / 30 ms poll / 1 arrival check,50,30,1,diagonal,1,849.304097,True,82729.202501,83578.506598,,benchmarks/i-spy/framing-main50.json,10
+120,7,12,Main stream: 50 ms settle / 30 ms poll / 1 arrival check,50,30,1,diagonal,-1,867.409459,True,83578.506598,84445.91605700001,,benchmarks/i-spy/framing-main50.json,11
+121,7,13,Main stream: 50 ms settle / 30 ms poll / 1 arrival check,50,30,1,pan,1,639.979057,True,84445.91605700001,85085.89511400001,,benchmarks/i-spy/framing-main50.json,12
+122,7,14,Main stream: 50 ms settle / 30 ms poll / 1 arrival check,50,30,1,pan,-1,597.46674,True,85085.89511400001,85683.36185400002,,benchmarks/i-spy/framing-main50.json,13
+123,7,15,Main stream: 50 ms settle / 30 ms poll / 1 arrival check,50,30,1,tilt,1,416.894259,True,85683.36185400002,86100.25611300001,,benchmarks/i-spy/framing-main50.json,14
+124,7,16,Main stream: 50 ms settle / 30 ms poll / 1 arrival check,50,30,1,tilt,-1,356.498068,True,86100.25611300001,86456.75418100001,,benchmarks/i-spy/framing-main50.json,15
+125,7,17,Main stream: 50 ms settle / 30 ms poll / 1 arrival check,50,30,1,diagonal,1,834.740156,True,86456.75418100001,87291.49433700001,,benchmarks/i-spy/framing-main50.json,16
+126,7,18,Main stream: 50 ms settle / 30 ms poll / 1 arrival check,50,30,1,diagonal,-1,875.56282,True,87291.49433700001,88167.05715700002,,benchmarks/i-spy/framing-main50.json,17
+127,8,1,50 ms settle / 0 ms poll / 1 arrival check,50,0,1,pan,1,627.271115,True,88167.05715700002,88794.32827200001,,benchmarks/i-spy/framing-poll0-50.json,0
+128,8,2,50 ms settle / 0 ms poll / 1 arrival check,50,0,1,pan,-1,573.6096,True,88794.32827200001,89367.93787200001,,benchmarks/i-spy/framing-poll0-50.json,1
+129,8,3,50 ms settle / 0 ms poll / 1 arrival check,50,0,1,tilt,1,413.309254,True,89367.93787200001,89781.24712600002,,benchmarks/i-spy/framing-poll0-50.json,2
+130,8,4,50 ms settle / 0 ms poll / 1 arrival check,50,0,1,tilt,-1,421.03222600000004,True,89781.24712600002,90202.27935200001,,benchmarks/i-spy/framing-poll0-50.json,3
+131,8,5,50 ms settle / 0 ms poll / 1 arrival check,50,0,1,diagonal,1,936.423563,True,90202.27935200001,91138.70291500002,,benchmarks/i-spy/framing-poll0-50.json,4
+132,8,6,50 ms settle / 0 ms poll / 1 arrival check,50,0,1,diagonal,-1,1085.494859,True,91138.70291500002,92224.19777400001,,benchmarks/i-spy/framing-poll0-50.json,5
+133,8,7,50 ms settle / 0 ms poll / 1 arrival check,50,0,1,pan,1,636.998385,True,92224.19777400001,92861.19615900001,,benchmarks/i-spy/framing-poll0-50.json,6
+134,8,8,50 ms settle / 0 ms poll / 1 arrival check,50,0,1,pan,-1,627.282782,True,92861.19615900001,93488.47894100001,,benchmarks/i-spy/framing-poll0-50.json,7
+135,8,9,50 ms settle / 0 ms poll / 1 arrival check,50,0,1,tilt,1,367.806374,True,93488.47894100001,93856.28531500002,,benchmarks/i-spy/framing-poll0-50.json,8
+136,8,10,50 ms settle / 0 ms poll / 1 arrival check,50,0,1,tilt,-1,447.059314,True,93856.28531500002,94303.34462900001,,benchmarks/i-spy/framing-poll0-50.json,9
+137,8,11,50 ms settle / 0 ms poll / 1 arrival check,50,0,1,diagonal,1,1000.9592869999999,True,94303.34462900001,95304.30391600002,,benchmarks/i-spy/framing-poll0-50.json,10
+138,8,12,50 ms settle / 0 ms poll / 1 arrival check,50,0,1,diagonal,-1,877.766331,True,95304.30391600002,96182.07024700003,,benchmarks/i-spy/framing-poll0-50.json,11
+139,8,13,50 ms settle / 0 ms poll / 1 arrival check,50,0,1,pan,1,933.519868,True,96182.07024700003,97115.59011500003,,benchmarks/i-spy/framing-poll0-50.json,12
+140,8,14,50 ms settle / 0 ms poll / 1 arrival check,50,0,1,pan,-1,605.554547,True,97115.59011500003,97721.14466200004,,benchmarks/i-spy/framing-poll0-50.json,13
+141,8,15,50 ms settle / 0 ms poll / 1 arrival check,50,0,1,tilt,1,433.352849,True,97721.14466200004,98154.49751100004,,benchmarks/i-spy/framing-poll0-50.json,14
+142,8,16,50 ms settle / 0 ms poll / 1 arrival check,50,0,1,tilt,-1,366.46355000000005,True,98154.49751100004,98520.96106100004,,benchmarks/i-spy/framing-poll0-50.json,15
+143,8,17,50 ms settle / 0 ms poll / 1 arrival check,50,0,1,diagonal,1,819.493793,True,98520.96106100004,99340.45485400004,,benchmarks/i-spy/framing-poll0-50.json,16
+144,8,18,50 ms settle / 0 ms poll / 1 arrival check,50,0,1,diagonal,-1,902.265541,True,99340.45485400004,100242.72039500004,,benchmarks/i-spy/framing-poll0-50.json,17
+145,9,1,50 ms settle / 30 ms poll / 1 arrival check,50,30,1,pan,1,632.8902360000001,True,100242.72039500004,100875.61063100005,,benchmarks/i-spy/framing-poll30-50.json,0
+146,9,2,50 ms settle / 30 ms poll / 1 arrival check,50,30,1,pan,-1,626.539213,True,100875.61063100005,101502.14984400004,,benchmarks/i-spy/framing-poll30-50.json,1
+147,9,3,50 ms settle / 30 ms poll / 1 arrival check,50,30,1,tilt,1,401.62489600000004,True,101502.14984400004,101903.77474000004,,benchmarks/i-spy/framing-poll30-50.json,2
+148,9,4,50 ms settle / 30 ms poll / 1 arrival check,50,30,1,tilt,-1,393.084262,True,101903.77474000004,102296.85900200004,,benchmarks/i-spy/framing-poll30-50.json,3
+149,9,5,50 ms settle / 30 ms poll / 1 arrival check,50,30,1,diagonal,1,879.014454,True,102296.85900200004,103175.87345600004,,benchmarks/i-spy/framing-poll30-50.json,4
+150,9,6,50 ms settle / 30 ms poll / 1 arrival check,50,30,1,diagonal,-1,849.321442,True,103175.87345600004,104025.19489800005,,benchmarks/i-spy/framing-poll30-50.json,5
+151,9,7,50 ms settle / 30 ms poll / 1 arrival check,50,30,1,pan,1,711.364652,True,104025.19489800005,104736.55955000005,,benchmarks/i-spy/framing-poll30-50.json,6
+152,9,8,50 ms settle / 30 ms poll / 1 arrival check,50,30,1,pan,-1,600.535767,True,104736.55955000005,105337.09531700004,,benchmarks/i-spy/framing-poll30-50.json,7
+153,9,9,50 ms settle / 30 ms poll / 1 arrival check,50,30,1,tilt,1,412.40867799999995,True,105337.09531700004,105749.50399500005,,benchmarks/i-spy/framing-poll30-50.json,8
+154,9,10,50 ms settle / 30 ms poll / 1 arrival check,50,30,1,tilt,-1,383.75379100000004,True,105749.50399500005,106133.25778600005,,benchmarks/i-spy/framing-poll30-50.json,9
+155,9,11,50 ms settle / 30 ms poll / 1 arrival check,50,30,1,diagonal,1,813.7457999999999,True,106133.25778600005,106947.00358600005,,benchmarks/i-spy/framing-poll30-50.json,10
+156,9,12,50 ms settle / 30 ms poll / 1 arrival check,50,30,1,diagonal,-1,800.1915509999999,True,106947.00358600005,107747.19513700005,,benchmarks/i-spy/framing-poll30-50.json,11
+157,9,13,50 ms settle / 30 ms poll / 1 arrival check,50,30,1,pan,1,650.779439,True,107747.19513700005,108397.97457600005,,benchmarks/i-spy/framing-poll30-50.json,12
+158,9,14,50 ms settle / 30 ms poll / 1 arrival check,50,30,1,pan,-1,583.880712,True,108397.97457600005,108981.85528800005,,benchmarks/i-spy/framing-poll30-50.json,13
+159,9,15,50 ms settle / 30 ms poll / 1 arrival check,50,30,1,tilt,1,465.113146,True,108981.85528800005,109446.96843400005,,benchmarks/i-spy/framing-poll30-50.json,14
+160,9,16,50 ms settle / 30 ms poll / 1 arrival check,50,30,1,tilt,-1,361.36192700000004,True,109446.96843400005,109808.33036100006,,benchmarks/i-spy/framing-poll30-50.json,15
+161,9,17,50 ms settle / 30 ms poll / 1 arrival check,50,30,1,diagonal,1,838.968533,True,109808.33036100006,110647.29889400007,,benchmarks/i-spy/framing-poll30-50.json,16
+162,9,18,50 ms settle / 30 ms poll / 1 arrival check,50,30,1,diagonal,-1,848.2204340000001,True,110647.29889400007,111495.51932800007,,benchmarks/i-spy/framing-poll30-50.json,17
+163,10,1,0 ms settle / 15 ms poll / 2 arrival checks,0,15,2,pan,1,625.21051,True,111495.51932800007,112120.72983800007,,benchmarks/i-spy/framing-two-zero.json,0
+164,10,2,0 ms settle / 15 ms poll / 2 arrival checks,0,15,2,pan,-1,579.327684,True,112120.72983800007,112700.05752200008,,benchmarks/i-spy/framing-two-zero.json,1
+165,10,3,0 ms settle / 15 ms poll / 2 arrival checks,0,15,2,tilt,1,413.694379,True,112700.05752200008,113113.75190100007,,benchmarks/i-spy/framing-two-zero.json,2
+166,10,4,0 ms settle / 15 ms poll / 2 arrival checks,0,15,2,tilt,-1,373.168252,True,113113.75190100007,113486.92015300007,,benchmarks/i-spy/framing-two-zero.json,3
+167,10,5,0 ms settle / 15 ms poll / 2 arrival checks,0,15,2,diagonal,1,768.042107,True,113486.92015300007,114254.96226000007,,benchmarks/i-spy/framing-two-zero.json,4
+168,10,6,0 ms settle / 15 ms poll / 2 arrival checks,0,15,2,diagonal,-1,824.6235819999999,True,114254.96226000007,115079.58584200007,,benchmarks/i-spy/framing-two-zero.json,5
+169,10,7,0 ms settle / 15 ms poll / 2 arrival checks,0,15,2,pan,1,622.500928,True,115079.58584200007,115702.08677000007,,benchmarks/i-spy/framing-two-zero.json,6
+170,10,8,0 ms settle / 15 ms poll / 2 arrival checks,0,15,2,pan,-1,569.3026169999999,True,115702.08677000007,116271.38938700006,,benchmarks/i-spy/framing-two-zero.json,7
+171,10,9,0 ms settle / 15 ms poll / 2 arrival checks,0,15,2,tilt,1,405.15263200000004,True,116271.38938700006,116676.54201900006,,benchmarks/i-spy/framing-two-zero.json,8
+172,10,10,0 ms settle / 15 ms poll / 2 arrival checks,0,15,2,tilt,-1,358.95530399999996,True,116676.54201900006,117035.49732300006,,benchmarks/i-spy/framing-two-zero.json,9
+173,10,11,0 ms settle / 15 ms poll / 2 arrival checks,0,15,2,diagonal,1,841.257311,True,117035.49732300006,117876.75463400006,,benchmarks/i-spy/framing-two-zero.json,10
+174,10,12,0 ms settle / 15 ms poll / 2 arrival checks,0,15,2,diagonal,-1,818.6694190000001,True,117876.75463400006,118695.42405300005,,benchmarks/i-spy/framing-two-zero.json,11
+175,10,13,0 ms settle / 15 ms poll / 2 arrival checks,0,15,2,pan,1,612.2344039999999,True,118695.42405300005,119307.65845700006,,benchmarks/i-spy/framing-two-zero.json,12
+176,10,14,0 ms settle / 15 ms poll / 2 arrival checks,0,15,2,pan,-1,568.0793170000001,True,119307.65845700006,119875.73777400005,,benchmarks/i-spy/framing-two-zero.json,13
+177,10,15,0 ms settle / 15 ms poll / 2 arrival checks,0,15,2,tilt,1,390.332938,True,119875.73777400005,120266.07071200006,,benchmarks/i-spy/framing-two-zero.json,14
+178,10,16,0 ms settle / 15 ms poll / 2 arrival checks,0,15,2,tilt,-1,356.596423,True,120266.07071200006,120622.66713500005,,benchmarks/i-spy/framing-two-zero.json,15
+179,10,17,0 ms settle / 15 ms poll / 2 arrival checks,0,15,2,diagonal,1,797.510372,True,120622.66713500005,121420.17750700006,,benchmarks/i-spy/framing-two-zero.json,16
+180,10,18,0 ms settle / 15 ms poll / 2 arrival checks,0,15,2,diagonal,-1,884.489212,True,121420.17750700006,122304.66671900006,,benchmarks/i-spy/framing-two-zero.json,17
+181,11,1,Final matched baseline,300,60,2,pan,1,922.702234,True,122304.66671900006,123227.36895300006,,benchmarks/i-spy/framing-final-matched-baseline.json,0
+182,11,2,Final matched baseline,300,60,2,pan,-1,950.286352,True,123227.36895300006,124177.65530500005,,benchmarks/i-spy/framing-final-matched-baseline.json,1
+183,11,3,Final matched baseline,300,60,2,tilt,1,778.818555,True,124177.65530500005,124956.47386000006,,benchmarks/i-spy/framing-final-matched-baseline.json,2
+184,11,4,Final matched baseline,300,60,2,tilt,-1,769.027021,True,124956.47386000006,125725.50088100006,,benchmarks/i-spy/framing-final-matched-baseline.json,3
+185,11,5,Final matched baseline,300,60,2,diagonal,1,1187.709165,True,125725.50088100006,126913.21004600005,,benchmarks/i-spy/framing-final-matched-baseline.json,4
+186,11,6,Final matched baseline,300,60,2,diagonal,-1,1214.073571,True,126913.21004600005,128127.28361700005,,benchmarks/i-spy/framing-final-matched-baseline.json,5
+187,11,7,Final matched baseline,300,60,2,pan,1,963.343876,True,128127.28361700005,129090.62749300005,,benchmarks/i-spy/framing-final-matched-baseline.json,6
+188,11,8,Final matched baseline,300,60,2,pan,-1,908.3437,True,129090.62749300005,129998.97119300005,,benchmarks/i-spy/framing-final-matched-baseline.json,7
+189,11,9,Final matched baseline,300,60,2,tilt,1,737.9413030000001,True,129998.97119300005,130736.91249600005,,benchmarks/i-spy/framing-final-matched-baseline.json,8
+190,11,10,Final matched baseline,300,60,2,tilt,-1,690.756251,True,130736.91249600005,131427.66874700005,,benchmarks/i-spy/framing-final-matched-baseline.json,9
+191,11,11,Final matched baseline,300,60,2,diagonal,1,1157.3713070000001,True,131427.66874700005,132585.04005400004,,benchmarks/i-spy/framing-final-matched-baseline.json,10
+192,11,12,Final matched baseline,300,60,2,diagonal,-1,1218.473285,True,132585.04005400004,133803.51333900006,,benchmarks/i-spy/framing-final-matched-baseline.json,11
+193,11,13,Final matched baseline,300,60,2,pan,1,911.263777,True,133803.51333900006,134714.77711600004,,benchmarks/i-spy/framing-final-matched-baseline.json,12
+194,11,14,Final matched baseline,300,60,2,pan,-1,943.289174,True,134714.77711600004,135658.06629000005,,benchmarks/i-spy/framing-final-matched-baseline.json,13
+195,11,15,Final matched baseline,300,60,2,tilt,1,775.204776,True,135658.06629000005,136433.27106600004,,benchmarks/i-spy/framing-final-matched-baseline.json,14
+196,11,16,Final matched baseline,300,60,2,tilt,-1,689.670064,True,136433.27106600004,137122.94113000005,,benchmarks/i-spy/framing-final-matched-baseline.json,15
+197,11,17,Final matched baseline,300,60,2,diagonal,1,1239.042106,True,137122.94113000005,138361.98323600006,,benchmarks/i-spy/framing-final-matched-baseline.json,16
+198,11,18,Final matched baseline,300,60,2,diagonal,-1,1144.752507,True,138361.98323600006,139506.73574300006,,benchmarks/i-spy/framing-final-matched-baseline.json,17
+199,12,1,Final controller,50,15,2,pan,1,632.9583439999999,True,139506.73574300006,140139.69408700007,,benchmarks/i-spy/framing-final-matched-candidate.json,0
+200,12,2,Final controller,50,15,2,pan,-1,617.135312,True,140139.69408700007,140756.82939900007,,benchmarks/i-spy/framing-final-matched-candidate.json,1
+201,12,3,Final controller,50,15,2,tilt,1,516.847977,True,140756.82939900007,141273.67737600007,,benchmarks/i-spy/framing-final-matched-candidate.json,2
+202,12,4,Final controller,50,15,2,tilt,-1,393.164971,True,141273.67737600007,141666.84234700006,,benchmarks/i-spy/framing-final-matched-candidate.json,3
+203,12,5,Final controller,50,15,2,diagonal,1,903.636449,True,141666.84234700006,142570.47879600007,,benchmarks/i-spy/framing-final-matched-candidate.json,4
+204,12,6,Final controller,50,15,2,diagonal,-1,851.555105,True,142570.47879600007,143422.03390100008,,benchmarks/i-spy/framing-final-matched-candidate.json,5
+205,12,7,Final controller,50,15,2,pan,1,673.983644,True,143422.03390100008,144096.01754500007,,benchmarks/i-spy/framing-final-matched-candidate.json,6
+206,12,8,Final controller,50,15,2,pan,-1,604.887415,True,144096.01754500007,144700.90496000007,,benchmarks/i-spy/framing-final-matched-candidate.json,7
+207,12,9,Final controller,50,15,2,tilt,1,398.199731,True,144700.90496000007,145099.10469100007,,benchmarks/i-spy/framing-final-matched-candidate.json,8
+208,12,10,Final controller,50,15,2,tilt,-1,364.862342,True,145099.10469100007,145463.96703300008,,benchmarks/i-spy/framing-final-matched-candidate.json,9
+209,12,11,Final controller,50,15,2,diagonal,1,879.1197400000001,True,145463.96703300008,146343.08677300008,,benchmarks/i-spy/framing-final-matched-candidate.json,10
+210,12,12,Final controller,50,15,2,diagonal,-1,806.380634,True,146343.08677300008,147149.46740700008,,benchmarks/i-spy/framing-final-matched-candidate.json,11
+211,12,13,Final controller,50,15,2,pan,1,610.514593,True,147149.46740700008,147759.98200000008,,benchmarks/i-spy/framing-final-matched-candidate.json,12
+212,12,14,Final controller,50,15,2,pan,-1,605.152594,True,147759.98200000008,148365.1345940001,,benchmarks/i-spy/framing-final-matched-candidate.json,13
+213,12,15,Final controller,50,15,2,tilt,1,456.81618000000003,True,148365.1345940001,148821.95077400008,,benchmarks/i-spy/framing-final-matched-candidate.json,14
+214,12,16,Final controller,50,15,2,tilt,-1,402.96723000000003,True,148821.95077400008,149224.9180040001,,benchmarks/i-spy/framing-final-matched-candidate.json,15
+215,12,17,Final controller,50,15,2,diagonal,1,911.0839520000001,True,149224.9180040001,150136.00195600008,,benchmarks/i-spy/framing-final-matched-candidate.json,16
+216,12,18,Final controller,50,15,2,diagonal,-1,873.875314,True,150136.00195600008,151009.87727000008,,benchmarks/i-spy/framing-final-matched-candidate.json,17

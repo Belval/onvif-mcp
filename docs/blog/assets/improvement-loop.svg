@@ -34,7 +34,7 @@
 <polyline points="314,794.0 228,794 228.0,628" fill="none" stroke="#284944" stroke-width="3" stroke-dasharray="12 8"/>
 <polygon points="228.0,628 236.0,641.856406460551 220.0,641.856406460551" fill="#284944"/>
 <text x="760.0" y="910" dominant-baseline="text-before-edge" text-anchor="middle" font-family="Arial, Helvetica, Liberation Sans, sans-serif" font-size="28" font-weight="400" fill="#626959">Matched trials measure speed. Fresh targets test usefulness.</text>
-<text x="100" y="215" dominant-baseline="text-before-edge" text-anchor="start" font-family="Georgia, Times New Roman, DejaVu Serif, serif" font-size="108" font-weight="400" fill="#303D2C">34%</text>
-<text x="450" y="246" dominant-baseline="text-before-edge" text-anchor="start" font-family="Georgia, Times New Roman, DejaVu Serif, serif" font-size="40" font-weight="400" fill="#303D2C">Lower median move-plus-image time.</text>
-<text x="454" y="315" dominant-baseline="text-before-edge" text-anchor="start" font-family="Arial, Helvetica, Liberation Sans, sans-serif" font-size="30" font-weight="400" fill="#303D2C">933 → 614 ms · 18/18 geometry passes in each block</text>
+<text x="100" y="215" dominant-baseline="text-before-edge" text-anchor="start" font-family="Georgia, Times New Roman, DejaVu Serif, serif" font-size="108" font-weight="400" fill="#303D2C">7 games</text>
+<text x="650" y="246" dominant-baseline="text-before-edge" text-anchor="start" font-family="Georgia, Times New Roman, DejaVu Serif, serif" font-size="40" font-weight="400" fill="#303D2C">216 physical motion trials</text>
+<text x="654" y="315" dominant-baseline="text-before-edge" text-anchor="start" font-family="Arial, Helvetica, Liberation Sans, sans-serif" font-size="30" font-weight="400" fill="#303D2C">10 timing variants + 36 final comparison moves</text>
 </svg>

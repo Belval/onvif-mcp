@@ -1,0 +1,1817 @@
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:ns2="http://creativecommons.org/ns#" xmlns:ns4="http://www.w3.org/1999/xlink" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" width="1152pt" height="1152pt" viewBox="0 0 1152 1152" version="1.1">
+ <metadata>
+  <rdf:RDF>
+   <ns2:Work>
+    <dc:type rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
+    <dc:format>image/svg+xml</dc:format>
+    <dc:creator>
+     <ns2:Agent>
+      <dc:title>Matplotlib v3.10.9, https://matplotlib.org/</dc:title>
+     </ns2:Agent>
+    </dc:creator>
+   </ns2:Work>
+  </rdf:RDF>
+ </metadata>
+ <defs>
+  <style type="text/css">*{stroke-linejoin: round; stroke-linecap: butt}</style>
+ </defs>
+ <g id="figure_1">
+  <g id="patch_1">
+   <path d="M 0 1152  L 1152 1152  L 1152 0  L 0 0  z " style="fill: #f5f3ec" />
+  </g>
+  <g id="axes_1">
+   <g id="patch_2">
+    <path d="M 86.4 518.4  L 1111.68 518.4  L 1111.68 241.92  L 86.4 241.92  z " style="fill: #f5f3ec" />
+   </g>
+   <g id="patch_3">
+    <path d="M 86.4 518.4  L 188.928 518.4  L 188.928 241.92  L 86.4 241.92  z " clip-path="url(#p2be4f5e943)" style="fill: #eeeae3" />
+   </g>
+   <g id="patch_4">
+    <path d="M 188.928 518.4  L 291.456 518.4  L 291.456 241.92  L 188.928 241.92  z " clip-path="url(#p2be4f5e943)" style="fill: #f5f3ec" />
+   </g>
+   <g id="patch_5">
+    <path d="M 291.456 518.4  L 393.984 518.4  L 393.984 241.92  L 291.456 241.92  z " clip-path="url(#p2be4f5e943)" style="fill: #eeeae3" />
+   </g>
+   <g id="patch_6">
+    <path d="M 393.984 518.4  L 496.512 518.4  L 496.512 241.92  L 393.984 241.92  z " clip-path="url(#p2be4f5e943)" style="fill: #f5f3ec" />
+   </g>
+   <g id="patch_7">
+    <path d="M 496.512 518.4  L 599.04 518.4  L 599.04 241.92  L 496.512 241.92  z " clip-path="url(#p2be4f5e943)" style="fill: #eeeae3" />
+   </g>
+   <g id="patch_8">
+    <path d="M 599.04 518.4  L 701.568 518.4  L 701.568 241.92  L 599.04 241.92  z " clip-path="url(#p2be4f5e943)" style="fill: #f5f3ec" />
+   </g>
+   <g id="patch_9">
+    <path d="M 701.568 518.4  L 804.096 518.4  L 804.096 241.92  L 701.568 241.92  z " clip-path="url(#p2be4f5e943)" style="fill: #eeeae3" />
+   </g>
+   <g id="patch_10">
+    <path d="M 804.096 518.4  L 906.624 518.4  L 906.624 241.92  L 804.096 241.92  z " clip-path="url(#p2be4f5e943)" style="fill: #f5f3ec" />
+   </g>
+   <g id="patch_11">
+    <path d="M 906.624 518.4  L 1009.152 518.4  L 1009.152 241.92  L 906.624 241.92  z " clip-path="url(#p2be4f5e943)" style="fill: #eeeae3" />
+   </g>
+   <g id="patch_12">
+    <path d="M 1009.152 518.4  L 1111.68 518.4  L 1111.68 241.92  L 1009.152 241.92  z " clip-path="url(#p2be4f5e943)" style="fill: #f5f3ec" />
+   </g>
+   <g id="matplotlib.axis_1">
+    <g id="xtick_1">
+     <g id="line2d_1">
+      <defs>
+       <path id="m38c3a0a1e5" d="M 0 0  L 0 3.5  " style="stroke: #626959; stroke-width: 0.8" />
+      </defs>
+      <g>
+       <use ns4:href="#m38c3a0a1e5" x="89.248" y="518.4" style="fill: #626959; stroke: #626959; stroke-width: 0.8" />
+      </g>
+     </g>
+     <g id="text_1">
+      <text style="font-size: 15px; font-family: 'DejaVu Sans'; text-anchor: middle; fill: #626959" x="89.248" y="536.797656" transform="rotate(-0 89.248 536.797656)">1</text>
+     </g>
+    </g>
+    <g id="xtick_2">
+     <g id="line2d_2">
+      <g>
+       <use ns4:href="#m38c3a0a1e5" x="288.608" y="518.4" style="fill: #626959; stroke: #626959; stroke-width: 0.8" />
+      </g>
+     </g>
+     <g id="text_2">
+      <text style="font-size: 15px; font-family: 'DejaVu Sans'; text-anchor: middle; fill: #626959" x="288.608" y="536.797656" transform="rotate(-0 288.608 536.797656)">36</text>
+     </g>
+    </g>
+    <g id="xtick_3">
+     <g id="line2d_3">
+      <g>
+       <use ns4:href="#m38c3a0a1e5" x="493.664" y="518.4" style="fill: #626959; stroke: #626959; stroke-width: 0.8" />
+      </g>
+     </g>
+     <g id="text_3">
+      <text style="font-size: 15px; font-family: 'DejaVu Sans'; text-anchor: middle; fill: #626959" x="493.664" y="536.797656" transform="rotate(-0 493.664 536.797656)">72</text>
+     </g>
+    </g>
+    <g id="xtick_4">
+     <g id="line2d_4">
+      <g>
+       <use ns4:href="#m38c3a0a1e5" x="698.72" y="518.4" style="fill: #626959; stroke: #626959; stroke-width: 0.8" />
+      </g>
+     </g>
+     <g id="text_4">
+      <text style="font-size: 15px; font-family: 'DejaVu Sans'; text-anchor: middle; fill: #626959" x="698.72" y="536.797656" transform="rotate(-0 698.72 536.797656)">108</text>
+     </g>
+    </g>
+    <g id="xtick_5">
+     <g id="line2d_5">
+      <g>
+       <use ns4:href="#m38c3a0a1e5" x="903.776" y="518.4" style="fill: #626959; stroke: #626959; stroke-width: 0.8" />
+      </g>
+     </g>
+     <g id="text_5">
+      <text style="font-size: 15px; font-family: 'DejaVu Sans'; text-anchor: middle; fill: #626959" x="903.776" y="536.797656" transform="rotate(-0 903.776 536.797656)">144</text>
+     </g>
+    </g>
+    <g id="xtick_6">
+     <g id="line2d_6">
+      <g>
+       <use ns4:href="#m38c3a0a1e5" x="1108.832" y="518.4" style="fill: #626959; stroke: #626959; stroke-width: 0.8" />
+      </g>
+     </g>
+     <g id="text_6">
+      <text style="font-size: 15px; font-family: 'DejaVu Sans'; text-anchor: middle; fill: #626959" x="1108.832" y="536.797656" transform="rotate(-0 1108.832 536.797656)">180</text>
+     </g>
+    </g>
+    <g id="text_7">
+     <text style="font-size: 14px; font-family: 'DejaVu Sans'; text-anchor: middle; fill: #303d2c" x="599.04" y="562.555" transform="rotate(-0 599.04 562.555)">Trial number · grouped by setting</text>
+    </g>
+   </g>
+   <g id="matplotlib.axis_2">
+    <g id="ytick_1">
+     <g id="line2d_7">
+      <path d="M 86.4 518.4  L 1111.68 518.4  " clip-path="url(#p2be4f5e943)" style="fill: none; stroke: #d8dbcf; stroke-width: 0.8; stroke-linecap: square" />
+     </g>
+     <g id="line2d_8">
+      <defs>
+       <path id="mc5ae75cf00" d="M 0 0  L -3.5 0  " style="stroke: #626959; stroke-width: 0.8" />
+      </defs>
+      <g>
+       <use ns4:href="#mc5ae75cf00" x="86.4" y="518.4" style="fill: #626959; stroke: #626959; stroke-width: 0.8" />
+      </g>
+     </g>
+     <g id="text_8">
+      <text style="font-size: 15px; font-family: 'DejaVu Sans'; text-anchor: end; fill: #626959" x="79.4" y="524.098828" transform="rotate(-0 79.4 524.098828)">0</text>
+     </g>
+    </g>
+    <g id="ytick_2">
+     <g id="line2d_9">
+      <path d="M 86.4 481.536  L 1111.68 481.536  " clip-path="url(#p2be4f5e943)" style="fill: none; stroke: #d8dbcf; stroke-width: 0.8; stroke-linecap: square" />
+     </g>
+     <g id="line2d_10">
+      <g>
+       <use ns4:href="#mc5ae75cf00" x="86.4" y="481.536" style="fill: #626959; stroke: #626959; stroke-width: 0.8" />
+      </g>
+     </g>
+     <g id="text_9">
+      <text style="font-size: 15px; font-family: 'DejaVu Sans'; text-anchor: end; fill: #626959" x="79.4" y="487.234828" transform="rotate(-0 79.4 487.234828)">200</text>
+     </g>
+    </g>
+    <g id="ytick_3">
+     <g id="line2d_11">
+      <path d="M 86.4 444.672  L 1111.68 444.672  " clip-path="url(#p2be4f5e943)" style="fill: none; stroke: #d8dbcf; stroke-width: 0.8; stroke-linecap: square" />
+     </g>
+     <g id="line2d_12">
+      <g>
+       <use ns4:href="#mc5ae75cf00" x="86.4" y="444.672" style="fill: #626959; stroke: #626959; stroke-width: 0.8" />
+      </g>
+     </g>
+     <g id="text_10">
+      <text style="font-size: 15px; font-family: 'DejaVu Sans'; text-anchor: end; fill: #626959" x="79.4" y="450.370828" transform="rotate(-0 79.4 450.370828)">400</text>
+     </g>
+    </g>
+    <g id="ytick_4">
+     <g id="line2d_13">
+      <path d="M 86.4 407.808  L 1111.68 407.808  " clip-path="url(#p2be4f5e943)" style="fill: none; stroke: #d8dbcf; stroke-width: 0.8; stroke-linecap: square" />
+     </g>
+     <g id="line2d_14">
+      <g>
+       <use ns4:href="#mc5ae75cf00" x="86.4" y="407.808" style="fill: #626959; stroke: #626959; stroke-width: 0.8" />
+      </g>
+     </g>
+     <g id="text_11">
+      <text style="font-size: 15px; font-family: 'DejaVu Sans'; text-anchor: end; fill: #626959" x="79.4" y="413.506828" transform="rotate(-0 79.4 413.506828)">600</text>
+     </g>
+    </g>
+    <g id="ytick_5">
+     <g id="line2d_15">
+      <path d="M 86.4 370.944  L 1111.68 370.944  " clip-path="url(#p2be4f5e943)" style="fill: none; stroke: #d8dbcf; stroke-width: 0.8; stroke-linecap: square" />
+     </g>
+     <g id="line2d_16">
+      <g>
+       <use ns4:href="#mc5ae75cf00" x="86.4" y="370.944" style="fill: #626959; stroke: #626959; stroke-width: 0.8" />
+      </g>
+     </g>
+     <g id="text_12">
+      <text style="font-size: 15px; font-family: 'DejaVu Sans'; text-anchor: end; fill: #626959" x="79.4" y="376.642828" transform="rotate(-0 79.4 376.642828)">800</text>
+     </g>
+    </g>
+    <g id="ytick_6">
+     <g id="line2d_17">
+      <path d="M 86.4 334.08  L 1111.68 334.08  " clip-path="url(#p2be4f5e943)" style="fill: none; stroke: #d8dbcf; stroke-width: 0.8; stroke-linecap: square" />
+     </g>
+     <g id="line2d_18">
+      <g>
+       <use ns4:href="#mc5ae75cf00" x="86.4" y="334.08" style="fill: #626959; stroke: #626959; stroke-width: 0.8" />
+      </g>
+     </g>
+     <g id="text_13">
+      <text style="font-size: 15px; font-family: 'DejaVu Sans'; text-anchor: end; fill: #626959" x="79.4" y="339.778828" transform="rotate(-0 79.4 339.778828)">1000</text>
+     </g>
+    </g>
+    <g id="ytick_7">
+     <g id="line2d_19">
+      <path d="M 86.4 297.216  L 1111.68 297.216  " clip-path="url(#p2be4f5e943)" style="fill: none; stroke: #d8dbcf; stroke-width: 0.8; stroke-linecap: square" />
+     </g>
+     <g id="line2d_20">
+      <g>
+       <use ns4:href="#mc5ae75cf00" x="86.4" y="297.216" style="fill: #626959; stroke: #626959; stroke-width: 0.8" />
+      </g>
+     </g>
+     <g id="text_14">
+      <text style="font-size: 15px; font-family: 'DejaVu Sans'; text-anchor: end; fill: #626959" x="79.4" y="302.914828" transform="rotate(-0 79.4 302.914828)">1200</text>
+     </g>
+    </g>
+    <g id="ytick_8">
+     <g id="line2d_21">
+      <path d="M 86.4 260.352  L 1111.68 260.352  " clip-path="url(#p2be4f5e943)" style="fill: none; stroke: #d8dbcf; stroke-width: 0.8; stroke-linecap: square" />
+     </g>
+     <g id="line2d_22">
+      <g>
+       <use ns4:href="#mc5ae75cf00" x="86.4" y="260.352" style="fill: #626959; stroke: #626959; stroke-width: 0.8" />
+      </g>
+     </g>
+     <g id="text_15">
+      <text style="font-size: 15px; font-family: 'DejaVu Sans'; text-anchor: end; fill: #626959" x="79.4" y="266.050828" transform="rotate(-0 79.4 266.050828)">1400</text>
+     </g>
+    </g>
+    <g id="text_16">
+     <text style="font-size: 14px; font-family: 'DejaVu Sans'; text-anchor: middle; fill: #303d2c" x="26.313437" y="380.16" transform="rotate(-90 26.313437 380.16)">Move + image duration (ms)</text>
+    </g>
+   </g>
+   <g id="line2d_23">
+    <path d="M 86.4 518.4  L 86.4 241.92  " clip-path="url(#p2be4f5e943)" style="fill: none; stroke: #d8dbcf; stroke-width: 0.8; stroke-linecap: square" />
+   </g>
+   <g id="LineCollection_1">
+    <path d="M 89.248 347.553532  L 186.08 347.553532  " clip-path="url(#p2be4f5e943)" style="fill: none; stroke: #303d2c; stroke-opacity: 0.6; stroke-width: 2" />
+   </g>
+   <g id="line2d_24">
+    <path d="M 188.928 518.4  L 188.928 241.92  " clip-path="url(#p2be4f5e943)" style="fill: none; stroke: #d8dbcf; stroke-width: 0.8; stroke-linecap: square" />
+   </g>
+   <g id="LineCollection_2">
+    <path d="M 191.776 415.967893  L 288.608 415.967893  " clip-path="url(#p2be4f5e943)" style="fill: none; stroke: #303d2c; stroke-opacity: 0.6; stroke-width: 2" />
+   </g>
+   <g id="line2d_25">
+    <path d="M 291.456 518.4  L 291.456 241.92  " clip-path="url(#p2be4f5e943)" style="fill: none; stroke: #d8dbcf; stroke-width: 0.8; stroke-linecap: square" />
+   </g>
+   <g id="LineCollection_3">
+    <path d="M 294.304 400.335372  L 391.136 400.335372  " clip-path="url(#p2be4f5e943)" style="fill: none; stroke: #303d2c; stroke-opacity: 0.6; stroke-width: 2" />
+   </g>
+   <g id="line2d_26">
+    <path d="M 393.984 518.4  L 393.984 241.92  " clip-path="url(#p2be4f5e943)" style="fill: none; stroke: #d8dbcf; stroke-width: 0.8; stroke-linecap: square" />
+   </g>
+   <g id="LineCollection_4">
+    <path d="M 396.832 403.807229  L 493.664 403.807229  " clip-path="url(#p2be4f5e943)" style="fill: none; stroke: #303d2c; stroke-opacity: 0.6; stroke-width: 2" />
+   </g>
+   <g id="line2d_27">
+    <path d="M 496.512 518.4  L 496.512 241.92  " clip-path="url(#p2be4f5e943)" style="fill: none; stroke: #d8dbcf; stroke-width: 0.8; stroke-linecap: square" />
+   </g>
+   <g id="LineCollection_5">
+    <path d="M 499.36 387.712036  L 596.192 387.712036  " clip-path="url(#p2be4f5e943)" style="fill: none; stroke: #303d2c; stroke-opacity: 0.6; stroke-width: 2" />
+   </g>
+   <g id="line2d_28">
+    <path d="M 599.04 518.4  L 599.04 241.92  " clip-path="url(#p2be4f5e943)" style="fill: none; stroke: #d8dbcf; stroke-width: 0.8; stroke-linecap: square" />
+   </g>
+   <g id="LineCollection_6">
+    <path d="M 601.888 379.622951  L 698.72 379.622951  " clip-path="url(#p2be4f5e943)" style="fill: none; stroke: #303d2c; stroke-opacity: 0.6; stroke-width: 2" />
+   </g>
+   <g id="line2d_29">
+    <path d="M 701.568 518.4  L 701.568 241.92  " clip-path="url(#p2be4f5e943)" style="fill: none; stroke: #d8dbcf; stroke-width: 0.8; stroke-linecap: square" />
+   </g>
+   <g id="LineCollection_7">
+    <path d="M 704.416 404.374927  L 801.248 404.374927  " clip-path="url(#p2be4f5e943)" style="fill: none; stroke: #303d2c; stroke-opacity: 0.6; stroke-width: 2" />
+   </g>
+   <g id="line2d_30">
+    <path d="M 804.096 518.4  L 804.096 241.92  " clip-path="url(#p2be4f5e943)" style="fill: none; stroke: #d8dbcf; stroke-width: 0.8; stroke-linecap: square" />
+   </g>
+   <g id="LineCollection_8">
+    <path d="M 806.944 402.780313  L 903.776 402.780313  " clip-path="url(#p2be4f5e943)" style="fill: none; stroke: #303d2c; stroke-opacity: 0.6; stroke-width: 2" />
+   </g>
+   <g id="line2d_31">
+    <path d="M 906.624 518.4  L 906.624 241.92  " clip-path="url(#p2be4f5e943)" style="fill: none; stroke: #d8dbcf; stroke-width: 0.8; stroke-linecap: square" />
+   </g>
+   <g id="LineCollection_9">
+    <path d="M 909.472 402.330982  L 1006.304 402.330982  " clip-path="url(#p2be4f5e943)" style="fill: none; stroke: #303d2c; stroke-opacity: 0.6; stroke-width: 2" />
+   </g>
+   <g id="line2d_32">
+    <path d="M 1009.152 518.4  L 1009.152 241.92  " clip-path="url(#p2be4f5e943)" style="fill: none; stroke: #d8dbcf; stroke-width: 0.8; stroke-linecap: square" />
+   </g>
+   <g id="LineCollection_10">
+    <path d="M 1012 408.585638  L 1108.832 408.585638  " clip-path="url(#p2be4f5e943)" style="fill: none; stroke: #303d2c; stroke-opacity: 0.6; stroke-width: 2" />
+   </g>
+   <g id="patch_13">
+    <path d="M 86.4 518.4  L 86.4 241.92  " style="fill: none; stroke: #d8dbcf; stroke-width: 0.8; stroke-linejoin: miter; stroke-linecap: square" />
+   </g>
+   <g id="patch_14">
+    <path d="M 86.4 518.4  L 1111.68 518.4  " style="fill: none; stroke: #d8dbcf; stroke-width: 0.8; stroke-linejoin: miter; stroke-linecap: square" />
+   </g>
+   <g id="text_17">
+    <text style="font-size: 12px; font-family: 'DejaVu Sans'; text-anchor: middle; fill: #626959" x="137.664" y="254.8224" transform="rotate(-0 137.664 254.8224)">01</text>
+   </g>
+   <g id="text_18">
+    <text style="font-size: 12px; font-family: 'DejaVu Sans'; text-anchor: middle; fill: #626959" x="240.192" y="254.8224" transform="rotate(-0 240.192 254.8224)">02</text>
+   </g>
+   <g id="text_19">
+    <text style="font-size: 12px; font-family: 'DejaVu Sans'; text-anchor: middle; fill: #626959" x="342.72" y="254.8224" transform="rotate(-0 342.72 254.8224)">03</text>
+   </g>
+   <g id="text_20">
+    <text style="font-size: 12px; font-family: 'DejaVu Sans'; text-anchor: middle; fill: #626959" x="445.248" y="254.8224" transform="rotate(-0 445.248 254.8224)">04</text>
+   </g>
+   <g id="text_21">
+    <text style="font-size: 12px; font-family: 'DejaVu Sans'; text-anchor: middle; fill: #626959" x="547.776" y="254.8224" transform="rotate(-0 547.776 254.8224)">05</text>
+   </g>
+   <g id="text_22">
+    <text style="font-size: 12px; font-family: 'DejaVu Sans'; text-anchor: middle; fill: #626959" x="650.304" y="254.8224" transform="rotate(-0 650.304 254.8224)">06</text>
+   </g>
+   <g id="text_23">
+    <text style="font-size: 12px; font-family: 'DejaVu Sans'; text-anchor: middle; fill: #626959" x="752.832" y="254.8224" transform="rotate(-0 752.832 254.8224)">07</text>
+   </g>
+   <g id="text_24">
+    <text style="font-size: 12px; font-family: 'DejaVu Sans'; text-anchor: middle; fill: #626959" x="855.36" y="254.8224" transform="rotate(-0 855.36 254.8224)">08</text>
+   </g>
+   <g id="text_25">
+    <text style="font-size: 12px; font-family: 'DejaVu Sans'; text-anchor: middle; fill: #626959" x="957.888" y="254.8224" transform="rotate(-0 957.888 254.8224)">09</text>
+   </g>
+   <g id="text_26">
+    <text style="font-size: 12px; font-family: 'DejaVu Sans'; text-anchor: middle; fill: #626959" x="1060.416" y="254.8224" transform="rotate(-0 1060.416 254.8224)">10</text>
+   </g>
+   <g id="trial-001" data-trial="1" tabindex="0" role="button" aria-label="Trial 1: 967.94 ms; batch 01; 300 ms settle / 60 ms poll / 2 arrival checks; pan; geometry pass">
+    <defs>
+     <path id="md400b9ccb9" d="M 0 2.345208  C 0.621956 2.345208 1.218523 2.098102 1.658312 1.658312  C 2.098102 1.218523 2.345208 0.621956 2.345208 0  C 2.345208 -0.621956 2.098102 -1.218523 1.658312 -1.658312  C 1.218523 -2.098102 0.621956 -2.345208 0 -2.345208  C -0.621956 -2.345208 -1.218523 -2.098102 -1.658312 -1.658312  C -2.098102 -1.218523 -2.345208 -0.621956 -2.345208 0  C -2.345208 0.621956 -2.098102 1.218523 -1.658312 1.658312  C -1.218523 2.098102 -0.621956 2.345208 0 2.345208  z " style="stroke: #303d2c" />
+    </defs>
+    <g clip-path="url(#p2be4f5e943)">
+     <use ns4:href="#md400b9ccb9" x="89.248" y="339.988847" style="fill: #303d2c; stroke: #303d2c" />
+    </g>
+   <title>Trial 1: 967.94 ms; batch 01; 300 ms settle / 60 ms poll / 2 arrival checks; pan; geometry pass</title></g>
+   <g id="trial-002" data-trial="2" tabindex="0" role="button" aria-label="Trial 2: 926.38 ms; batch 01; 300 ms settle / 60 ms poll / 2 arrival checks; pan; geometry pass">
+    <g clip-path="url(#p2be4f5e943)">
+     <use ns4:href="#md400b9ccb9" x="94.944" y="347.650542" style="fill: #303d2c; stroke: #303d2c" />
+    </g>
+   <title>Trial 2: 926.38 ms; batch 01; 300 ms settle / 60 ms poll / 2 arrival checks; pan; geometry pass</title></g>
+   <g id="trial-003" data-trial="3" tabindex="0" role="button" aria-label="Trial 3: 739.16 ms; batch 01; 300 ms settle / 60 ms poll / 2 arrival checks; tilt; geometry pass">
+    <g clip-path="url(#p2be4f5e943)">
+     <use ns4:href="#md400b9ccb9" x="100.64" y="382.15838" style="fill: #303d2c; stroke: #303d2c" />
+    </g>
+   <title>Trial 3: 739.16 ms; batch 01; 300 ms settle / 60 ms poll / 2 arrival checks; tilt; geometry pass</title></g>
+   <g id="trial-004" data-trial="4" tabindex="0" role="button" aria-label="Trial 4: 741.73 ms; batch 01; 300 ms settle / 60 ms poll / 2 arrival checks; tilt; geometry pass">
+    <g clip-path="url(#p2be4f5e943)">
+     <use ns4:href="#md400b9ccb9" x="106.336" y="381.685205" style="fill: #303d2c; stroke: #303d2c" />
+    </g>
+   <title>Trial 4: 741.73 ms; batch 01; 300 ms settle / 60 ms poll / 2 arrival checks; tilt; geometry pass</title></g>
+   <g id="trial-005" data-trial="5" tabindex="0" role="button" aria-label="Trial 5: 1156.52 ms; batch 01; 300 ms settle / 60 ms poll / 2 arrival checks; diagonal; geometry pass">
+    <g clip-path="url(#p2be4f5e943)">
+     <use ns4:href="#md400b9ccb9" x="112.032" y="305.230305" style="fill: #303d2c; stroke: #303d2c" />
+    </g>
+   <title>Trial 5: 1156.52 ms; batch 01; 300 ms settle / 60 ms poll / 2 arrival checks; diagonal; geometry pass</title></g>
+   <g id="trial-006" data-trial="6" tabindex="0" role="button" aria-label="Trial 6: 1208.43 ms; batch 01; 300 ms settle / 60 ms poll / 2 arrival checks; diagonal; geometry pass">
+    <g clip-path="url(#p2be4f5e943)">
+     <use ns4:href="#md400b9ccb9" x="117.728" y="295.66297" style="fill: #303d2c; stroke: #303d2c" />
+    </g>
+   <title>Trial 6: 1208.43 ms; batch 01; 300 ms settle / 60 ms poll / 2 arrival checks; diagonal; geometry pass</title></g>
+   <g id="trial-007" data-trial="7" tabindex="0" role="button" aria-label="Trial 7: 926.57 ms; batch 01; 300 ms settle / 60 ms poll / 2 arrival checks; pan; geometry pass">
+    <g clip-path="url(#p2be4f5e943)">
+     <use ns4:href="#md400b9ccb9" x="123.424" y="347.613788" style="fill: #303d2c; stroke: #303d2c" />
+    </g>
+   <title>Trial 7: 926.57 ms; batch 01; 300 ms settle / 60 ms poll / 2 arrival checks; pan; geometry pass</title></g>
+   <g id="trial-008" data-trial="8" tabindex="0" role="button" aria-label="Trial 8: 947.21 ms; batch 01; 300 ms settle / 60 ms poll / 2 arrival checks; pan; geometry pass">
+    <g clip-path="url(#p2be4f5e943)">
+     <use ns4:href="#md400b9ccb9" x="129.12" y="343.809407" style="fill: #303d2c; stroke: #303d2c" />
+    </g>
+   <title>Trial 8: 947.21 ms; batch 01; 300 ms settle / 60 ms poll / 2 arrival checks; pan; geometry pass</title></g>
+   <g id="trial-009" data-trial="9" tabindex="0" role="button" aria-label="Trial 9: 765.65 ms; batch 01; 300 ms settle / 60 ms poll / 2 arrival checks; tilt; geometry pass">
+    <g clip-path="url(#p2be4f5e943)">
+     <use ns4:href="#md400b9ccb9" x="134.816" y="377.275151" style="fill: #303d2c; stroke: #303d2c" />
+    </g>
+   <title>Trial 9: 765.65 ms; batch 01; 300 ms settle / 60 ms poll / 2 arrival checks; tilt; geometry pass</title></g>
+   <g id="trial-010" data-trial="10" tabindex="0" role="button" aria-label="Trial 10: 796.18 ms; batch 01; 300 ms settle / 60 ms poll / 2 arrival checks; tilt; geometry pass">
+    <g clip-path="url(#p2be4f5e943)">
+     <use ns4:href="#md400b9ccb9" x="140.512" y="371.648686" style="fill: #303d2c; stroke: #303d2c" />
+    </g>
+   <title>Trial 10: 796.18 ms; batch 01; 300 ms settle / 60 ms poll / 2 arrival checks; tilt; geometry pass</title></g>
+   <g id="trial-011" data-trial="11" tabindex="0" role="button" aria-label="Trial 11: 1268.38 ms; batch 01; 300 ms settle / 60 ms poll / 2 arrival checks; diagonal; geometry pass">
+    <g clip-path="url(#p2be4f5e943)">
+     <use ns4:href="#md400b9ccb9" x="146.208" y="284.611288" style="fill: #303d2c; stroke: #303d2c" />
+    </g>
+   <title>Trial 11: 1268.38 ms; batch 01; 300 ms settle / 60 ms poll / 2 arrival checks; diagonal; geometry pass</title></g>
+   <g id="trial-012" data-trial="12" tabindex="0" role="button" aria-label="Trial 12: 1143.53 ms; batch 01; 300 ms settle / 60 ms poll / 2 arrival checks; diagonal; geometry pass">
+    <g clip-path="url(#p2be4f5e943)">
+     <use ns4:href="#md400b9ccb9" x="151.904" y="307.624077" style="fill: #303d2c; stroke: #303d2c" />
+    </g>
+   <title>Trial 12: 1143.53 ms; batch 01; 300 ms settle / 60 ms poll / 2 arrival checks; diagonal; geometry pass</title></g>
+   <g id="trial-013" data-trial="13" tabindex="0" role="button" aria-label="Trial 13: 874.30 ms; batch 01; 300 ms settle / 60 ms poll / 2 arrival checks; pan; geometry pass">
+    <g clip-path="url(#p2be4f5e943)">
+     <use ns4:href="#md400b9ccb9" x="157.6" y="357.249709" style="fill: #303d2c; stroke: #303d2c" />
+    </g>
+   <title>Trial 13: 874.30 ms; batch 01; 300 ms settle / 60 ms poll / 2 arrival checks; pan; geometry pass</title></g>
+   <g id="trial-014" data-trial="14" tabindex="0" role="button" aria-label="Trial 14: 927.23 ms; batch 01; 300 ms settle / 60 ms poll / 2 arrival checks; pan; geometry pass">
+    <g clip-path="url(#p2be4f5e943)">
+     <use ns4:href="#md400b9ccb9" x="163.296" y="347.493277" style="fill: #303d2c; stroke: #303d2c" />
+    </g>
+   <title>Trial 14: 927.23 ms; batch 01; 300 ms settle / 60 ms poll / 2 arrival checks; pan; geometry pass</title></g>
+   <g id="trial-015" data-trial="15" tabindex="0" role="button" aria-label="Trial 15: 695.51 ms; batch 01; 300 ms settle / 60 ms poll / 2 arrival checks; tilt; geometry pass">
+    <g clip-path="url(#p2be4f5e943)">
+     <use ns4:href="#md400b9ccb9" x="168.992" y="390.203561" style="fill: #303d2c; stroke: #303d2c" />
+    </g>
+   <title>Trial 15: 695.51 ms; batch 01; 300 ms settle / 60 ms poll / 2 arrival checks; tilt; geometry pass</title></g>
+   <g id="trial-016" data-trial="16" tabindex="0" role="button" aria-label="Trial 16: 808.11 ms; batch 01; 300 ms settle / 60 ms poll / 2 arrival checks; tilt; geometry pass">
+    <g clip-path="url(#p2be4f5e943)">
+     <use ns4:href="#md400b9ccb9" x="174.688" y="369.44875" style="fill: #303d2c; stroke: #303d2c" />
+    </g>
+   <title>Trial 16: 808.11 ms; batch 01; 300 ms settle / 60 ms poll / 2 arrival checks; tilt; geometry pass</title></g>
+   <g id="trial-017" data-trial="17" tabindex="0" role="button" aria-label="Trial 17: 1212.00 ms; batch 01; 300 ms settle / 60 ms poll / 2 arrival checks; diagonal; geometry pass">
+    <g clip-path="url(#p2be4f5e943)">
+     <use ns4:href="#md400b9ccb9" x="180.384" y="295.004288" style="fill: #303d2c; stroke: #303d2c" />
+    </g>
+   <title>Trial 17: 1212.00 ms; batch 01; 300 ms settle / 60 ms poll / 2 arrival checks; diagonal; geometry pass</title></g>
+   <g id="trial-018" data-trial="18" tabindex="0" role="button" aria-label="Trial 18: 1144.21 ms; batch 01; 300 ms settle / 60 ms poll / 2 arrival checks; diagonal; geometry pass">
+    <g clip-path="url(#p2be4f5e943)">
+     <use ns4:href="#md400b9ccb9" x="186.08" y="307.500051" style="fill: #303d2c; stroke: #303d2c" />
+    </g>
+   <title>Trial 18: 1144.21 ms; batch 01; 300 ms settle / 60 ms poll / 2 arrival checks; diagonal; geometry pass</title></g>
+   <g id="trial-019" data-trial="19" tabindex="0" role="button" aria-label="Trial 19: 638.41 ms; batch 02; 0 ms settle / 15 ms poll / 1 arrival check; pan; geometry pass">
+    <g clip-path="url(#p2be4f5e943)">
+     <use ns4:href="#md400b9ccb9" x="191.776" y="400.729143" style="fill: #303d2c; stroke: #303d2c" />
+    </g>
+   <title>Trial 19: 638.41 ms; batch 02; 0 ms settle / 15 ms poll / 1 arrival check; pan; geometry pass</title></g>
+   <g id="trial-020" data-trial="20" tabindex="0" role="button" aria-label="Trial 20: 553.43 ms; batch 02; 0 ms settle / 15 ms poll / 1 arrival check; pan; geometry pass">
+    <g clip-path="url(#p2be4f5e943)">
+     <use ns4:href="#md400b9ccb9" x="197.472" y="416.390945" style="fill: #303d2c; stroke: #303d2c" />
+    </g>
+   <title>Trial 20: 553.43 ms; batch 02; 0 ms settle / 15 ms poll / 1 arrival check; pan; geometry pass</title></g>
+   <g id="trial-021" data-trial="21" tabindex="0" role="button" aria-label="Trial 21: 353.51 ms; batch 02; 0 ms settle / 15 ms poll / 1 arrival check; tilt; geometry pass">
+    <g clip-path="url(#p2be4f5e943)">
+     <use ns4:href="#md400b9ccb9" x="203.168" y="453.240171" style="fill: #303d2c; stroke: #303d2c" />
+    </g>
+   <title>Trial 21: 353.51 ms; batch 02; 0 ms settle / 15 ms poll / 1 arrival check; tilt; geometry pass</title></g>
+   <g id="trial-022" data-trial="22" tabindex="0" role="button" aria-label="Trial 22: 342.46 ms; batch 02; 0 ms settle / 15 ms poll / 1 arrival check; tilt; geometry pass">
+    <g clip-path="url(#p2be4f5e943)">
+     <use ns4:href="#md400b9ccb9" x="208.864" y="455.276882" style="fill: #303d2c; stroke: #303d2c" />
+    </g>
+   <title>Trial 22: 342.46 ms; batch 02; 0 ms settle / 15 ms poll / 1 arrival check; tilt; geometry pass</title></g>
+   <g id="trial-023" data-trial="23" tabindex="0" role="button" aria-label="Trial 23: 763.02 ms; batch 02; 0 ms settle / 15 ms poll / 1 arrival check; diagonal; geometry FAIL">
+    <defs>
+     <path id="mcddb7c7f21" d="M -3.391165 3.391165  L 3.391165 -3.391165  M -3.391165 -3.391165  L 3.391165 3.391165  " style="stroke: #bf956b; stroke-width: 1.5" />
+    </defs>
+    <g clip-path="url(#p2be4f5e943)">
+     <use ns4:href="#mcddb7c7f21" x="214.56" y="377.760648" style="fill: #bf956b; stroke: #bf956b; stroke-width: 1.5" />
+    </g>
+   <title>Trial 23: 763.02 ms; batch 02; 0 ms settle / 15 ms poll / 1 arrival check; diagonal; geometry FAIL</title></g>
+   <g id="trial-024" data-trial="24" tabindex="0" role="button" aria-label="Trial 24: 803.83 ms; batch 02; 0 ms settle / 15 ms poll / 1 arrival check; diagonal; geometry pass">
+    <g clip-path="url(#p2be4f5e943)">
+     <use ns4:href="#md400b9ccb9" x="220.256" y="370.23856" style="fill: #303d2c; stroke: #303d2c" />
+    </g>
+   <title>Trial 24: 803.83 ms; batch 02; 0 ms settle / 15 ms poll / 1 arrival check; diagonal; geometry pass</title></g>
+   <g id="trial-025" data-trial="25" tabindex="0" role="button" aria-label="Trial 25: 574.44 ms; batch 02; 0 ms settle / 15 ms poll / 1 arrival check; pan; geometry pass">
+    <g clip-path="url(#p2be4f5e943)">
+     <use ns4:href="#md400b9ccb9" x="225.952" y="412.519829" style="fill: #303d2c; stroke: #303d2c" />
+    </g>
+   <title>Trial 25: 574.44 ms; batch 02; 0 ms settle / 15 ms poll / 1 arrival check; pan; geometry pass</title></g>
+   <g id="trial-026" data-trial="26" tabindex="0" role="button" aria-label="Trial 26: 550.76 ms; batch 02; 0 ms settle / 15 ms poll / 1 arrival check; pan; geometry pass">
+    <g clip-path="url(#p2be4f5e943)">
+     <use ns4:href="#md400b9ccb9" x="231.648" y="416.88404" style="fill: #303d2c; stroke: #303d2c" />
+    </g>
+   <title>Trial 26: 550.76 ms; batch 02; 0 ms settle / 15 ms poll / 1 arrival check; pan; geometry pass</title></g>
+   <g id="trial-027" data-trial="27" tabindex="0" role="button" aria-label="Trial 27: 303.25 ms; batch 02; 0 ms settle / 15 ms poll / 1 arrival check; tilt; geometry pass">
+    <g clip-path="url(#p2be4f5e943)">
+     <use ns4:href="#md400b9ccb9" x="237.344" y="462.504811" style="fill: #303d2c; stroke: #303d2c" />
+    </g>
+   <title>Trial 27: 303.25 ms; batch 02; 0 ms settle / 15 ms poll / 1 arrival check; tilt; geometry pass</title></g>
+   <g id="trial-028" data-trial="28" tabindex="0" role="button" aria-label="Trial 28: 359.14 ms; batch 02; 0 ms settle / 15 ms poll / 1 arrival check; tilt; geometry pass">
+    <g clip-path="url(#p2be4f5e943)">
+     <use ns4:href="#md400b9ccb9" x="243.04" y="452.203318" style="fill: #303d2c; stroke: #303d2c" />
+    </g>
+   <title>Trial 28: 359.14 ms; batch 02; 0 ms settle / 15 ms poll / 1 arrival check; tilt; geometry pass</title></g>
+   <g id="trial-029" data-trial="29" tabindex="0" role="button" aria-label="Trial 29: 789.18 ms; batch 02; 0 ms settle / 15 ms poll / 1 arrival check; diagonal; geometry pass">
+    <g clip-path="url(#p2be4f5e943)">
+     <use ns4:href="#md400b9ccb9" x="248.736" y="372.938171" style="fill: #303d2c; stroke: #303d2c" />
+    </g>
+   <title>Trial 29: 789.18 ms; batch 02; 0 ms settle / 15 ms poll / 1 arrival check; diagonal; geometry pass</title></g>
+   <g id="trial-030" data-trial="30" tabindex="0" role="button" aria-label="Trial 30: 843.43 ms; batch 02; 0 ms settle / 15 ms poll / 1 arrival check; diagonal; geometry pass">
+    <g clip-path="url(#p2be4f5e943)">
+     <use ns4:href="#md400b9ccb9" x="254.432" y="362.938658" style="fill: #303d2c; stroke: #303d2c" />
+    </g>
+   <title>Trial 30: 843.43 ms; batch 02; 0 ms settle / 15 ms poll / 1 arrival check; diagonal; geometry pass</title></g>
+   <g id="trial-031" data-trial="31" tabindex="0" role="button" aria-label="Trial 31: 558.02 ms; batch 02; 0 ms settle / 15 ms poll / 1 arrival check; pan; geometry pass">
+    <g clip-path="url(#p2be4f5e943)">
+     <use ns4:href="#md400b9ccb9" x="260.128" y="415.544841" style="fill: #303d2c; stroke: #303d2c" />
+    </g>
+   <title>Trial 31: 558.02 ms; batch 02; 0 ms settle / 15 ms poll / 1 arrival check; pan; geometry pass</title></g>
+   <g id="trial-032" data-trial="32" tabindex="0" role="button" aria-label="Trial 32: 528.01 ms; batch 02; 0 ms settle / 15 ms poll / 1 arrival check; pan; geometry FAIL">
+    <g clip-path="url(#p2be4f5e943)">
+     <use ns4:href="#mcddb7c7f21" x="265.824" y="421.077719" style="fill: #bf956b; stroke: #bf956b; stroke-width: 1.5" />
+    </g>
+   <title>Trial 32: 528.01 ms; batch 02; 0 ms settle / 15 ms poll / 1 arrival check; pan; geometry FAIL</title></g>
+   <g id="trial-033" data-trial="33" tabindex="0" role="button" aria-label="Trial 33: 378.57 ms; batch 02; 0 ms settle / 15 ms poll / 1 arrival check; tilt; geometry pass">
+    <g clip-path="url(#p2be4f5e943)">
+     <use ns4:href="#md400b9ccb9" x="271.52" y="448.621937" style="fill: #303d2c; stroke: #303d2c" />
+    </g>
+   <title>Trial 33: 378.57 ms; batch 02; 0 ms settle / 15 ms poll / 1 arrival check; tilt; geometry pass</title></g>
+   <g id="trial-034" data-trial="34" tabindex="0" role="button" aria-label="Trial 34: 294.07 ms; batch 02; 0 ms settle / 15 ms poll / 1 arrival check; tilt; geometry pass">
+    <g clip-path="url(#p2be4f5e943)">
+     <use ns4:href="#md400b9ccb9" x="277.216" y="464.196777" style="fill: #303d2c; stroke: #303d2c" />
+    </g>
+   <title>Trial 34: 294.07 ms; batch 02; 0 ms settle / 15 ms poll / 1 arrival check; tilt; geometry pass</title></g>
+   <g id="trial-035" data-trial="35" tabindex="0" role="button" aria-label="Trial 35: 721.74 ms; batch 02; 0 ms settle / 15 ms poll / 1 arrival check; diagonal; geometry FAIL">
+    <g clip-path="url(#p2be4f5e943)">
+     <use ns4:href="#mcddb7c7f21" x="282.912" y="385.369341" style="fill: #bf956b; stroke: #bf956b; stroke-width: 1.5" />
+    </g>
+   <title>Trial 35: 721.74 ms; batch 02; 0 ms settle / 15 ms poll / 1 arrival check; diagonal; geometry FAIL</title></g>
+   <g id="trial-036" data-trial="36" tabindex="0" role="button" aria-label="Trial 36: 786.76 ms; batch 02; 0 ms settle / 15 ms poll / 1 arrival check; diagonal; geometry pass">
+    <g clip-path="url(#p2be4f5e943)">
+     <use ns4:href="#md400b9ccb9" x="288.608" y="373.384753" style="fill: #303d2c; stroke: #303d2c" />
+    </g>
+   <title>Trial 36: 786.76 ms; batch 02; 0 ms settle / 15 ms poll / 1 arrival check; diagonal; geometry pass</title></g>
+   <g id="trial-037" data-trial="37" tabindex="0" role="button" aria-label="Trial 37: 704.70 ms; batch 03; 100 ms settle / 15 ms poll / 1 arrival check; pan; geometry pass">
+    <g clip-path="url(#p2be4f5e943)">
+     <use ns4:href="#md400b9ccb9" x="294.304" y="388.509216" style="fill: #303d2c; stroke: #303d2c" />
+    </g>
+   <title>Trial 37: 704.70 ms; batch 03; 100 ms settle / 15 ms poll / 1 arrival check; pan; geometry pass</title></g>
+   <g id="trial-038" data-trial="38" tabindex="0" role="button" aria-label="Trial 38: 745.53 ms; batch 03; 100 ms settle / 15 ms poll / 1 arrival check; pan; geometry pass">
+    <g clip-path="url(#p2be4f5e943)">
+     <use ns4:href="#md400b9ccb9" x="300" y="380.984586" style="fill: #303d2c; stroke: #303d2c" />
+    </g>
+   <title>Trial 38: 745.53 ms; batch 03; 100 ms settle / 15 ms poll / 1 arrival check; pan; geometry pass</title></g>
+   <g id="trial-039" data-trial="39" tabindex="0" role="button" aria-label="Trial 39: 464.54 ms; batch 03; 100 ms settle / 15 ms poll / 1 arrival check; tilt; geometry pass">
+    <g clip-path="url(#p2be4f5e943)">
+     <use ns4:href="#md400b9ccb9" x="305.696" y="432.775203" style="fill: #303d2c; stroke: #303d2c" />
+    </g>
+   <title>Trial 39: 464.54 ms; batch 03; 100 ms settle / 15 ms poll / 1 arrival check; tilt; geometry pass</title></g>
+   <g id="trial-040" data-trial="40" tabindex="0" role="button" aria-label="Trial 40: 416.80 ms; batch 03; 100 ms settle / 15 ms poll / 1 arrival check; tilt; geometry pass">
+    <g clip-path="url(#p2be4f5e943)">
+     <use ns4:href="#md400b9ccb9" x="311.392" y="441.575091" style="fill: #303d2c; stroke: #303d2c" />
+    </g>
+   <title>Trial 40: 416.80 ms; batch 03; 100 ms settle / 15 ms poll / 1 arrival check; tilt; geometry pass</title></g>
+   <g id="trial-041" data-trial="41" tabindex="0" role="button" aria-label="Trial 41: 876.77 ms; batch 03; 100 ms settle / 15 ms poll / 1 arrival check; diagonal; geometry pass">
+    <g clip-path="url(#p2be4f5e943)">
+     <use ns4:href="#md400b9ccb9" x="317.088" y="356.793303" style="fill: #303d2c; stroke: #303d2c" />
+    </g>
+   <title>Trial 41: 876.77 ms; batch 03; 100 ms settle / 15 ms poll / 1 arrival check; diagonal; geometry pass</title></g>
+   <g id="trial-042" data-trial="42" tabindex="0" role="button" aria-label="Trial 42: 851.24 ms; batch 03; 100 ms settle / 15 ms poll / 1 arrival check; diagonal; geometry pass">
+    <g clip-path="url(#p2be4f5e943)">
+     <use ns4:href="#md400b9ccb9" x="322.784" y="361.499542" style="fill: #303d2c; stroke: #303d2c" />
+    </g>
+   <title>Trial 42: 851.24 ms; batch 03; 100 ms settle / 15 ms poll / 1 arrival check; diagonal; geometry pass</title></g>
+   <g id="trial-043" data-trial="43" tabindex="0" role="button" aria-label="Trial 43: 654.46 ms; batch 03; 100 ms settle / 15 ms poll / 1 arrival check; pan; geometry pass">
+    <g clip-path="url(#p2be4f5e943)">
+     <use ns4:href="#md400b9ccb9" x="328.48" y="397.769982" style="fill: #303d2c; stroke: #303d2c" />
+    </g>
+   <title>Trial 43: 654.46 ms; batch 03; 100 ms settle / 15 ms poll / 1 arrival check; pan; geometry pass</title></g>
+   <g id="trial-044" data-trial="44" tabindex="0" role="button" aria-label="Trial 44: 618.85 ms; batch 03; 100 ms settle / 15 ms poll / 1 arrival check; pan; geometry pass">
+    <g clip-path="url(#p2be4f5e943)">
+     <use ns4:href="#md400b9ccb9" x="334.176" y="404.333041" style="fill: #303d2c; stroke: #303d2c" />
+    </g>
+   <title>Trial 44: 618.85 ms; batch 03; 100 ms settle / 15 ms poll / 1 arrival check; pan; geometry pass</title></g>
+   <g id="trial-045" data-trial="45" tabindex="0" role="button" aria-label="Trial 45: 442.74 ms; batch 03; 100 ms settle / 15 ms poll / 1 arrival check; tilt; geometry pass">
+    <g clip-path="url(#p2be4f5e943)">
+     <use ns4:href="#md400b9ccb9" x="339.872" y="436.793268" style="fill: #303d2c; stroke: #303d2c" />
+    </g>
+   <title>Trial 45: 442.74 ms; batch 03; 100 ms settle / 15 ms poll / 1 arrival check; tilt; geometry pass</title></g>
+   <g id="trial-046" data-trial="46" tabindex="0" role="button" aria-label="Trial 46: 394.55 ms; batch 03; 100 ms settle / 15 ms poll / 1 arrival check; tilt; geometry pass">
+    <g clip-path="url(#p2be4f5e943)">
+     <use ns4:href="#md400b9ccb9" x="345.568" y="445.676041" style="fill: #303d2c; stroke: #303d2c" />
+    </g>
+   <title>Trial 46: 394.55 ms; batch 03; 100 ms settle / 15 ms poll / 1 arrival check; tilt; geometry pass</title></g>
+   <g id="trial-047" data-trial="47" tabindex="0" role="button" aria-label="Trial 47: 821.08 ms; batch 03; 100 ms settle / 15 ms poll / 1 arrival check; diagonal; geometry pass">
+    <g clip-path="url(#p2be4f5e943)">
+     <use ns4:href="#md400b9ccb9" x="351.264" y="367.058725" style="fill: #303d2c; stroke: #303d2c" />
+    </g>
+   <title>Trial 47: 821.08 ms; batch 03; 100 ms settle / 15 ms poll / 1 arrival check; diagonal; geometry pass</title></g>
+   <g id="trial-048" data-trial="48" tabindex="0" role="button" aria-label="Trial 48: 891.18 ms; batch 03; 100 ms settle / 15 ms poll / 1 arrival check; diagonal; geometry pass">
+    <g clip-path="url(#p2be4f5e943)">
+     <use ns4:href="#md400b9ccb9" x="356.96" y="354.137614" style="fill: #303d2c; stroke: #303d2c" />
+    </g>
+   <title>Trial 48: 891.18 ms; batch 03; 100 ms settle / 15 ms poll / 1 arrival check; diagonal; geometry pass</title></g>
+   <g id="trial-049" data-trial="49" tabindex="0" role="button" aria-label="Trial 49: 623.49 ms; batch 03; 100 ms settle / 15 ms poll / 1 arrival check; pan; geometry pass">
+    <g clip-path="url(#p2be4f5e943)">
+     <use ns4:href="#md400b9ccb9" x="362.656" y="403.478755" style="fill: #303d2c; stroke: #303d2c" />
+    </g>
+   <title>Trial 49: 623.49 ms; batch 03; 100 ms settle / 15 ms poll / 1 arrival check; pan; geometry pass</title></g>
+   <g id="trial-050" data-trial="50" tabindex="0" role="button" aria-label="Trial 50: 626.62 ms; batch 03; 100 ms settle / 15 ms poll / 1 arrival check; pan; geometry pass">
+    <g clip-path="url(#p2be4f5e943)">
+     <use ns4:href="#md400b9ccb9" x="368.352" y="402.900763" style="fill: #303d2c; stroke: #303d2c" />
+    </g>
+   <title>Trial 50: 626.62 ms; batch 03; 100 ms settle / 15 ms poll / 1 arrival check; pan; geometry pass</title></g>
+   <g id="trial-051" data-trial="51" tabindex="0" role="button" aria-label="Trial 51: 447.43 ms; batch 03; 100 ms settle / 15 ms poll / 1 arrival check; tilt; geometry pass">
+    <g clip-path="url(#p2be4f5e943)">
+     <use ns4:href="#md400b9ccb9" x="374.048" y="435.929256" style="fill: #303d2c; stroke: #303d2c" />
+    </g>
+   <title>Trial 51: 447.43 ms; batch 03; 100 ms settle / 15 ms poll / 1 arrival check; tilt; geometry pass</title></g>
+   <g id="trial-052" data-trial="52" tabindex="0" role="button" aria-label="Trial 52: 414.36 ms; batch 03; 100 ms settle / 15 ms poll / 1 arrival check; tilt; geometry pass">
+    <g clip-path="url(#p2be4f5e943)">
+     <use ns4:href="#md400b9ccb9" x="379.744" y="442.025786" style="fill: #303d2c; stroke: #303d2c" />
+    </g>
+   <title>Trial 52: 414.36 ms; batch 03; 100 ms settle / 15 ms poll / 1 arrival check; tilt; geometry pass</title></g>
+   <g id="trial-053" data-trial="53" tabindex="0" role="button" aria-label="Trial 53: 986.94 ms; batch 03; 100 ms settle / 15 ms poll / 1 arrival check; diagonal; geometry pass">
+    <g clip-path="url(#p2be4f5e943)">
+     <use ns4:href="#md400b9ccb9" x="385.44" y="336.486941" style="fill: #303d2c; stroke: #303d2c" />
+    </g>
+   <title>Trial 53: 986.94 ms; batch 03; 100 ms settle / 15 ms poll / 1 arrival check; diagonal; geometry pass</title></g>
+   <g id="trial-054" data-trial="54" tabindex="0" role="button" aria-label="Trial 54: 838.62 ms; batch 03; 100 ms settle / 15 ms poll / 1 arrival check; diagonal; geometry pass">
+    <g clip-path="url(#p2be4f5e943)">
+     <use ns4:href="#md400b9ccb9" x="391.136" y="363.824725" style="fill: #303d2c; stroke: #303d2c" />
+    </g>
+   <title>Trial 54: 838.62 ms; batch 03; 100 ms settle / 15 ms poll / 1 arrival check; diagonal; geometry pass</title></g>
+   <g id="trial-055" data-trial="55" tabindex="0" role="button" aria-label="Trial 55: 630.56 ms; batch 04; 50 ms settle / 15 ms poll / 1 arrival check; pan; geometry pass">
+    <g clip-path="url(#p2be4f5e943)">
+     <use ns4:href="#md400b9ccb9" x="396.832" y="402.174649" style="fill: #303d2c; stroke: #303d2c" />
+    </g>
+   <title>Trial 55: 630.56 ms; batch 04; 50 ms settle / 15 ms poll / 1 arrival check; pan; geometry pass</title></g>
+   <g id="trial-056" data-trial="56" tabindex="0" role="button" aria-label="Trial 56: 577.83 ms; batch 04; 50 ms settle / 15 ms poll / 1 arrival check; pan; geometry pass">
+    <g clip-path="url(#p2be4f5e943)">
+     <use ns4:href="#md400b9ccb9" x="402.528" y="411.894521" style="fill: #303d2c; stroke: #303d2c" />
+    </g>
+   <title>Trial 56: 577.83 ms; batch 04; 50 ms settle / 15 ms poll / 1 arrival check; pan; geometry pass</title></g>
+   <g id="trial-057" data-trial="57" tabindex="0" role="button" aria-label="Trial 57: 442.16 ms; batch 04; 50 ms settle / 15 ms poll / 1 arrival check; tilt; geometry pass">
+    <g clip-path="url(#p2be4f5e943)">
+     <use ns4:href="#md400b9ccb9" x="408.224" y="436.900511" style="fill: #303d2c; stroke: #303d2c" />
+    </g>
+   <title>Trial 57: 442.16 ms; batch 04; 50 ms settle / 15 ms poll / 1 arrival check; tilt; geometry pass</title></g>
+   <g id="trial-058" data-trial="58" tabindex="0" role="button" aria-label="Trial 58: 366.25 ms; batch 04; 50 ms settle / 15 ms poll / 1 arrival check; tilt; geometry pass">
+    <g clip-path="url(#p2be4f5e943)">
+     <use ns4:href="#md400b9ccb9" x="413.92" y="450.892825" style="fill: #303d2c; stroke: #303d2c" />
+    </g>
+   <title>Trial 58: 366.25 ms; batch 04; 50 ms settle / 15 ms poll / 1 arrival check; tilt; geometry pass</title></g>
+   <g id="trial-059" data-trial="59" tabindex="0" role="button" aria-label="Trial 59: 886.39 ms; batch 04; 50 ms settle / 15 ms poll / 1 arrival check; diagonal; geometry pass">
+    <g clip-path="url(#p2be4f5e943)">
+     <use ns4:href="#md400b9ccb9" x="419.616" y="355.020479" style="fill: #303d2c; stroke: #303d2c" />
+    </g>
+   <title>Trial 59: 886.39 ms; batch 04; 50 ms settle / 15 ms poll / 1 arrival check; diagonal; geometry pass</title></g>
+   <g id="trial-060" data-trial="60" tabindex="0" role="button" aria-label="Trial 60: 826.29 ms; batch 04; 50 ms settle / 15 ms poll / 1 arrival check; diagonal; geometry pass">
+    <g clip-path="url(#p2be4f5e943)">
+     <use ns4:href="#md400b9ccb9" x="425.312" y="366.098769" style="fill: #303d2c; stroke: #303d2c" />
+    </g>
+   <title>Trial 60: 826.29 ms; batch 04; 50 ms settle / 15 ms poll / 1 arrival check; diagonal; geometry pass</title></g>
+   <g id="trial-061" data-trial="61" tabindex="0" role="button" aria-label="Trial 61: 621.69 ms; batch 04; 50 ms settle / 15 ms poll / 1 arrival check; pan; geometry pass">
+    <g clip-path="url(#p2be4f5e943)">
+     <use ns4:href="#md400b9ccb9" x="431.008" y="403.810967" style="fill: #303d2c; stroke: #303d2c" />
+    </g>
+   <title>Trial 61: 621.69 ms; batch 04; 50 ms settle / 15 ms poll / 1 arrival check; pan; geometry pass</title></g>
+   <g id="trial-062" data-trial="62" tabindex="0" role="button" aria-label="Trial 62: 621.73 ms; batch 04; 50 ms settle / 15 ms poll / 1 arrival check; pan; geometry pass">
+    <g clip-path="url(#p2be4f5e943)">
+     <use ns4:href="#md400b9ccb9" x="436.704" y="403.803492" style="fill: #303d2c; stroke: #303d2c" />
+    </g>
+   <title>Trial 62: 621.73 ms; batch 04; 50 ms settle / 15 ms poll / 1 arrival check; pan; geometry pass</title></g>
+   <g id="trial-063" data-trial="63" tabindex="0" role="button" aria-label="Trial 63: 382.27 ms; batch 04; 50 ms settle / 15 ms poll / 1 arrival check; tilt; geometry pass">
+    <g clip-path="url(#p2be4f5e943)">
+     <use ns4:href="#md400b9ccb9" x="442.4" y="447.940886" style="fill: #303d2c; stroke: #303d2c" />
+    </g>
+   <title>Trial 63: 382.27 ms; batch 04; 50 ms settle / 15 ms poll / 1 arrival check; tilt; geometry pass</title></g>
+   <g id="trial-064" data-trial="64" tabindex="0" role="button" aria-label="Trial 64: 415.43 ms; batch 04; 50 ms settle / 15 ms poll / 1 arrival check; tilt; geometry pass">
+    <g clip-path="url(#p2be4f5e943)">
+     <use ns4:href="#md400b9ccb9" x="448.096" y="441.828439" style="fill: #303d2c; stroke: #303d2c" />
+    </g>
+   <title>Trial 64: 415.43 ms; batch 04; 50 ms settle / 15 ms poll / 1 arrival check; tilt; geometry pass</title></g>
+   <g id="trial-065" data-trial="65" tabindex="0" role="button" aria-label="Trial 65: 819.76 ms; batch 04; 50 ms settle / 15 ms poll / 1 arrival check; diagonal; geometry pass">
+    <g clip-path="url(#p2be4f5e943)">
+     <use ns4:href="#md400b9ccb9" x="453.792" y="367.301993" style="fill: #303d2c; stroke: #303d2c" />
+    </g>
+   <title>Trial 65: 819.76 ms; batch 04; 50 ms settle / 15 ms poll / 1 arrival check; diagonal; geometry pass</title></g>
+   <g id="trial-066" data-trial="66" tabindex="0" role="button" aria-label="Trial 66: 886.54 ms; batch 04; 50 ms settle / 15 ms poll / 1 arrival check; diagonal; geometry pass">
+    <g clip-path="url(#p2be4f5e943)">
+     <use ns4:href="#md400b9ccb9" x="459.488" y="354.992914" style="fill: #303d2c; stroke: #303d2c" />
+    </g>
+   <title>Trial 66: 886.54 ms; batch 04; 50 ms settle / 15 ms poll / 1 arrival check; diagonal; geometry pass</title></g>
+   <g id="trial-067" data-trial="67" tabindex="0" role="button" aria-label="Trial 67: 648.55 ms; batch 04; 50 ms settle / 15 ms poll / 1 arrival check; pan; geometry pass">
+    <g clip-path="url(#p2be4f5e943)">
+     <use ns4:href="#md400b9ccb9" x="465.184" y="398.858429" style="fill: #303d2c; stroke: #303d2c" />
+    </g>
+   <title>Trial 67: 648.55 ms; batch 04; 50 ms settle / 15 ms poll / 1 arrival check; pan; geometry pass</title></g>
+   <g id="trial-068" data-trial="68" tabindex="0" role="button" aria-label="Trial 68: 615.26 ms; batch 04; 50 ms settle / 15 ms poll / 1 arrival check; pan; geometry pass">
+    <g clip-path="url(#p2be4f5e943)">
+     <use ns4:href="#md400b9ccb9" x="470.88" y="404.994452" style="fill: #303d2c; stroke: #303d2c" />
+    </g>
+   <title>Trial 68: 615.26 ms; batch 04; 50 ms settle / 15 ms poll / 1 arrival check; pan; geometry pass</title></g>
+   <g id="trial-069" data-trial="69" tabindex="0" role="button" aria-label="Trial 69: 361.06 ms; batch 04; 50 ms settle / 15 ms poll / 1 arrival check; tilt; geometry pass">
+    <g clip-path="url(#p2be4f5e943)">
+     <use ns4:href="#md400b9ccb9" x="476.576" y="451.849606" style="fill: #303d2c; stroke: #303d2c" />
+    </g>
+   <title>Trial 69: 361.06 ms; batch 04; 50 ms settle / 15 ms poll / 1 arrival check; tilt; geometry pass</title></g>
+   <g id="trial-070" data-trial="70" tabindex="0" role="button" aria-label="Trial 70: 408.69 ms; batch 04; 50 ms settle / 15 ms poll / 1 arrival check; tilt; geometry pass">
+    <g clip-path="url(#p2be4f5e943)">
+     <use ns4:href="#md400b9ccb9" x="482.272" y="443.070484" style="fill: #303d2c; stroke: #303d2c" />
+    </g>
+   <title>Trial 70: 408.69 ms; batch 04; 50 ms settle / 15 ms poll / 1 arrival check; tilt; geometry pass</title></g>
+   <g id="trial-071" data-trial="71" tabindex="0" role="button" aria-label="Trial 71: 842.43 ms; batch 04; 50 ms settle / 15 ms poll / 1 arrival check; diagonal; geometry pass">
+    <g clip-path="url(#p2be4f5e943)">
+     <use ns4:href="#md400b9ccb9" x="487.968" y="363.123752" style="fill: #303d2c; stroke: #303d2c" />
+    </g>
+   <title>Trial 71: 842.43 ms; batch 04; 50 ms settle / 15 ms poll / 1 arrival check; diagonal; geometry pass</title></g>
+   <g id="trial-072" data-trial="72" tabindex="0" role="button" aria-label="Trial 72: 888.06 ms; batch 04; 50 ms settle / 15 ms poll / 1 arrival check; diagonal; geometry pass">
+    <g clip-path="url(#p2be4f5e943)">
+     <use ns4:href="#md400b9ccb9" x="493.664" y="354.712948" style="fill: #303d2c; stroke: #303d2c" />
+    </g>
+   <title>Trial 72: 888.06 ms; batch 04; 50 ms settle / 15 ms poll / 1 arrival check; diagonal; geometry pass</title></g>
+   <g id="trial-073" data-trial="73" tabindex="0" role="button" aria-label="Trial 73: 699.24 ms; batch 05; 150 ms settle / 30 ms poll / 1 arrival check; pan; geometry pass">
+    <g clip-path="url(#p2be4f5e943)">
+     <use ns4:href="#md400b9ccb9" x="499.36" y="389.516691" style="fill: #303d2c; stroke: #303d2c" />
+    </g>
+   <title>Trial 73: 699.24 ms; batch 05; 150 ms settle / 30 ms poll / 1 arrival check; pan; geometry pass</title></g>
+   <g id="trial-074" data-trial="74" tabindex="0" role="button" aria-label="Trial 74: 694.75 ms; batch 05; 150 ms settle / 30 ms poll / 1 arrival check; pan; geometry pass">
+    <g clip-path="url(#p2be4f5e943)">
+     <use ns4:href="#md400b9ccb9" x="505.056" y="390.344295" style="fill: #303d2c; stroke: #303d2c" />
+    </g>
+   <title>Trial 74: 694.75 ms; batch 05; 150 ms settle / 30 ms poll / 1 arrival check; pan; geometry pass</title></g>
+   <g id="trial-075" data-trial="75" tabindex="0" role="button" aria-label="Trial 75: 475.72 ms; batch 05; 150 ms settle / 30 ms poll / 1 arrival check; tilt; geometry pass">
+    <g clip-path="url(#p2be4f5e943)">
+     <use ns4:href="#md400b9ccb9" x="510.752" y="430.716159" style="fill: #303d2c; stroke: #303d2c" />
+    </g>
+   <title>Trial 75: 475.72 ms; batch 05; 150 ms settle / 30 ms poll / 1 arrival check; tilt; geometry pass</title></g>
+   <g id="trial-076" data-trial="76" tabindex="0" role="button" aria-label="Trial 76: 489.33 ms; batch 05; 150 ms settle / 30 ms poll / 1 arrival check; tilt; geometry pass">
+    <g clip-path="url(#p2be4f5e943)">
+     <use ns4:href="#md400b9ccb9" x="516.448" y="428.206706" style="fill: #303d2c; stroke: #303d2c" />
+    </g>
+   <title>Trial 76: 489.33 ms; batch 05; 150 ms settle / 30 ms poll / 1 arrival check; tilt; geometry pass</title></g>
+   <g id="trial-077" data-trial="77" tabindex="0" role="button" aria-label="Trial 77: 905.90 ms; batch 05; 150 ms settle / 30 ms poll / 1 arrival check; diagonal; geometry pass">
+    <g clip-path="url(#p2be4f5e943)">
+     <use ns4:href="#md400b9ccb9" x="522.144" y="351.424329" style="fill: #303d2c; stroke: #303d2c" />
+    </g>
+   <title>Trial 77: 905.90 ms; batch 05; 150 ms settle / 30 ms poll / 1 arrival check; diagonal; geometry pass</title></g>
+   <g id="trial-078" data-trial="78" tabindex="0" role="button" aria-label="Trial 78: 950.01 ms; batch 05; 150 ms settle / 30 ms poll / 1 arrival check; diagonal; geometry pass">
+    <g clip-path="url(#p2be4f5e943)">
+     <use ns4:href="#md400b9ccb9" x="527.84" y="343.293814" style="fill: #303d2c; stroke: #303d2c" />
+    </g>
+   <title>Trial 78: 950.01 ms; batch 05; 150 ms settle / 30 ms poll / 1 arrival check; diagonal; geometry pass</title></g>
+   <g id="trial-079" data-trial="79" tabindex="0" role="button" aria-label="Trial 79: 745.97 ms; batch 05; 150 ms settle / 30 ms poll / 1 arrival check; pan; geometry pass">
+    <g clip-path="url(#p2be4f5e943)">
+     <use ns4:href="#md400b9ccb9" x="533.536" y="380.902204" style="fill: #303d2c; stroke: #303d2c" />
+    </g>
+   <title>Trial 79: 745.97 ms; batch 05; 150 ms settle / 30 ms poll / 1 arrival check; pan; geometry pass</title></g>
+   <g id="trial-080" data-trial="80" tabindex="0" role="button" aria-label="Trial 80: 725.96 ms; batch 05; 150 ms settle / 30 ms poll / 1 arrival check; pan; geometry pass">
+    <g clip-path="url(#p2be4f5e943)">
+     <use ns4:href="#md400b9ccb9" x="539.232" y="384.590484" style="fill: #303d2c; stroke: #303d2c" />
+    </g>
+   <title>Trial 80: 725.96 ms; batch 05; 150 ms settle / 30 ms poll / 1 arrival check; pan; geometry pass</title></g>
+   <g id="trial-081" data-trial="81" tabindex="0" role="button" aria-label="Trial 81: 458.52 ms; batch 05; 150 ms settle / 30 ms poll / 1 arrival check; tilt; geometry pass">
+    <g clip-path="url(#p2be4f5e943)">
+     <use ns4:href="#md400b9ccb9" x="544.928" y="433.884936" style="fill: #303d2c; stroke: #303d2c" />
+    </g>
+   <title>Trial 81: 458.52 ms; batch 05; 150 ms settle / 30 ms poll / 1 arrival check; tilt; geometry pass</title></g>
+   <g id="trial-082" data-trial="82" tabindex="0" role="button" aria-label="Trial 82: 452.62 ms; batch 05; 150 ms settle / 30 ms poll / 1 arrival check; tilt; geometry pass">
+    <g clip-path="url(#p2be4f5e943)">
+     <use ns4:href="#md400b9ccb9" x="550.624" y="434.973953" style="fill: #303d2c; stroke: #303d2c" />
+    </g>
+   <title>Trial 82: 452.62 ms; batch 05; 150 ms settle / 30 ms poll / 1 arrival check; tilt; geometry pass</title></g>
+   <g id="trial-083" data-trial="83" tabindex="0" role="button" aria-label="Trial 83: 985.45 ms; batch 05; 150 ms settle / 30 ms poll / 1 arrival check; diagonal; geometry pass">
+    <g clip-path="url(#p2be4f5e943)">
+     <use ns4:href="#md400b9ccb9" x="556.32" y="336.761334" style="fill: #303d2c; stroke: #303d2c" />
+    </g>
+   <title>Trial 83: 985.45 ms; batch 05; 150 ms settle / 30 ms poll / 1 arrival check; diagonal; geometry pass</title></g>
+   <g id="trial-084" data-trial="84" tabindex="0" role="button" aria-label="Trial 84: 994.80 ms; batch 05; 150 ms settle / 30 ms poll / 1 arrival check; diagonal; geometry pass">
+    <g clip-path="url(#p2be4f5e943)">
+     <use ns4:href="#md400b9ccb9" x="562.016" y="335.038324" style="fill: #303d2c; stroke: #303d2c" />
+    </g>
+   <title>Trial 84: 994.80 ms; batch 05; 150 ms settle / 30 ms poll / 1 arrival check; diagonal; geometry pass</title></g>
+   <g id="trial-085" data-trial="85" tabindex="0" role="button" aria-label="Trial 85: 718.82 ms; batch 05; 150 ms settle / 30 ms poll / 1 arrival check; pan; geometry pass">
+    <g clip-path="url(#p2be4f5e943)">
+     <use ns4:href="#md400b9ccb9" x="567.712" y="385.907381" style="fill: #303d2c; stroke: #303d2c" />
+    </g>
+   <title>Trial 85: 718.82 ms; batch 05; 150 ms settle / 30 ms poll / 1 arrival check; pan; geometry pass</title></g>
+   <g id="trial-086" data-trial="86" tabindex="0" role="button" aria-label="Trial 86: 662.59 ms; batch 05; 150 ms settle / 30 ms poll / 1 arrival check; pan; geometry pass">
+    <g clip-path="url(#p2be4f5e943)">
+     <use ns4:href="#md400b9ccb9" x="573.408" y="396.271578" style="fill: #303d2c; stroke: #303d2c" />
+    </g>
+   <title>Trial 86: 662.59 ms; batch 05; 150 ms settle / 30 ms poll / 1 arrival check; pan; geometry pass</title></g>
+   <g id="trial-087" data-trial="87" tabindex="0" role="button" aria-label="Trial 87: 513.96 ms; batch 05; 150 ms settle / 30 ms poll / 1 arrival check; tilt; geometry pass">
+    <g clip-path="url(#p2be4f5e943)">
+     <use ns4:href="#md400b9ccb9" x="579.104" y="423.666854" style="fill: #303d2c; stroke: #303d2c" />
+    </g>
+   <title>Trial 87: 513.96 ms; batch 05; 150 ms settle / 30 ms poll / 1 arrival check; tilt; geometry pass</title></g>
+   <g id="trial-088" data-trial="88" tabindex="0" role="button" aria-label="Trial 88: 488.20 ms; batch 05; 150 ms settle / 30 ms poll / 1 arrival check; tilt; geometry pass">
+    <g clip-path="url(#p2be4f5e943)">
+     <use ns4:href="#md400b9ccb9" x="584.8" y="428.414622" style="fill: #303d2c; stroke: #303d2c" />
+    </g>
+   <title>Trial 88: 488.20 ms; batch 05; 150 ms settle / 30 ms poll / 1 arrival check; tilt; geometry pass</title></g>
+   <g id="trial-089" data-trial="89" tabindex="0" role="button" aria-label="Trial 89: 946.14 ms; batch 05; 150 ms settle / 30 ms poll / 1 arrival check; diagonal; geometry pass">
+    <g clip-path="url(#p2be4f5e943)">
+     <use ns4:href="#md400b9ccb9" x="590.496" y="344.007138" style="fill: #303d2c; stroke: #303d2c" />
+    </g>
+   <title>Trial 89: 946.14 ms; batch 05; 150 ms settle / 30 ms poll / 1 arrival check; diagonal; geometry pass</title></g>
+   <g id="trial-090" data-trial="90" tabindex="0" role="button" aria-label="Trial 90: 1013.52 ms; batch 05; 150 ms settle / 30 ms poll / 1 arrival check; diagonal; geometry pass">
+    <g clip-path="url(#p2be4f5e943)">
+     <use ns4:href="#md400b9ccb9" x="596.192" y="331.588861" style="fill: #303d2c; stroke: #303d2c" />
+    </g>
+   <title>Trial 90: 1013.52 ms; batch 05; 150 ms settle / 30 ms poll / 1 arrival check; diagonal; geometry pass</title></g>
+   <g id="trial-091" data-trial="91" tabindex="0" role="button" aria-label="Trial 91: 717.07 ms; batch 06; 200 ms settle / 30 ms poll / 1 arrival check; pan; geometry pass">
+    <g clip-path="url(#p2be4f5e943)">
+     <use ns4:href="#md400b9ccb9" x="601.888" y="386.230063" style="fill: #303d2c; stroke: #303d2c" />
+    </g>
+   <title>Trial 91: 717.07 ms; batch 06; 200 ms settle / 30 ms poll / 1 arrival check; pan; geometry pass</title></g>
+   <g id="trial-092" data-trial="92" tabindex="0" role="button" aria-label="Trial 92: 746.27 ms; batch 06; 200 ms settle / 30 ms poll / 1 arrival check; pan; geometry pass">
+    <g clip-path="url(#p2be4f5e943)">
+     <use ns4:href="#md400b9ccb9" x="607.584" y="380.847816" style="fill: #303d2c; stroke: #303d2c" />
+    </g>
+   <title>Trial 92: 746.27 ms; batch 06; 200 ms settle / 30 ms poll / 1 arrival check; pan; geometry pass</title></g>
+   <g id="trial-093" data-trial="93" tabindex="0" role="button" aria-label="Trial 93: 533.52 ms; batch 06; 200 ms settle / 30 ms poll / 1 arrival check; tilt; geometry pass">
+    <g clip-path="url(#p2be4f5e943)">
+     <use ns4:href="#md400b9ccb9" x="613.28" y="420.062361" style="fill: #303d2c; stroke: #303d2c" />
+    </g>
+   <title>Trial 93: 533.52 ms; batch 06; 200 ms settle / 30 ms poll / 1 arrival check; tilt; geometry pass</title></g>
+   <g id="trial-094" data-trial="94" tabindex="0" role="button" aria-label="Trial 94: 593.40 ms; batch 06; 200 ms settle / 30 ms poll / 1 arrival check; tilt; geometry pass">
+    <g clip-path="url(#p2be4f5e943)">
+     <use ns4:href="#md400b9ccb9" x="618.976" y="409.024819" style="fill: #303d2c; stroke: #303d2c" />
+    </g>
+   <title>Trial 94: 593.40 ms; batch 06; 200 ms settle / 30 ms poll / 1 arrival check; tilt; geometry pass</title></g>
+   <g id="trial-095" data-trial="95" tabindex="0" role="button" aria-label="Trial 95: 1039.02 ms; batch 06; 200 ms settle / 30 ms poll / 1 arrival check; diagonal; geometry pass">
+    <g clip-path="url(#p2be4f5e943)">
+     <use ns4:href="#md400b9ccb9" x="624.672" y="326.887122" style="fill: #303d2c; stroke: #303d2c" />
+    </g>
+   <title>Trial 95: 1039.02 ms; batch 06; 200 ms settle / 30 ms poll / 1 arrival check; diagonal; geometry pass</title></g>
+   <g id="trial-096" data-trial="96" tabindex="0" role="button" aria-label="Trial 96: 1007.80 ms; batch 06; 200 ms settle / 30 ms poll / 1 arrival check; diagonal; geometry pass">
+    <g clip-path="url(#p2be4f5e943)">
+     <use ns4:href="#md400b9ccb9" x="630.368" y="332.641993" style="fill: #303d2c; stroke: #303d2c" />
+    </g>
+   <title>Trial 96: 1007.80 ms; batch 06; 200 ms settle / 30 ms poll / 1 arrival check; diagonal; geometry pass</title></g>
+   <g id="trial-097" data-trial="97" tabindex="0" role="button" aria-label="Trial 97: 784.31 ms; batch 06; 200 ms settle / 30 ms poll / 1 arrival check; pan; geometry pass">
+    <g clip-path="url(#p2be4f5e943)">
+     <use ns4:href="#md400b9ccb9" x="636.064" y="373.836512" style="fill: #303d2c; stroke: #303d2c" />
+    </g>
+   <title>Trial 97: 784.31 ms; batch 06; 200 ms settle / 30 ms poll / 1 arrival check; pan; geometry pass</title></g>
+   <g id="trial-098" data-trial="98" tabindex="0" role="button" aria-label="Trial 98: 759.48 ms; batch 06; 200 ms settle / 30 ms poll / 1 arrival check; pan; geometry pass">
+    <g clip-path="url(#p2be4f5e943)">
+     <use ns4:href="#md400b9ccb9" x="641.76" y="378.413559" style="fill: #303d2c; stroke: #303d2c" />
+    </g>
+   <title>Trial 98: 759.48 ms; batch 06; 200 ms settle / 30 ms poll / 1 arrival check; pan; geometry pass</title></g>
+   <g id="trial-099" data-trial="99" tabindex="0" role="button" aria-label="Trial 99: 496.51 ms; batch 06; 200 ms settle / 30 ms poll / 1 arrival check; tilt; geometry pass">
+    <g clip-path="url(#p2be4f5e943)">
+     <use ns4:href="#md400b9ccb9" x="647.456" y="426.883787" style="fill: #303d2c; stroke: #303d2c" />
+    </g>
+   <title>Trial 99: 496.51 ms; batch 06; 200 ms settle / 30 ms poll / 1 arrival check; tilt; geometry pass</title></g>
+   <g id="trial-100" data-trial="100" tabindex="0" role="button" aria-label="Trial 100: 488.19 ms; batch 06; 200 ms settle / 30 ms poll / 1 arrival check; tilt; geometry FAIL">
+    <g clip-path="url(#p2be4f5e943)">
+     <use ns4:href="#mcddb7c7f21" x="653.152" y="428.417128" style="fill: #bf956b; stroke: #bf956b; stroke-width: 1.5" />
+    </g>
+   <title>Trial 100: 488.19 ms; batch 06; 200 ms settle / 30 ms poll / 1 arrival check; tilt; geometry FAIL</title></g>
+   <g id="trial-101" data-trial="101" tabindex="0" role="button" aria-label="Trial 101: 972.54 ms; batch 06; 200 ms settle / 30 ms poll / 1 arrival check; diagonal; geometry pass">
+    <g clip-path="url(#p2be4f5e943)">
+     <use ns4:href="#md400b9ccb9" x="658.848" y="339.140549" style="fill: #303d2c; stroke: #303d2c" />
+    </g>
+   <title>Trial 101: 972.54 ms; batch 06; 200 ms settle / 30 ms poll / 1 arrival check; diagonal; geometry pass</title></g>
+   <g id="trial-102" data-trial="102" tabindex="0" role="button" aria-label="Trial 102: 945.99 ms; batch 06; 200 ms settle / 30 ms poll / 1 arrival check; diagonal; geometry pass">
+    <g clip-path="url(#p2be4f5e943)">
+     <use ns4:href="#md400b9ccb9" x="664.544" y="344.035289" style="fill: #303d2c; stroke: #303d2c" />
+    </g>
+   <title>Trial 102: 945.99 ms; batch 06; 200 ms settle / 30 ms poll / 1 arrival check; diagonal; geometry pass</title></g>
+   <g id="trial-103" data-trial="103" tabindex="0" role="button" aria-label="Trial 103: 775.42 ms; batch 06; 200 ms settle / 30 ms poll / 1 arrival check; pan; geometry pass">
+    <g clip-path="url(#p2be4f5e943)">
+     <use ns4:href="#md400b9ccb9" x="670.24" y="375.475142" style="fill: #303d2c; stroke: #303d2c" />
+    </g>
+   <title>Trial 103: 775.42 ms; batch 06; 200 ms settle / 30 ms poll / 1 arrival check; pan; geometry pass</title></g>
+   <g id="trial-104" data-trial="104" tabindex="0" role="button" aria-label="Trial 104: 746.35 ms; batch 06; 200 ms settle / 30 ms poll / 1 arrival check; pan; geometry pass">
+    <g clip-path="url(#p2be4f5e943)">
+     <use ns4:href="#md400b9ccb9" x="675.936" y="380.832343" style="fill: #303d2c; stroke: #303d2c" />
+    </g>
+   <title>Trial 104: 746.35 ms; batch 06; 200 ms settle / 30 ms poll / 1 arrival check; pan; geometry pass</title></g>
+   <g id="trial-105" data-trial="105" tabindex="0" role="button" aria-label="Trial 105: 549.95 ms; batch 06; 200 ms settle / 30 ms poll / 1 arrival check; tilt; geometry pass">
+    <g clip-path="url(#p2be4f5e943)">
+     <use ns4:href="#md400b9ccb9" x="681.632" y="417.032954" style="fill: #303d2c; stroke: #303d2c" />
+    </g>
+   <title>Trial 105: 549.95 ms; batch 06; 200 ms settle / 30 ms poll / 1 arrival check; tilt; geometry pass</title></g>
+   <g id="trial-106" data-trial="106" tabindex="0" role="button" aria-label="Trial 106: 556.90 ms; batch 06; 200 ms settle / 30 ms poll / 1 arrival check; tilt; geometry pass">
+    <g clip-path="url(#p2be4f5e943)">
+     <use ns4:href="#md400b9ccb9" x="687.328" y="415.752089" style="fill: #303d2c; stroke: #303d2c" />
+    </g>
+   <title>Trial 106: 556.90 ms; batch 06; 200 ms settle / 30 ms poll / 1 arrival check; tilt; geometry pass</title></g>
+   <g id="trial-107" data-trial="107" tabindex="0" role="button" aria-label="Trial 107: 1008.90 ms; batch 06; 200 ms settle / 30 ms poll / 1 arrival check; diagonal; geometry pass">
+    <g clip-path="url(#p2be4f5e943)">
+     <use ns4:href="#md400b9ccb9" x="693.024" y="332.440442" style="fill: #303d2c; stroke: #303d2c" />
+    </g>
+   <title>Trial 107: 1008.90 ms; batch 06; 200 ms settle / 30 ms poll / 1 arrival check; diagonal; geometry pass</title></g>
+   <g id="trial-108" data-trial="108" tabindex="0" role="button" aria-label="Trial 108: 965.08 ms; batch 06; 200 ms settle / 30 ms poll / 1 arrival check; diagonal; geometry pass">
+    <g clip-path="url(#p2be4f5e943)">
+     <use ns4:href="#md400b9ccb9" x="698.72" y="340.517274" style="fill: #303d2c; stroke: #303d2c" />
+    </g>
+   <title>Trial 108: 965.08 ms; batch 06; 200 ms settle / 30 ms poll / 1 arrival check; diagonal; geometry pass</title></g>
+   <g id="trial-109" data-trial="109" tabindex="0" role="button" aria-label="Trial 109: 667.37 ms; batch 07; Main stream: 50 ms settle / 30 ms poll / 1 arrival check; pan; geometry pass">
+    <g clip-path="url(#p2be4f5e943)">
+     <use ns4:href="#md400b9ccb9" x="704.416" y="395.390038" style="fill: #303d2c; stroke: #303d2c" />
+    </g>
+   <title>Trial 109: 667.37 ms; batch 07; Main stream: 50 ms settle / 30 ms poll / 1 arrival check; pan; geometry pass</title></g>
+   <g id="trial-110" data-trial="110" tabindex="0" role="button" aria-label="Trial 110: 639.78 ms; batch 07; Main stream: 50 ms settle / 30 ms poll / 1 arrival check; pan; geometry pass">
+    <g clip-path="url(#p2be4f5e943)">
+     <use ns4:href="#md400b9ccb9" x="710.112" y="400.474923" style="fill: #303d2c; stroke: #303d2c" />
+    </g>
+   <title>Trial 110: 639.78 ms; batch 07; Main stream: 50 ms settle / 30 ms poll / 1 arrival check; pan; geometry pass</title></g>
+   <g id="trial-111" data-trial="111" tabindex="0" role="button" aria-label="Trial 111: 402.06 ms; batch 07; Main stream: 50 ms settle / 30 ms poll / 1 arrival check; tilt; geometry pass">
+    <g clip-path="url(#p2be4f5e943)">
+     <use ns4:href="#md400b9ccb9" x="715.808" y="444.292028" style="fill: #303d2c; stroke: #303d2c" />
+    </g>
+   <title>Trial 111: 402.06 ms; batch 07; Main stream: 50 ms settle / 30 ms poll / 1 arrival check; tilt; geometry pass</title></g>
+   <g id="trial-112" data-trial="112" tabindex="0" role="button" aria-label="Trial 112: 406.37 ms; batch 07; Main stream: 50 ms settle / 30 ms poll / 1 arrival check; tilt; geometry pass">
+    <g clip-path="url(#p2be4f5e943)">
+     <use ns4:href="#md400b9ccb9" x="721.504" y="443.497325" style="fill: #303d2c; stroke: #303d2c" />
+    </g>
+   <title>Trial 112: 406.37 ms; batch 07; Main stream: 50 ms settle / 30 ms poll / 1 arrival check; tilt; geometry pass</title></g>
+   <g id="trial-113" data-trial="113" tabindex="0" role="button" aria-label="Trial 113: 848.26 ms; batch 07; Main stream: 50 ms settle / 30 ms poll / 1 arrival check; diagonal; geometry pass">
+    <g clip-path="url(#p2be4f5e943)">
+     <use ns4:href="#md400b9ccb9" x="727.2" y="362.047865" style="fill: #303d2c; stroke: #303d2c" />
+    </g>
+   <title>Trial 113: 848.26 ms; batch 07; Main stream: 50 ms settle / 30 ms poll / 1 arrival check; diagonal; geometry pass</title></g>
+   <g id="trial-114" data-trial="114" tabindex="0" role="button" aria-label="Trial 114: 819.26 ms; batch 07; Main stream: 50 ms settle / 30 ms poll / 1 arrival check; diagonal; geometry FAIL">
+    <g clip-path="url(#p2be4f5e943)">
+     <use ns4:href="#mcddb7c7f21" x="732.896" y="367.394123" style="fill: #bf956b; stroke: #bf956b; stroke-width: 1.5" />
+    </g>
+   <title>Trial 114: 819.26 ms; batch 07; Main stream: 50 ms settle / 30 ms poll / 1 arrival check; diagonal; geometry FAIL</title></g>
+   <g id="trial-115" data-trial="115" tabindex="0" role="button" aria-label="Trial 115: 580.72 ms; batch 07; Main stream: 50 ms settle / 30 ms poll / 1 arrival check; pan; geometry pass">
+    <g clip-path="url(#p2be4f5e943)">
+     <use ns4:href="#md400b9ccb9" x="738.592" y="411.361148" style="fill: #303d2c; stroke: #303d2c" />
+    </g>
+   <title>Trial 115: 580.72 ms; batch 07; Main stream: 50 ms settle / 30 ms poll / 1 arrival check; pan; geometry pass</title></g>
+   <g id="trial-116" data-trial="116" tabindex="0" role="button" aria-label="Trial 116: 576.46 ms; batch 07; Main stream: 50 ms settle / 30 ms poll / 1 arrival check; pan; geometry pass">
+    <g clip-path="url(#p2be4f5e943)">
+     <use ns4:href="#md400b9ccb9" x="744.288" y="412.146771" style="fill: #303d2c; stroke: #303d2c" />
+    </g>
+   <title>Trial 116: 576.46 ms; batch 07; Main stream: 50 ms settle / 30 ms poll / 1 arrival check; pan; geometry pass</title></g>
+   <g id="trial-117" data-trial="117" tabindex="0" role="button" aria-label="Trial 117: 367.02 ms; batch 07; Main stream: 50 ms settle / 30 ms poll / 1 arrival check; tilt; geometry pass">
+    <g clip-path="url(#p2be4f5e943)">
+     <use ns4:href="#md400b9ccb9" x="749.984" y="450.750601" style="fill: #303d2c; stroke: #303d2c" />
+    </g>
+   <title>Trial 117: 367.02 ms; batch 07; Main stream: 50 ms settle / 30 ms poll / 1 arrival check; tilt; geometry pass</title></g>
+   <g id="trial-118" data-trial="118" tabindex="0" role="button" aria-label="Trial 118: 361.78 ms; batch 07; Main stream: 50 ms settle / 30 ms poll / 1 arrival check; tilt; geometry pass">
+    <g clip-path="url(#p2be4f5e943)">
+     <use ns4:href="#md400b9ccb9" x="755.68" y="451.716884" style="fill: #303d2c; stroke: #303d2c" />
+    </g>
+   <title>Trial 118: 361.78 ms; batch 07; Main stream: 50 ms settle / 30 ms poll / 1 arrival check; tilt; geometry pass</title></g>
+   <g id="trial-119" data-trial="119" tabindex="0" role="button" aria-label="Trial 119: 849.30 ms; batch 07; Main stream: 50 ms settle / 30 ms poll / 1 arrival check; diagonal; geometry pass">
+    <g clip-path="url(#p2be4f5e943)">
+     <use ns4:href="#md400b9ccb9" x="761.376" y="361.856269" style="fill: #303d2c; stroke: #303d2c" />
+    </g>
+   <title>Trial 119: 849.30 ms; batch 07; Main stream: 50 ms settle / 30 ms poll / 1 arrival check; diagonal; geometry pass</title></g>
+   <g id="trial-120" data-trial="120" tabindex="0" role="button" aria-label="Trial 120: 867.41 ms; batch 07; Main stream: 50 ms settle / 30 ms poll / 1 arrival check; diagonal; geometry pass">
+    <g clip-path="url(#p2be4f5e943)">
+     <use ns4:href="#md400b9ccb9" x="767.072" y="358.519089" style="fill: #303d2c; stroke: #303d2c" />
+    </g>
+   <title>Trial 120: 867.41 ms; batch 07; Main stream: 50 ms settle / 30 ms poll / 1 arrival check; diagonal; geometry pass</title></g>
+   <g id="trial-121" data-trial="121" tabindex="0" role="button" aria-label="Trial 121: 639.98 ms; batch 07; Main stream: 50 ms settle / 30 ms poll / 1 arrival check; pan; geometry pass">
+    <g clip-path="url(#p2be4f5e943)">
+     <use ns4:href="#md400b9ccb9" x="772.768" y="400.43906" style="fill: #303d2c; stroke: #303d2c" />
+    </g>
+   <title>Trial 121: 639.98 ms; batch 07; Main stream: 50 ms settle / 30 ms poll / 1 arrival check; pan; geometry pass</title></g>
+   <g id="trial-122" data-trial="122" tabindex="0" role="button" aria-label="Trial 122: 597.47 ms; batch 07; Main stream: 50 ms settle / 30 ms poll / 1 arrival check; pan; geometry pass">
+    <g clip-path="url(#p2be4f5e943)">
+     <use ns4:href="#md400b9ccb9" x="778.464" y="408.27493" style="fill: #303d2c; stroke: #303d2c" />
+    </g>
+   <title>Trial 122: 597.47 ms; batch 07; Main stream: 50 ms settle / 30 ms poll / 1 arrival check; pan; geometry pass</title></g>
+   <g id="trial-123" data-trial="123" tabindex="0" role="button" aria-label="Trial 123: 416.89 ms; batch 07; Main stream: 50 ms settle / 30 ms poll / 1 arrival check; tilt; geometry pass">
+    <g clip-path="url(#p2be4f5e943)">
+     <use ns4:href="#md400b9ccb9" x="784.16" y="441.55805" style="fill: #303d2c; stroke: #303d2c" />
+    </g>
+   <title>Trial 123: 416.89 ms; batch 07; Main stream: 50 ms settle / 30 ms poll / 1 arrival check; tilt; geometry pass</title></g>
+   <g id="trial-124" data-trial="124" tabindex="0" role="button" aria-label="Trial 124: 356.50 ms; batch 07; Main stream: 50 ms settle / 30 ms poll / 1 arrival check; tilt; geometry pass">
+    <g clip-path="url(#p2be4f5e943)">
+     <use ns4:href="#md400b9ccb9" x="789.856" y="452.690276" style="fill: #303d2c; stroke: #303d2c" />
+    </g>
+   <title>Trial 124: 356.50 ms; batch 07; Main stream: 50 ms settle / 30 ms poll / 1 arrival check; tilt; geometry pass</title></g>
+   <g id="trial-125" data-trial="125" tabindex="0" role="button" aria-label="Trial 125: 834.74 ms; batch 07; Main stream: 50 ms settle / 30 ms poll / 1 arrival check; diagonal; geometry pass">
+    <g clip-path="url(#p2be4f5e943)">
+     <use ns4:href="#md400b9ccb9" x="795.552" y="364.540694" style="fill: #303d2c; stroke: #303d2c" />
+    </g>
+   <title>Trial 125: 834.74 ms; batch 07; Main stream: 50 ms settle / 30 ms poll / 1 arrival check; diagonal; geometry pass</title></g>
+   <g id="trial-126" data-trial="126" tabindex="0" role="button" aria-label="Trial 126: 875.56 ms; batch 07; Main stream: 50 ms settle / 30 ms poll / 1 arrival check; diagonal; geometry pass">
+    <g clip-path="url(#p2be4f5e943)">
+     <use ns4:href="#md400b9ccb9" x="801.248" y="357.016261" style="fill: #303d2c; stroke: #303d2c" />
+    </g>
+   <title>Trial 126: 875.56 ms; batch 07; Main stream: 50 ms settle / 30 ms poll / 1 arrival check; diagonal; geometry pass</title></g>
+   <g id="trial-127" data-trial="127" tabindex="0" role="button" aria-label="Trial 127: 627.27 ms; batch 08; 50 ms settle / 0 ms poll / 1 arrival check; pan; geometry pass">
+    <g clip-path="url(#p2be4f5e943)">
+     <use ns4:href="#md400b9ccb9" x="806.944" y="402.781388" style="fill: #303d2c; stroke: #303d2c" />
+    </g>
+   <title>Trial 127: 627.27 ms; batch 08; 50 ms settle / 0 ms poll / 1 arrival check; pan; geometry pass</title></g>
+   <g id="trial-128" data-trial="128" tabindex="0" role="button" aria-label="Trial 128: 573.61 ms; batch 08; 50 ms settle / 0 ms poll / 1 arrival check; pan; geometry pass">
+    <g clip-path="url(#p2be4f5e943)">
+     <use ns4:href="#md400b9ccb9" x="812.64" y="412.672279" style="fill: #303d2c; stroke: #303d2c" />
+    </g>
+   <title>Trial 128: 573.61 ms; batch 08; 50 ms settle / 0 ms poll / 1 arrival check; pan; geometry pass</title></g>
+   <g id="trial-129" data-trial="129" tabindex="0" role="button" aria-label="Trial 129: 413.31 ms; batch 08; 50 ms settle / 0 ms poll / 1 arrival check; tilt; geometry pass">
+    <g clip-path="url(#p2be4f5e943)">
+     <use ns4:href="#md400b9ccb9" x="818.336" y="442.218838" style="fill: #303d2c; stroke: #303d2c" />
+    </g>
+   <title>Trial 129: 413.31 ms; batch 08; 50 ms settle / 0 ms poll / 1 arrival check; tilt; geometry pass</title></g>
+   <g id="trial-130" data-trial="130" tabindex="0" role="button" aria-label="Trial 130: 421.03 ms; batch 08; 50 ms settle / 0 ms poll / 1 arrival check; tilt; geometry pass">
+    <g clip-path="url(#p2be4f5e943)">
+     <use ns4:href="#md400b9ccb9" x="824.032" y="440.79534" style="fill: #303d2c; stroke: #303d2c" />
+    </g>
+   <title>Trial 130: 421.03 ms; batch 08; 50 ms settle / 0 ms poll / 1 arrival check; tilt; geometry pass</title></g>
+   <g id="trial-131" data-trial="131" tabindex="0" role="button" aria-label="Trial 131: 936.42 ms; batch 08; 50 ms settle / 0 ms poll / 1 arrival check; diagonal; geometry pass">
+    <g clip-path="url(#p2be4f5e943)">
+     <use ns4:href="#md400b9ccb9" x="829.728" y="345.798409" style="fill: #303d2c; stroke: #303d2c" />
+    </g>
+   <title>Trial 131: 936.42 ms; batch 08; 50 ms settle / 0 ms poll / 1 arrival check; diagonal; geometry pass</title></g>
+   <g id="trial-132" data-trial="132" tabindex="0" role="button" aria-label="Trial 132: 1085.49 ms; batch 08; 50 ms settle / 0 ms poll / 1 arrival check; diagonal; geometry pass">
+    <g clip-path="url(#p2be4f5e943)">
+     <use ns4:href="#md400b9ccb9" x="835.424" y="318.321588" style="fill: #303d2c; stroke: #303d2c" />
+    </g>
+   <title>Trial 132: 1085.49 ms; batch 08; 50 ms settle / 0 ms poll / 1 arrival check; diagonal; geometry pass</title></g>
+   <g id="trial-133" data-trial="133" tabindex="0" role="button" aria-label="Trial 133: 637.00 ms; batch 08; 50 ms settle / 0 ms poll / 1 arrival check; pan; geometry pass">
+    <g clip-path="url(#p2be4f5e943)">
+     <use ns4:href="#md400b9ccb9" x="841.12" y="400.988458" style="fill: #303d2c; stroke: #303d2c" />
+    </g>
+   <title>Trial 133: 637.00 ms; batch 08; 50 ms settle / 0 ms poll / 1 arrival check; pan; geometry pass</title></g>
+   <g id="trial-134" data-trial="134" tabindex="0" role="button" aria-label="Trial 134: 627.28 ms; batch 08; 50 ms settle / 0 ms poll / 1 arrival check; pan; geometry pass">
+    <g clip-path="url(#p2be4f5e943)">
+     <use ns4:href="#md400b9ccb9" x="846.816" y="402.779238" style="fill: #303d2c; stroke: #303d2c" />
+    </g>
+   <title>Trial 134: 627.28 ms; batch 08; 50 ms settle / 0 ms poll / 1 arrival check; pan; geometry pass</title></g>
+   <g id="trial-135" data-trial="135" tabindex="0" role="button" aria-label="Trial 135: 367.81 ms; batch 08; 50 ms settle / 0 ms poll / 1 arrival check; tilt; geometry pass">
+    <g clip-path="url(#p2be4f5e943)">
+     <use ns4:href="#md400b9ccb9" x="852.512" y="450.605929" style="fill: #303d2c; stroke: #303d2c" />
+    </g>
+   <title>Trial 135: 367.81 ms; batch 08; 50 ms settle / 0 ms poll / 1 arrival check; tilt; geometry pass</title></g>
+   <g id="trial-136" data-trial="136" tabindex="0" role="button" aria-label="Trial 136: 447.06 ms; batch 08; 50 ms settle / 0 ms poll / 1 arrival check; tilt; geometry pass">
+    <g clip-path="url(#p2be4f5e943)">
+     <use ns4:href="#md400b9ccb9" x="858.208" y="435.998027" style="fill: #303d2c; stroke: #303d2c" />
+    </g>
+   <title>Trial 136: 447.06 ms; batch 08; 50 ms settle / 0 ms poll / 1 arrival check; tilt; geometry pass</title></g>
+   <g id="trial-137" data-trial="137" tabindex="0" role="button" aria-label="Trial 137: 1000.96 ms; batch 08; 50 ms settle / 0 ms poll / 1 arrival check; diagonal; geometry pass">
+    <g clip-path="url(#p2be4f5e943)">
+     <use ns4:href="#md400b9ccb9" x="863.904" y="333.903184" style="fill: #303d2c; stroke: #303d2c" />
+    </g>
+   <title>Trial 137: 1000.96 ms; batch 08; 50 ms settle / 0 ms poll / 1 arrival check; diagonal; geometry pass</title></g>
+   <g id="trial-138" data-trial="138" tabindex="0" role="button" aria-label="Trial 138: 877.77 ms; batch 08; 50 ms settle / 0 ms poll / 1 arrival check; diagonal; geometry pass">
+    <g clip-path="url(#p2be4f5e943)">
+     <use ns4:href="#md400b9ccb9" x="869.6" y="356.61011" style="fill: #303d2c; stroke: #303d2c" />
+    </g>
+   <title>Trial 138: 877.77 ms; batch 08; 50 ms settle / 0 ms poll / 1 arrival check; diagonal; geometry pass</title></g>
+   <g id="trial-139" data-trial="139" tabindex="0" role="button" aria-label="Trial 139: 933.52 ms; batch 08; 50 ms settle / 0 ms poll / 1 arrival check; pan; geometry pass">
+    <g clip-path="url(#p2be4f5e943)">
+     <use ns4:href="#md400b9ccb9" x="875.296" y="346.333618" style="fill: #303d2c; stroke: #303d2c" />
+    </g>
+   <title>Trial 139: 933.52 ms; batch 08; 50 ms settle / 0 ms poll / 1 arrival check; pan; geometry pass</title></g>
+   <g id="trial-140" data-trial="140" tabindex="0" role="button" aria-label="Trial 140: 605.55 ms; batch 08; 50 ms settle / 0 ms poll / 1 arrival check; pan; geometry pass">
+    <g clip-path="url(#p2be4f5e943)">
+     <use ns4:href="#md400b9ccb9" x="880.992" y="406.784186" style="fill: #303d2c; stroke: #303d2c" />
+    </g>
+   <title>Trial 140: 605.55 ms; batch 08; 50 ms settle / 0 ms poll / 1 arrival check; pan; geometry pass</title></g>
+   <g id="trial-141" data-trial="141" tabindex="0" role="button" aria-label="Trial 141: 433.35 ms; batch 08; 50 ms settle / 0 ms poll / 1 arrival check; tilt; geometry pass">
+    <g clip-path="url(#p2be4f5e943)">
+     <use ns4:href="#md400b9ccb9" x="886.688" y="438.524403" style="fill: #303d2c; stroke: #303d2c" />
+    </g>
+   <title>Trial 141: 433.35 ms; batch 08; 50 ms settle / 0 ms poll / 1 arrival check; tilt; geometry pass</title></g>
+   <g id="trial-142" data-trial="142" tabindex="0" role="button" aria-label="Trial 142: 366.46 ms; batch 08; 50 ms settle / 0 ms poll / 1 arrival check; tilt; geometry pass">
+    <g clip-path="url(#p2be4f5e943)">
+     <use ns4:href="#md400b9ccb9" x="892.384" y="450.853438" style="fill: #303d2c; stroke: #303d2c" />
+    </g>
+   <title>Trial 142: 366.46 ms; batch 08; 50 ms settle / 0 ms poll / 1 arrival check; tilt; geometry pass</title></g>
+   <g id="trial-143" data-trial="143" tabindex="0" role="button" aria-label="Trial 143: 819.49 ms; batch 08; 50 ms settle / 0 ms poll / 1 arrival check; diagonal; geometry pass">
+    <g clip-path="url(#p2be4f5e943)">
+     <use ns4:href="#md400b9ccb9" x="898.08" y="367.350904" style="fill: #303d2c; stroke: #303d2c" />
+    </g>
+   <title>Trial 143: 819.49 ms; batch 08; 50 ms settle / 0 ms poll / 1 arrival check; diagonal; geometry pass</title></g>
+   <g id="trial-144" data-trial="144" tabindex="0" role="button" aria-label="Trial 144: 902.27 ms; batch 08; 50 ms settle / 0 ms poll / 1 arrival check; diagonal; geometry pass">
+    <g clip-path="url(#p2be4f5e943)">
+     <use ns4:href="#md400b9ccb9" x="903.776" y="352.094415" style="fill: #303d2c; stroke: #303d2c" />
+    </g>
+   <title>Trial 144: 902.27 ms; batch 08; 50 ms settle / 0 ms poll / 1 arrival check; diagonal; geometry pass</title></g>
+   <g id="trial-145" data-trial="145" tabindex="0" role="button" aria-label="Trial 145: 632.89 ms; batch 09; 50 ms settle / 30 ms poll / 1 arrival check; pan; geometry pass">
+    <g clip-path="url(#p2be4f5e943)">
+     <use ns4:href="#md400b9ccb9" x="909.472" y="401.745672" style="fill: #303d2c; stroke: #303d2c" />
+    </g>
+   <title>Trial 145: 632.89 ms; batch 09; 50 ms settle / 30 ms poll / 1 arrival check; pan; geometry pass</title></g>
+   <g id="trial-146" data-trial="146" tabindex="0" role="button" aria-label="Trial 146: 626.54 ms; batch 09; 50 ms settle / 30 ms poll / 1 arrival check; pan; geometry pass">
+    <g clip-path="url(#p2be4f5e943)">
+     <use ns4:href="#md400b9ccb9" x="915.168" y="402.916292" style="fill: #303d2c; stroke: #303d2c" />
+    </g>
+   <title>Trial 146: 626.54 ms; batch 09; 50 ms settle / 30 ms poll / 1 arrival check; pan; geometry pass</title></g>
+   <g id="trial-147" data-trial="147" tabindex="0" role="button" aria-label="Trial 147: 401.62 ms; batch 09; 50 ms settle / 30 ms poll / 1 arrival check; tilt; geometry pass">
+    <g clip-path="url(#p2be4f5e943)">
+     <use ns4:href="#md400b9ccb9" x="920.864" y="444.372499" style="fill: #303d2c; stroke: #303d2c" />
+    </g>
+   <title>Trial 147: 401.62 ms; batch 09; 50 ms settle / 30 ms poll / 1 arrival check; tilt; geometry pass</title></g>
+   <g id="trial-148" data-trial="148" tabindex="0" role="button" aria-label="Trial 148: 393.08 ms; batch 09; 50 ms settle / 30 ms poll / 1 arrival check; tilt; geometry pass">
+    <g clip-path="url(#p2be4f5e943)">
+     <use ns4:href="#md400b9ccb9" x="926.56" y="445.946709" style="fill: #303d2c; stroke: #303d2c" />
+    </g>
+   <title>Trial 148: 393.08 ms; batch 09; 50 ms settle / 30 ms poll / 1 arrival check; tilt; geometry pass</title></g>
+   <g id="trial-149" data-trial="149" tabindex="0" role="button" aria-label="Trial 149: 879.01 ms; batch 09; 50 ms settle / 30 ms poll / 1 arrival check; diagonal; geometry pass">
+    <g clip-path="url(#p2be4f5e943)">
+     <use ns4:href="#md400b9ccb9" x="932.256" y="356.380056" style="fill: #303d2c; stroke: #303d2c" />
+    </g>
+   <title>Trial 149: 879.01 ms; batch 09; 50 ms settle / 30 ms poll / 1 arrival check; diagonal; geometry pass</title></g>
+   <g id="trial-150" data-trial="150" tabindex="0" role="button" aria-label="Trial 150: 849.32 ms; batch 09; 50 ms settle / 30 ms poll / 1 arrival check; diagonal; geometry pass">
+    <g clip-path="url(#p2be4f5e943)">
+     <use ns4:href="#md400b9ccb9" x="937.952" y="361.853072" style="fill: #303d2c; stroke: #303d2c" />
+    </g>
+   <title>Trial 150: 849.32 ms; batch 09; 50 ms settle / 30 ms poll / 1 arrival check; diagonal; geometry pass</title></g>
+   <g id="trial-151" data-trial="151" tabindex="0" role="button" aria-label="Trial 151: 711.36 ms; batch 09; 50 ms settle / 30 ms poll / 1 arrival check; pan; geometry pass">
+    <g clip-path="url(#p2be4f5e943)">
+     <use ns4:href="#md400b9ccb9" x="943.648" y="387.281267" style="fill: #303d2c; stroke: #303d2c" />
+    </g>
+   <title>Trial 151: 711.36 ms; batch 09; 50 ms settle / 30 ms poll / 1 arrival check; pan; geometry pass</title></g>
+   <g id="trial-152" data-trial="152" tabindex="0" role="button" aria-label="Trial 152: 600.54 ms; batch 09; 50 ms settle / 30 ms poll / 1 arrival check; pan; geometry pass">
+    <g clip-path="url(#p2be4f5e943)">
+     <use ns4:href="#md400b9ccb9" x="949.344" y="407.709247" style="fill: #303d2c; stroke: #303d2c" />
+    </g>
+   <title>Trial 152: 600.54 ms; batch 09; 50 ms settle / 30 ms poll / 1 arrival check; pan; geometry pass</title></g>
+   <g id="trial-153" data-trial="153" tabindex="0" role="button" aria-label="Trial 153: 412.41 ms; batch 09; 50 ms settle / 30 ms poll / 1 arrival check; tilt; geometry pass">
+    <g clip-path="url(#p2be4f5e943)">
+     <use ns4:href="#md400b9ccb9" x="955.04" y="442.384832" style="fill: #303d2c; stroke: #303d2c" />
+    </g>
+   <title>Trial 153: 412.41 ms; batch 09; 50 ms settle / 30 ms poll / 1 arrival check; tilt; geometry pass</title></g>
+   <g id="trial-154" data-trial="154" tabindex="0" role="button" aria-label="Trial 154: 383.75 ms; batch 09; 50 ms settle / 30 ms poll / 1 arrival check; tilt; geometry pass">
+    <g clip-path="url(#p2be4f5e943)">
+     <use ns4:href="#md400b9ccb9" x="960.736" y="447.666501" style="fill: #303d2c; stroke: #303d2c" />
+    </g>
+   <title>Trial 154: 383.75 ms; batch 09; 50 ms settle / 30 ms poll / 1 arrival check; tilt; geometry pass</title></g>
+   <g id="trial-155" data-trial="155" tabindex="0" role="button" aria-label="Trial 155: 813.75 ms; batch 09; 50 ms settle / 30 ms poll / 1 arrival check; diagonal; geometry pass">
+    <g clip-path="url(#p2be4f5e943)">
+     <use ns4:href="#md400b9ccb9" x="966.432" y="368.410374" style="fill: #303d2c; stroke: #303d2c" />
+    </g>
+   <title>Trial 155: 813.75 ms; batch 09; 50 ms settle / 30 ms poll / 1 arrival check; diagonal; geometry pass</title></g>
+   <g id="trial-156" data-trial="156" tabindex="0" role="button" aria-label="Trial 156: 800.19 ms; batch 09; 50 ms settle / 30 ms poll / 1 arrival check; diagonal; geometry pass">
+    <g clip-path="url(#p2be4f5e943)">
+     <use ns4:href="#md400b9ccb9" x="972.128" y="370.908693" style="fill: #303d2c; stroke: #303d2c" />
+    </g>
+   <title>Trial 156: 800.19 ms; batch 09; 50 ms settle / 30 ms poll / 1 arrival check; diagonal; geometry pass</title></g>
+   <g id="trial-157" data-trial="157" tabindex="0" role="button" aria-label="Trial 157: 650.78 ms; batch 09; 50 ms settle / 30 ms poll / 1 arrival check; pan; geometry pass">
+    <g clip-path="url(#p2be4f5e943)">
+     <use ns4:href="#md400b9ccb9" x="977.824" y="398.448334" style="fill: #303d2c; stroke: #303d2c" />
+    </g>
+   <title>Trial 157: 650.78 ms; batch 09; 50 ms settle / 30 ms poll / 1 arrival check; pan; geometry pass</title></g>
+   <g id="trial-158" data-trial="158" tabindex="0" role="button" aria-label="Trial 158: 583.88 ms; batch 09; 50 ms settle / 30 ms poll / 1 arrival check; pan; geometry pass">
+    <g clip-path="url(#p2be4f5e943)">
+     <use ns4:href="#md400b9ccb9" x="983.52" y="410.779107" style="fill: #303d2c; stroke: #303d2c" />
+    </g>
+   <title>Trial 158: 583.88 ms; batch 09; 50 ms settle / 30 ms poll / 1 arrival check; pan; geometry pass</title></g>
+   <g id="trial-159" data-trial="159" tabindex="0" role="button" aria-label="Trial 159: 465.11 ms; batch 09; 50 ms settle / 30 ms poll / 1 arrival check; tilt; geometry pass">
+    <g clip-path="url(#p2be4f5e943)">
+     <use ns4:href="#md400b9ccb9" x="989.216" y="432.670345" style="fill: #303d2c; stroke: #303d2c" />
+    </g>
+   <title>Trial 159: 465.11 ms; batch 09; 50 ms settle / 30 ms poll / 1 arrival check; tilt; geometry pass</title></g>
+   <g id="trial-160" data-trial="160" tabindex="0" role="button" aria-label="Trial 160: 361.36 ms; batch 09; 50 ms settle / 30 ms poll / 1 arrival check; tilt; geometry pass">
+    <g clip-path="url(#p2be4f5e943)">
+     <use ns4:href="#md400b9ccb9" x="994.912" y="451.79377" style="fill: #303d2c; stroke: #303d2c" />
+    </g>
+   <title>Trial 160: 361.36 ms; batch 09; 50 ms settle / 30 ms poll / 1 arrival check; tilt; geometry pass</title></g>
+   <g id="trial-161" data-trial="161" tabindex="0" role="button" aria-label="Trial 161: 838.97 ms; batch 09; 50 ms settle / 30 ms poll / 1 arrival check; diagonal; geometry pass">
+    <g clip-path="url(#p2be4f5e943)">
+     <use ns4:href="#md400b9ccb9" x="1000.608" y="363.76132" style="fill: #303d2c; stroke: #303d2c" />
+    </g>
+   <title>Trial 161: 838.97 ms; batch 09; 50 ms settle / 30 ms poll / 1 arrival check; diagonal; geometry pass</title></g>
+   <g id="trial-162" data-trial="162" tabindex="0" role="button" aria-label="Trial 162: 848.22 ms; batch 09; 50 ms settle / 30 ms poll / 1 arrival check; diagonal; geometry pass">
+    <g clip-path="url(#p2be4f5e943)">
+     <use ns4:href="#md400b9ccb9" x="1006.304" y="362.05601" style="fill: #303d2c; stroke: #303d2c" />
+    </g>
+   <title>Trial 162: 848.22 ms; batch 09; 50 ms settle / 30 ms poll / 1 arrival check; diagonal; geometry pass</title></g>
+   <g id="trial-163" data-trial="163" tabindex="0" role="button" aria-label="Trial 163: 625.21 ms; batch 10; 0 ms settle / 15 ms poll / 2 arrival checks; pan; geometry pass">
+    <g clip-path="url(#p2be4f5e943)">
+     <use ns4:href="#md400b9ccb9" x="1012" y="403.161199" style="fill: #303d2c; stroke: #303d2c" />
+    </g>
+   <title>Trial 163: 625.21 ms; batch 10; 0 ms settle / 15 ms poll / 2 arrival checks; pan; geometry pass</title></g>
+   <g id="trial-164" data-trial="164" tabindex="0" role="button" aria-label="Trial 164: 579.33 ms; batch 10; 0 ms settle / 15 ms poll / 2 arrival checks; pan; geometry pass">
+    <g clip-path="url(#p2be4f5e943)">
+     <use ns4:href="#md400b9ccb9" x="1017.696" y="411.618321" style="fill: #303d2c; stroke: #303d2c" />
+    </g>
+   <title>Trial 164: 579.33 ms; batch 10; 0 ms settle / 15 ms poll / 2 arrival checks; pan; geometry pass</title></g>
+   <g id="trial-165" data-trial="165" tabindex="0" role="button" aria-label="Trial 165: 413.69 ms; batch 10; 0 ms settle / 15 ms poll / 2 arrival checks; tilt; geometry pass">
+    <g clip-path="url(#p2be4f5e943)">
+     <use ns4:href="#md400b9ccb9" x="1023.392" y="442.147852" style="fill: #303d2c; stroke: #303d2c" />
+    </g>
+   <title>Trial 165: 413.69 ms; batch 10; 0 ms settle / 15 ms poll / 2 arrival checks; tilt; geometry pass</title></g>
+   <g id="trial-166" data-trial="166" tabindex="0" role="button" aria-label="Trial 166: 373.17 ms; batch 10; 0 ms settle / 15 ms poll / 2 arrival checks; tilt; geometry pass">
+    <g clip-path="url(#p2be4f5e943)">
+     <use ns4:href="#md400b9ccb9" x="1029.088" y="449.617628" style="fill: #303d2c; stroke: #303d2c" />
+    </g>
+   <title>Trial 166: 373.17 ms; batch 10; 0 ms settle / 15 ms poll / 2 arrival checks; tilt; geometry pass</title></g>
+   <g id="trial-167" data-trial="167" tabindex="0" role="button" aria-label="Trial 167: 768.04 ms; batch 10; 0 ms settle / 15 ms poll / 2 arrival checks; diagonal; geometry pass">
+    <g clip-path="url(#p2be4f5e943)">
+     <use ns4:href="#md400b9ccb9" x="1034.784" y="376.834479" style="fill: #303d2c; stroke: #303d2c" />
+    </g>
+   <title>Trial 167: 768.04 ms; batch 10; 0 ms settle / 15 ms poll / 2 arrival checks; diagonal; geometry pass</title></g>
+   <g id="trial-168" data-trial="168" tabindex="0" role="button" aria-label="Trial 168: 824.62 ms; batch 10; 0 ms settle / 15 ms poll / 2 arrival checks; diagonal; geometry pass">
+    <g clip-path="url(#p2be4f5e943)">
+     <use ns4:href="#md400b9ccb9" x="1040.48" y="366.405381" style="fill: #303d2c; stroke: #303d2c" />
+    </g>
+   <title>Trial 168: 824.62 ms; batch 10; 0 ms settle / 15 ms poll / 2 arrival checks; diagonal; geometry pass</title></g>
+   <g id="trial-169" data-trial="169" tabindex="0" role="button" aria-label="Trial 169: 622.50 ms; batch 10; 0 ms settle / 15 ms poll / 2 arrival checks; pan; geometry pass">
+    <g clip-path="url(#p2be4f5e943)">
+     <use ns4:href="#md400b9ccb9" x="1046.176" y="403.660629" style="fill: #303d2c; stroke: #303d2c" />
+    </g>
+   <title>Trial 169: 622.50 ms; batch 10; 0 ms settle / 15 ms poll / 2 arrival checks; pan; geometry pass</title></g>
+   <g id="trial-170" data-trial="170" tabindex="0" role="button" aria-label="Trial 170: 569.30 ms; batch 10; 0 ms settle / 15 ms poll / 2 arrival checks; pan; geometry pass">
+    <g clip-path="url(#p2be4f5e943)">
+     <use ns4:href="#md400b9ccb9" x="1051.872" y="413.466142" style="fill: #303d2c; stroke: #303d2c" />
+    </g>
+   <title>Trial 170: 569.30 ms; batch 10; 0 ms settle / 15 ms poll / 2 arrival checks; pan; geometry pass</title></g>
+   <g id="trial-171" data-trial="171" tabindex="0" role="button" aria-label="Trial 171: 405.15 ms; batch 10; 0 ms settle / 15 ms poll / 2 arrival checks; tilt; geometry pass">
+    <g clip-path="url(#p2be4f5e943)">
+     <use ns4:href="#md400b9ccb9" x="1057.568" y="443.722267" style="fill: #303d2c; stroke: #303d2c" />
+    </g>
+   <title>Trial 171: 405.15 ms; batch 10; 0 ms settle / 15 ms poll / 2 arrival checks; tilt; geometry pass</title></g>
+   <g id="trial-172" data-trial="172" tabindex="0" role="button" aria-label="Trial 172: 358.96 ms; batch 10; 0 ms settle / 15 ms poll / 2 arrival checks; tilt; geometry pass">
+    <g clip-path="url(#p2be4f5e943)">
+     <use ns4:href="#md400b9ccb9" x="1063.264" y="452.237358" style="fill: #303d2c; stroke: #303d2c" />
+    </g>
+   <title>Trial 172: 358.96 ms; batch 10; 0 ms settle / 15 ms poll / 2 arrival checks; tilt; geometry pass</title></g>
+   <g id="trial-173" data-trial="173" tabindex="0" role="button" aria-label="Trial 173: 841.26 ms; batch 10; 0 ms settle / 15 ms poll / 2 arrival checks; diagonal; geometry pass">
+    <g clip-path="url(#p2be4f5e943)">
+     <use ns4:href="#md400b9ccb9" x="1068.96" y="363.339452" style="fill: #303d2c; stroke: #303d2c" />
+    </g>
+   <title>Trial 173: 841.26 ms; batch 10; 0 ms settle / 15 ms poll / 2 arrival checks; diagonal; geometry pass</title></g>
+   <g id="trial-174" data-trial="174" tabindex="0" role="button" aria-label="Trial 174: 818.67 ms; batch 10; 0 ms settle / 15 ms poll / 2 arrival checks; diagonal; geometry pass">
+    <g clip-path="url(#p2be4f5e943)">
+     <use ns4:href="#md400b9ccb9" x="1074.656" y="367.502853" style="fill: #303d2c; stroke: #303d2c" />
+    </g>
+   <title>Trial 174: 818.67 ms; batch 10; 0 ms settle / 15 ms poll / 2 arrival checks; diagonal; geometry pass</title></g>
+   <g id="trial-175" data-trial="175" tabindex="0" role="button" aria-label="Trial 175: 612.23 ms; batch 10; 0 ms settle / 15 ms poll / 2 arrival checks; pan; geometry pass">
+    <g clip-path="url(#p2be4f5e943)">
+     <use ns4:href="#md400b9ccb9" x="1080.352" y="405.552955" style="fill: #303d2c; stroke: #303d2c" />
+    </g>
+   <title>Trial 175: 612.23 ms; batch 10; 0 ms settle / 15 ms poll / 2 arrival checks; pan; geometry pass</title></g>
+   <g id="trial-176" data-trial="176" tabindex="0" role="button" aria-label="Trial 176: 568.08 ms; batch 10; 0 ms settle / 15 ms poll / 2 arrival checks; pan; geometry pass">
+    <g clip-path="url(#p2be4f5e943)">
+     <use ns4:href="#md400b9ccb9" x="1086.048" y="413.69162" style="fill: #303d2c; stroke: #303d2c" />
+    </g>
+   <title>Trial 176: 568.08 ms; batch 10; 0 ms settle / 15 ms poll / 2 arrival checks; pan; geometry pass</title></g>
+   <g id="trial-177" data-trial="177" tabindex="0" role="button" aria-label="Trial 177: 390.33 ms; batch 10; 0 ms settle / 15 ms poll / 2 arrival checks; tilt; geometry pass">
+    <g clip-path="url(#p2be4f5e943)">
+     <use ns4:href="#md400b9ccb9" x="1091.744" y="446.453833" style="fill: #303d2c; stroke: #303d2c" />
+    </g>
+   <title>Trial 177: 390.33 ms; batch 10; 0 ms settle / 15 ms poll / 2 arrival checks; tilt; geometry pass</title></g>
+   <g id="trial-178" data-trial="178" tabindex="0" role="button" aria-label="Trial 178: 356.60 ms; batch 10; 0 ms settle / 15 ms poll / 2 arrival checks; tilt; geometry pass">
+    <g clip-path="url(#p2be4f5e943)">
+     <use ns4:href="#md400b9ccb9" x="1097.44" y="452.672147" style="fill: #303d2c; stroke: #303d2c" />
+    </g>
+   <title>Trial 178: 356.60 ms; batch 10; 0 ms settle / 15 ms poll / 2 arrival checks; tilt; geometry pass</title></g>
+   <g id="trial-179" data-trial="179" tabindex="0" role="button" aria-label="Trial 179: 797.51 ms; batch 10; 0 ms settle / 15 ms poll / 2 arrival checks; diagonal; geometry pass">
+    <g clip-path="url(#p2be4f5e943)">
+     <use ns4:href="#md400b9ccb9" x="1103.136" y="371.402888" style="fill: #303d2c; stroke: #303d2c" />
+    </g>
+   <title>Trial 179: 797.51 ms; batch 10; 0 ms settle / 15 ms poll / 2 arrival checks; diagonal; geometry pass</title></g>
+   <g id="trial-180" data-trial="180" tabindex="0" role="button" aria-label="Trial 180: 884.49 ms; batch 10; 0 ms settle / 15 ms poll / 2 arrival checks; diagonal; geometry pass">
+    <g clip-path="url(#p2be4f5e943)">
+     <use ns4:href="#md400b9ccb9" x="1108.832" y="355.370948" style="fill: #303d2c; stroke: #303d2c" />
+    </g>
+   <title>Trial 180: 884.49 ms; batch 10; 0 ms settle / 15 ms poll / 2 arrival checks; diagonal; geometry pass</title></g>
+   <g id="text_27">
+    <text style="font-size: 16px; font-family: 'DejaVu Sans'; text-anchor: start; fill: #303d2c" x="86.4" y="219.92" transform="rotate(-0 86.4 219.92)">Timing search: 180 trials, not a monotonic improvement curve</text>
+   </g>
+  </g>
+  <g id="axes_2">
+   <g id="patch_15">
+    <path d="M 86.4 823.68  L 552.96 823.68  L 552.96 668.16  L 86.4 668.16  z " style="fill: #f5f3ec" />
+   </g>
+   <g id="matplotlib.axis_3">
+    <g id="xtick_7">
+     <g id="line2d_33">
+      <g>
+       <use ns4:href="#m38c3a0a1e5" x="99.36" y="823.68" style="fill: #626959; stroke: #626959; stroke-width: 0.8" />
+      </g>
+     </g>
+     <g id="text_28">
+      <text style="font-size: 11px; font-family: 'DejaVu Sans'; text-anchor: middle; fill: #626959" x="99.36" y="839.038281" transform="rotate(-0 99.36 839.038281)">181</text>
+     </g>
+    </g>
+    <g id="xtick_8">
+     <g id="line2d_34">
+      <g>
+       <use ns4:href="#m38c3a0a1e5" x="306.72" y="823.68" style="fill: #626959; stroke: #626959; stroke-width: 0.8" />
+      </g>
+     </g>
+     <g id="text_29">
+      <text style="font-size: 11px; font-family: 'DejaVu Sans'; text-anchor: middle; fill: #626959" x="306.72" y="839.038281" transform="rotate(-0 306.72 839.038281)">189</text>
+     </g>
+    </g>
+    <g id="xtick_9">
+     <g id="line2d_35">
+      <g>
+       <use ns4:href="#m38c3a0a1e5" x="540" y="823.68" style="fill: #626959; stroke: #626959; stroke-width: 0.8" />
+      </g>
+     </g>
+     <g id="text_30">
+      <text style="font-size: 11px; font-family: 'DejaVu Sans'; text-anchor: middle; fill: #626959" x="540" y="839.038281" transform="rotate(-0 540 839.038281)">198</text>
+     </g>
+    </g>
+    <g id="text_31">
+     <text style="font-size: 11px; font-family: 'DejaVu Sans'; text-anchor: middle; fill: #303d2c" x="319.68" y="853.684219" transform="rotate(-0 319.68 853.684219)">Trial number</text>
+    </g>
+   </g>
+   <g id="matplotlib.axis_4">
+    <g id="ytick_9">
+     <g id="line2d_36">
+      <path d="M 86.4 823.68  L 552.96 823.68  " clip-path="url(#p6115f8208f)" style="fill: none; stroke: #d8dbcf; stroke-width: 0.8; stroke-linecap: square" />
+     </g>
+     <g id="line2d_37">
+      <g>
+       <use ns4:href="#mc5ae75cf00" x="86.4" y="823.68" style="fill: #626959; stroke: #626959; stroke-width: 0.8" />
+      </g>
+     </g>
+     <g id="text_32">
+      <text style="font-size: 11px; font-family: 'DejaVu Sans'; text-anchor: end; fill: #626959" x="79.4" y="827.859141" transform="rotate(-0 79.4 827.859141)">0</text>
+     </g>
+    </g>
+    <g id="ytick_10">
+     <g id="line2d_38">
+      <path d="M 86.4 797.76  L 552.96 797.76  " clip-path="url(#p6115f8208f)" style="fill: none; stroke: #d8dbcf; stroke-width: 0.8; stroke-linecap: square" />
+     </g>
+     <g id="line2d_39">
+      <g>
+       <use ns4:href="#mc5ae75cf00" x="86.4" y="797.76" style="fill: #626959; stroke: #626959; stroke-width: 0.8" />
+      </g>
+     </g>
+     <g id="text_33">
+      <text style="font-size: 11px; font-family: 'DejaVu Sans'; text-anchor: end; fill: #626959" x="79.4" y="801.939141" transform="rotate(-0 79.4 801.939141)">250</text>
+     </g>
+    </g>
+    <g id="ytick_11">
+     <g id="line2d_40">
+      <path d="M 86.4 771.84  L 552.96 771.84  " clip-path="url(#p6115f8208f)" style="fill: none; stroke: #d8dbcf; stroke-width: 0.8; stroke-linecap: square" />
+     </g>
+     <g id="line2d_41">
+      <g>
+       <use ns4:href="#mc5ae75cf00" x="86.4" y="771.84" style="fill: #626959; stroke: #626959; stroke-width: 0.8" />
+      </g>
+     </g>
+     <g id="text_34">
+      <text style="font-size: 11px; font-family: 'DejaVu Sans'; text-anchor: end; fill: #626959" x="79.4" y="776.019141" transform="rotate(-0 79.4 776.019141)">500</text>
+     </g>
+    </g>
+    <g id="ytick_12">
+     <g id="line2d_42">
+      <path d="M 86.4 745.92  L 552.96 745.92  " clip-path="url(#p6115f8208f)" style="fill: none; stroke: #d8dbcf; stroke-width: 0.8; stroke-linecap: square" />
+     </g>
+     <g id="line2d_43">
+      <g>
+       <use ns4:href="#mc5ae75cf00" x="86.4" y="745.92" style="fill: #626959; stroke: #626959; stroke-width: 0.8" />
+      </g>
+     </g>
+     <g id="text_35">
+      <text style="font-size: 11px; font-family: 'DejaVu Sans'; text-anchor: end; fill: #626959" x="79.4" y="750.099141" transform="rotate(-0 79.4 750.099141)">750</text>
+     </g>
+    </g>
+    <g id="ytick_13">
+     <g id="line2d_44">
+      <path d="M 86.4 720  L 552.96 720  " clip-path="url(#p6115f8208f)" style="fill: none; stroke: #d8dbcf; stroke-width: 0.8; stroke-linecap: square" />
+     </g>
+     <g id="line2d_45">
+      <g>
+       <use ns4:href="#mc5ae75cf00" x="86.4" y="720" style="fill: #626959; stroke: #626959; stroke-width: 0.8" />
+      </g>
+     </g>
+     <g id="text_36">
+      <text style="font-size: 11px; font-family: 'DejaVu Sans'; text-anchor: end; fill: #626959" x="79.4" y="724.179141" transform="rotate(-0 79.4 724.179141)">1000</text>
+     </g>
+    </g>
+    <g id="ytick_14">
+     <g id="line2d_46">
+      <path d="M 86.4 694.08  L 552.96 694.08  " clip-path="url(#p6115f8208f)" style="fill: none; stroke: #d8dbcf; stroke-width: 0.8; stroke-linecap: square" />
+     </g>
+     <g id="line2d_47">
+      <g>
+       <use ns4:href="#mc5ae75cf00" x="86.4" y="694.08" style="fill: #626959; stroke: #626959; stroke-width: 0.8" />
+      </g>
+     </g>
+     <g id="text_37">
+      <text style="font-size: 11px; font-family: 'DejaVu Sans'; text-anchor: end; fill: #626959" x="79.4" y="698.259141" transform="rotate(-0 79.4 698.259141)">1250</text>
+     </g>
+    </g>
+    <g id="ytick_15">
+     <g id="line2d_48">
+      <path d="M 86.4 668.16  L 552.96 668.16  " clip-path="url(#p6115f8208f)" style="fill: none; stroke: #d8dbcf; stroke-width: 0.8; stroke-linecap: square" />
+     </g>
+     <g id="line2d_49">
+      <g>
+       <use ns4:href="#mc5ae75cf00" x="86.4" y="668.16" style="fill: #626959; stroke: #626959; stroke-width: 0.8" />
+      </g>
+     </g>
+     <g id="text_38">
+      <text style="font-size: 11px; font-family: 'DejaVu Sans'; text-anchor: end; fill: #626959" x="79.4" y="672.339141" transform="rotate(-0 79.4 672.339141)">1500</text>
+     </g>
+    </g>
+    <g id="text_39">
+     <text style="font-size: 11px; font-family: 'DejaVu Sans'; text-anchor: middle; fill: #303d2c" x="45.117344" y="745.92" transform="rotate(-90 45.117344 745.92)">Duration (ms)</text>
+    </g>
+   </g>
+   <g id="LineCollection_11">
+    <path d="M 99.36 726.947005  L 540 726.947005  " clip-path="url(#p6115f8208f)" style="fill: none; stroke: #303d2c; stroke-opacity: 0.6; stroke-width: 2" />
+   </g>
+   <g id="patch_16">
+    <path d="M 86.4 823.68  L 86.4 668.16  " style="fill: none; stroke: #d8dbcf; stroke-width: 0.8; stroke-linejoin: miter; stroke-linecap: square" />
+   </g>
+   <g id="patch_17">
+    <path d="M 86.4 823.68  L 552.96 823.68  " style="fill: none; stroke: #d8dbcf; stroke-width: 0.8; stroke-linejoin: miter; stroke-linecap: square" />
+   </g>
+   <g id="trial-181" data-trial="181" tabindex="0" role="button" aria-label="Trial 181: 922.70 ms; batch 11; Final matched baseline; pan; geometry pass">
+    <g clip-path="url(#p6115f8208f)">
+     <use ns4:href="#md400b9ccb9" x="99.36" y="728.014232" style="fill: #303d2c; stroke: #303d2c" />
+    </g>
+   <title>Trial 181: 922.70 ms; batch 11; Final matched baseline; pan; geometry pass</title></g>
+   <g id="trial-182" data-trial="182" tabindex="0" role="button" aria-label="Trial 182: 950.29 ms; batch 11; Final matched baseline; pan; geometry pass">
+    <g clip-path="url(#p6115f8208f)">
+     <use ns4:href="#md400b9ccb9" x="125.28" y="725.154311" style="fill: #303d2c; stroke: #303d2c" />
+    </g>
+   <title>Trial 182: 950.29 ms; batch 11; Final matched baseline; pan; geometry pass</title></g>
+   <g id="trial-183" data-trial="183" tabindex="0" role="button" aria-label="Trial 183: 778.82 ms; batch 11; Final matched baseline; tilt; geometry pass">
+    <g clip-path="url(#p6115f8208f)">
+     <use ns4:href="#md400b9ccb9" x="151.2" y="742.932092" style="fill: #303d2c; stroke: #303d2c" />
+    </g>
+   <title>Trial 183: 778.82 ms; batch 11; Final matched baseline; tilt; geometry pass</title></g>
+   <g id="trial-184" data-trial="184" tabindex="0" role="button" aria-label="Trial 184: 769.03 ms; batch 11; Final matched baseline; tilt; geometry pass">
+    <g clip-path="url(#p6115f8208f)">
+     <use ns4:href="#md400b9ccb9" x="177.12" y="743.947278" style="fill: #303d2c; stroke: #303d2c" />
+    </g>
+   <title>Trial 184: 769.03 ms; batch 11; Final matched baseline; tilt; geometry pass</title></g>
+   <g id="trial-185" data-trial="185" tabindex="0" role="button" aria-label="Trial 185: 1187.71 ms; batch 11; Final matched baseline; diagonal; geometry pass">
+    <g clip-path="url(#p6115f8208f)">
+     <use ns4:href="#md400b9ccb9" x="203.04" y="700.538314" style="fill: #303d2c; stroke: #303d2c" />
+    </g>
+   <title>Trial 185: 1187.71 ms; batch 11; Final matched baseline; diagonal; geometry pass</title></g>
+   <g id="trial-186" data-trial="186" tabindex="0" role="button" aria-label="Trial 186: 1214.07 ms; batch 11; Final matched baseline; diagonal; geometry pass">
+    <g clip-path="url(#p6115f8208f)">
+     <use ns4:href="#md400b9ccb9" x="228.96" y="697.804852" style="fill: #303d2c; stroke: #303d2c" />
+    </g>
+   <title>Trial 186: 1214.07 ms; batch 11; Final matched baseline; diagonal; geometry pass</title></g>
+   <g id="trial-187" data-trial="187" tabindex="0" role="button" aria-label="Trial 187: 963.34 ms; batch 11; Final matched baseline; pan; geometry pass">
+    <g clip-path="url(#p6115f8208f)">
+     <use ns4:href="#md400b9ccb9" x="254.88" y="723.800507" style="fill: #303d2c; stroke: #303d2c" />
+    </g>
+   <title>Trial 187: 963.34 ms; batch 11; Final matched baseline; pan; geometry pass</title></g>
+   <g id="trial-188" data-trial="188" tabindex="0" role="button" aria-label="Trial 188: 908.34 ms; batch 11; Final matched baseline; pan; geometry pass">
+    <g clip-path="url(#p6115f8208f)">
+     <use ns4:href="#md400b9ccb9" x="280.8" y="729.502925" style="fill: #303d2c; stroke: #303d2c" />
+    </g>
+   <title>Trial 188: 908.34 ms; batch 11; Final matched baseline; pan; geometry pass</title></g>
+   <g id="trial-189" data-trial="189" tabindex="0" role="button" aria-label="Trial 189: 737.94 ms; batch 11; Final matched baseline; tilt; geometry pass">
+    <g clip-path="url(#p6115f8208f)">
+     <use ns4:href="#md400b9ccb9" x="306.72" y="747.170246" style="fill: #303d2c; stroke: #303d2c" />
+    </g>
+   <title>Trial 189: 737.94 ms; batch 11; Final matched baseline; tilt; geometry pass</title></g>
+   <g id="trial-190" data-trial="190" tabindex="0" role="button" aria-label="Trial 190: 690.76 ms; batch 11; Final matched baseline; tilt; geometry pass">
+    <g clip-path="url(#p6115f8208f)">
+     <use ns4:href="#md400b9ccb9" x="332.64" y="752.062392" style="fill: #303d2c; stroke: #303d2c" />
+    </g>
+   <title>Trial 190: 690.76 ms; batch 11; Final matched baseline; tilt; geometry pass</title></g>
+   <g id="trial-191" data-trial="191" tabindex="0" role="button" aria-label="Trial 191: 1157.37 ms; batch 11; Final matched baseline; diagonal; geometry pass">
+    <g clip-path="url(#p6115f8208f)">
+     <use ns4:href="#md400b9ccb9" x="358.56" y="703.683743" style="fill: #303d2c; stroke: #303d2c" />
+    </g>
+   <title>Trial 191: 1157.37 ms; batch 11; Final matched baseline; diagonal; geometry pass</title></g>
+   <g id="trial-192" data-trial="192" tabindex="0" role="button" aria-label="Trial 192: 1218.47 ms; batch 11; Final matched baseline; diagonal; geometry pass">
+    <g clip-path="url(#p6115f8208f)">
+     <use ns4:href="#md400b9ccb9" x="384.48" y="697.34869" style="fill: #303d2c; stroke: #303d2c" />
+    </g>
+   <title>Trial 192: 1218.47 ms; batch 11; Final matched baseline; diagonal; geometry pass</title></g>
+   <g id="trial-193" data-trial="193" tabindex="0" role="button" aria-label="Trial 193: 911.26 ms; batch 11; Final matched baseline; pan; geometry pass">
+    <g clip-path="url(#p6115f8208f)">
+     <use ns4:href="#md400b9ccb9" x="410.4" y="729.200172" style="fill: #303d2c; stroke: #303d2c" />
+    </g>
+   <title>Trial 193: 911.26 ms; batch 11; Final matched baseline; pan; geometry pass</title></g>
+   <g id="trial-194" data-trial="194" tabindex="0" role="button" aria-label="Trial 194: 943.29 ms; batch 11; Final matched baseline; pan; geometry pass">
+    <g clip-path="url(#p6115f8208f)">
+     <use ns4:href="#md400b9ccb9" x="436.32" y="725.879778" style="fill: #303d2c; stroke: #303d2c" />
+    </g>
+   <title>Trial 194: 943.29 ms; batch 11; Final matched baseline; pan; geometry pass</title></g>
+   <g id="trial-195" data-trial="195" tabindex="0" role="button" aria-label="Trial 195: 775.20 ms; batch 11; Final matched baseline; tilt; geometry pass">
+    <g clip-path="url(#p6115f8208f)">
+     <use ns4:href="#md400b9ccb9" x="462.24" y="743.306769" style="fill: #303d2c; stroke: #303d2c" />
+    </g>
+   <title>Trial 195: 775.20 ms; batch 11; Final matched baseline; tilt; geometry pass</title></g>
+   <g id="trial-196" data-trial="196" tabindex="0" role="button" aria-label="Trial 196: 689.67 ms; batch 11; Final matched baseline; tilt; geometry pass">
+    <g clip-path="url(#p6115f8208f)">
+     <use ns4:href="#md400b9ccb9" x="488.16" y="752.175008" style="fill: #303d2c; stroke: #303d2c" />
+    </g>
+   <title>Trial 196: 689.67 ms; batch 11; Final matched baseline; tilt; geometry pass</title></g>
+   <g id="trial-197" data-trial="197" tabindex="0" role="button" aria-label="Trial 197: 1239.04 ms; batch 11; Final matched baseline; diagonal; geometry pass">
+    <g clip-path="url(#p6115f8208f)">
+     <use ns4:href="#md400b9ccb9" x="514.08" y="695.216114" style="fill: #303d2c; stroke: #303d2c" />
+    </g>
+   <title>Trial 197: 1239.04 ms; batch 11; Final matched baseline; diagonal; geometry pass</title></g>
+   <g id="trial-198" data-trial="198" tabindex="0" role="button" aria-label="Trial 198: 1144.75 ms; batch 11; Final matched baseline; diagonal; geometry pass">
+    <g clip-path="url(#p6115f8208f)">
+     <use ns4:href="#md400b9ccb9" x="540" y="704.99206" style="fill: #303d2c; stroke: #303d2c" />
+    </g>
+   <title>Trial 198: 1144.75 ms; batch 11; Final matched baseline; diagonal; geometry pass</title></g>
+   <g id="text_40">
+    <text style="font-size: 15px; font-family: 'DejaVu Sans'; text-anchor: start; fill: #303d2c" x="86.4" y="656.16" transform="rotate(-0 86.4 656.16)">Old settings replay · median 933 ms</text>
+   </g>
+  </g>
+  <g id="axes_3">
+   <g id="patch_18">
+    <path d="M 645.12 823.68  L 1111.68 823.68  L 1111.68 668.16  L 645.12 668.16  z " style="fill: #f5f3ec" />
+   </g>
+   <g id="matplotlib.axis_5">
+    <g id="xtick_10">
+     <g id="line2d_50">
+      <g>
+       <use ns4:href="#m38c3a0a1e5" x="658.08" y="823.68" style="fill: #626959; stroke: #626959; stroke-width: 0.8" />
+      </g>
+     </g>
+     <g id="text_41">
+      <text style="font-size: 11px; font-family: 'DejaVu Sans'; text-anchor: middle; fill: #626959" x="658.08" y="839.038281" transform="rotate(-0 658.08 839.038281)">199</text>
+     </g>
+    </g>
+    <g id="xtick_11">
+     <g id="line2d_51">
+      <g>
+       <use ns4:href="#m38c3a0a1e5" x="865.44" y="823.68" style="fill: #626959; stroke: #626959; stroke-width: 0.8" />
+      </g>
+     </g>
+     <g id="text_42">
+      <text style="font-size: 11px; font-family: 'DejaVu Sans'; text-anchor: middle; fill: #626959" x="865.44" y="839.038281" transform="rotate(-0 865.44 839.038281)">207</text>
+     </g>
+    </g>
+    <g id="xtick_12">
+     <g id="line2d_52">
+      <g>
+       <use ns4:href="#m38c3a0a1e5" x="1098.72" y="823.68" style="fill: #626959; stroke: #626959; stroke-width: 0.8" />
+      </g>
+     </g>
+     <g id="text_43">
+      <text style="font-size: 11px; font-family: 'DejaVu Sans'; text-anchor: middle; fill: #626959" x="1098.72" y="839.038281" transform="rotate(-0 1098.72 839.038281)">216</text>
+     </g>
+    </g>
+    <g id="text_44">
+     <text style="font-size: 11px; font-family: 'DejaVu Sans'; text-anchor: middle; fill: #303d2c" x="878.4" y="853.684219" transform="rotate(-0 878.4 853.684219)">Trial number</text>
+    </g>
+   </g>
+   <g id="matplotlib.axis_6">
+    <g id="ytick_16">
+     <g id="line2d_53">
+      <path d="M 645.12 823.68  L 1111.68 823.68  " clip-path="url(#p26e1e82aa0)" style="fill: none; stroke: #d8dbcf; stroke-width: 0.8; stroke-linecap: square" />
+     </g>
+     <g id="line2d_54">
+      <g>
+       <use ns4:href="#mc5ae75cf00" x="645.12" y="823.68" style="fill: #626959; stroke: #626959; stroke-width: 0.8" />
+      </g>
+     </g>
+     <g id="text_45">
+      <text style="font-size: 11px; font-family: 'DejaVu Sans'; text-anchor: end; fill: #626959" x="638.12" y="827.859141" transform="rotate(-0 638.12 827.859141)">0</text>
+     </g>
+    </g>
+    <g id="ytick_17">
+     <g id="line2d_55">
+      <path d="M 645.12 797.76  L 1111.68 797.76  " clip-path="url(#p26e1e82aa0)" style="fill: none; stroke: #d8dbcf; stroke-width: 0.8; stroke-linecap: square" />
+     </g>
+     <g id="line2d_56">
+      <g>
+       <use ns4:href="#mc5ae75cf00" x="645.12" y="797.76" style="fill: #626959; stroke: #626959; stroke-width: 0.8" />
+      </g>
+     </g>
+     <g id="text_46">
+      <text style="font-size: 11px; font-family: 'DejaVu Sans'; text-anchor: end; fill: #626959" x="638.12" y="801.939141" transform="rotate(-0 638.12 801.939141)">250</text>
+     </g>
+    </g>
+    <g id="ytick_18">
+     <g id="line2d_57">
+      <path d="M 645.12 771.84  L 1111.68 771.84  " clip-path="url(#p26e1e82aa0)" style="fill: none; stroke: #d8dbcf; stroke-width: 0.8; stroke-linecap: square" />
+     </g>
+     <g id="line2d_58">
+      <g>
+       <use ns4:href="#mc5ae75cf00" x="645.12" y="771.84" style="fill: #626959; stroke: #626959; stroke-width: 0.8" />
+      </g>
+     </g>
+     <g id="text_47">
+      <text style="font-size: 11px; font-family: 'DejaVu Sans'; text-anchor: end; fill: #626959" x="638.12" y="776.019141" transform="rotate(-0 638.12 776.019141)">500</text>
+     </g>
+    </g>
+    <g id="ytick_19">
+     <g id="line2d_59">
+      <path d="M 645.12 745.92  L 1111.68 745.92  " clip-path="url(#p26e1e82aa0)" style="fill: none; stroke: #d8dbcf; stroke-width: 0.8; stroke-linecap: square" />
+     </g>
+     <g id="line2d_60">
+      <g>
+       <use ns4:href="#mc5ae75cf00" x="645.12" y="745.92" style="fill: #626959; stroke: #626959; stroke-width: 0.8" />
+      </g>
+     </g>
+     <g id="text_48">
+      <text style="font-size: 11px; font-family: 'DejaVu Sans'; text-anchor: end; fill: #626959" x="638.12" y="750.099141" transform="rotate(-0 638.12 750.099141)">750</text>
+     </g>
+    </g>
+    <g id="ytick_20">
+     <g id="line2d_61">
+      <path d="M 645.12 720  L 1111.68 720  " clip-path="url(#p26e1e82aa0)" style="fill: none; stroke: #d8dbcf; stroke-width: 0.8; stroke-linecap: square" />
+     </g>
+     <g id="line2d_62">
+      <g>
+       <use ns4:href="#mc5ae75cf00" x="645.12" y="720" style="fill: #626959; stroke: #626959; stroke-width: 0.8" />
+      </g>
+     </g>
+     <g id="text_49">
+      <text style="font-size: 11px; font-family: 'DejaVu Sans'; text-anchor: end; fill: #626959" x="638.12" y="724.179141" transform="rotate(-0 638.12 724.179141)">1000</text>
+     </g>
+    </g>
+    <g id="ytick_21">
+     <g id="line2d_63">
+      <path d="M 645.12 694.08  L 1111.68 694.08  " clip-path="url(#p26e1e82aa0)" style="fill: none; stroke: #d8dbcf; stroke-width: 0.8; stroke-linecap: square" />
+     </g>
+     <g id="line2d_64">
+      <g>
+       <use ns4:href="#mc5ae75cf00" x="645.12" y="694.08" style="fill: #626959; stroke: #626959; stroke-width: 0.8" />
+      </g>
+     </g>
+     <g id="text_50">
+      <text style="font-size: 11px; font-family: 'DejaVu Sans'; text-anchor: end; fill: #626959" x="638.12" y="698.259141" transform="rotate(-0 638.12 698.259141)">1250</text>
+     </g>
+    </g>
+    <g id="ytick_22">
+     <g id="line2d_65">
+      <path d="M 645.12 668.16  L 1111.68 668.16  " clip-path="url(#p26e1e82aa0)" style="fill: none; stroke: #d8dbcf; stroke-width: 0.8; stroke-linecap: square" />
+     </g>
+     <g id="line2d_66">
+      <g>
+       <use ns4:href="#mc5ae75cf00" x="645.12" y="668.16" style="fill: #626959; stroke: #626959; stroke-width: 0.8" />
+      </g>
+     </g>
+     <g id="text_51">
+      <text style="font-size: 11px; font-family: 'DejaVu Sans'; text-anchor: end; fill: #626959" x="638.12" y="672.339141" transform="rotate(-0 638.12 672.339141)">1500</text>
+     </g>
+    </g>
+   </g>
+   <g id="LineCollection_12">
+    <path d="M 658.08 760.038629  L 1098.72 760.038629  " clip-path="url(#p26e1e82aa0)" style="fill: none; stroke: #303d2c; stroke-opacity: 0.6; stroke-width: 2" />
+   </g>
+   <g id="patch_19">
+    <path d="M 645.12 823.68  L 645.12 668.16  " style="fill: none; stroke: #d8dbcf; stroke-width: 0.8; stroke-linejoin: miter; stroke-linecap: square" />
+   </g>
+   <g id="patch_20">
+    <path d="M 645.12 823.68  L 1111.68 823.68  " style="fill: none; stroke: #d8dbcf; stroke-width: 0.8; stroke-linejoin: miter; stroke-linecap: square" />
+   </g>
+   <g id="trial-199" data-trial="199" tabindex="0" role="button" aria-label="Trial 199: 632.96 ms; batch 12; Final controller; pan; geometry pass">
+    <g clip-path="url(#p26e1e82aa0)">
+     <use ns4:href="#md400b9ccb9" x="658.08" y="758.054879" style="fill: #303d2c; stroke: #303d2c" />
+    </g>
+   <title>Trial 199: 632.96 ms; batch 12; Final controller; pan; geometry pass</title></g>
+   <g id="trial-200" data-trial="200" tabindex="0" role="button" aria-label="Trial 200: 617.14 ms; batch 12; Final controller; pan; geometry pass">
+    <g clip-path="url(#p26e1e82aa0)">
+     <use ns4:href="#md400b9ccb9" x="684" y="759.695411" style="fill: #303d2c; stroke: #303d2c" />
+    </g>
+   <title>Trial 200: 617.14 ms; batch 12; Final controller; pan; geometry pass</title></g>
+   <g id="trial-201" data-trial="201" tabindex="0" role="button" aria-label="Trial 201: 516.85 ms; batch 12; Final controller; tilt; geometry pass">
+    <g clip-path="url(#p26e1e82aa0)">
+     <use ns4:href="#md400b9ccb9" x="709.92" y="770.093202" style="fill: #303d2c; stroke: #303d2c" />
+    </g>
+   <title>Trial 201: 516.85 ms; batch 12; Final controller; tilt; geometry pass</title></g>
+   <g id="trial-202" data-trial="202" tabindex="0" role="button" aria-label="Trial 202: 393.16 ms; batch 12; Final controller; tilt; geometry pass">
+    <g clip-path="url(#p26e1e82aa0)">
+     <use ns4:href="#md400b9ccb9" x="735.84" y="782.916656" style="fill: #303d2c; stroke: #303d2c" />
+    </g>
+   <title>Trial 202: 393.16 ms; batch 12; Final controller; tilt; geometry pass</title></g>
+   <g id="trial-203" data-trial="203" tabindex="0" role="button" aria-label="Trial 203: 903.64 ms; batch 12; Final controller; diagonal; geometry pass">
+    <g clip-path="url(#p26e1e82aa0)">
+     <use ns4:href="#md400b9ccb9" x="761.76" y="729.990973" style="fill: #303d2c; stroke: #303d2c" />
+    </g>
+   <title>Trial 203: 903.64 ms; batch 12; Final controller; diagonal; geometry pass</title></g>
+   <g id="trial-204" data-trial="204" tabindex="0" role="button" aria-label="Trial 204: 851.56 ms; batch 12; Final controller; diagonal; geometry pass">
+    <g clip-path="url(#p26e1e82aa0)">
+     <use ns4:href="#md400b9ccb9" x="787.68" y="735.390767" style="fill: #303d2c; stroke: #303d2c" />
+    </g>
+   <title>Trial 204: 851.56 ms; batch 12; Final controller; diagonal; geometry pass</title></g>
+   <g id="trial-205" data-trial="205" tabindex="0" role="button" aria-label="Trial 205: 673.98 ms; batch 12; Final controller; pan; geometry pass">
+    <g clip-path="url(#p26e1e82aa0)">
+     <use ns4:href="#md400b9ccb9" x="813.6" y="753.801376" style="fill: #303d2c; stroke: #303d2c" />
+    </g>
+   <title>Trial 205: 673.98 ms; batch 12; Final controller; pan; geometry pass</title></g>
+   <g id="trial-206" data-trial="206" tabindex="0" role="button" aria-label="Trial 206: 604.89 ms; batch 12; Final controller; pan; geometry pass">
+    <g clip-path="url(#p26e1e82aa0)">
+     <use ns4:href="#md400b9ccb9" x="839.52" y="760.965273" style="fill: #303d2c; stroke: #303d2c" />
+    </g>
+   <title>Trial 206: 604.89 ms; batch 12; Final controller; pan; geometry pass</title></g>
+   <g id="trial-207" data-trial="207" tabindex="0" role="button" aria-label="Trial 207: 398.20 ms; batch 12; Final controller; tilt; geometry pass">
+    <g clip-path="url(#p26e1e82aa0)">
+     <use ns4:href="#md400b9ccb9" x="865.44" y="782.394652" style="fill: #303d2c; stroke: #303d2c" />
+    </g>
+   <title>Trial 207: 398.20 ms; batch 12; Final controller; tilt; geometry pass</title></g>
+   <g id="trial-208" data-trial="208" tabindex="0" role="button" aria-label="Trial 208: 364.86 ms; batch 12; Final controller; tilt; geometry pass">
+    <g clip-path="url(#p26e1e82aa0)">
+     <use ns4:href="#md400b9ccb9" x="891.36" y="785.851072" style="fill: #303d2c; stroke: #303d2c" />
+    </g>
+   <title>Trial 208: 364.86 ms; batch 12; Final controller; tilt; geometry pass</title></g>
+   <g id="trial-209" data-trial="209" tabindex="0" role="button" aria-label="Trial 209: 879.12 ms; batch 12; Final controller; diagonal; geometry pass">
+    <g clip-path="url(#p26e1e82aa0)">
+     <use ns4:href="#md400b9ccb9" x="917.28" y="732.532865" style="fill: #303d2c; stroke: #303d2c" />
+    </g>
+   <title>Trial 209: 879.12 ms; batch 12; Final controller; diagonal; geometry pass</title></g>
+   <g id="trial-210" data-trial="210" tabindex="0" role="button" aria-label="Trial 210: 806.38 ms; batch 12; Final controller; diagonal; geometry pass">
+    <g clip-path="url(#p26e1e82aa0)">
+     <use ns4:href="#md400b9ccb9" x="943.2" y="740.074456" style="fill: #303d2c; stroke: #303d2c" />
+    </g>
+   <title>Trial 210: 806.38 ms; batch 12; Final controller; diagonal; geometry pass</title></g>
+   <g id="trial-211" data-trial="211" tabindex="0" role="button" aria-label="Trial 211: 610.51 ms; batch 12; Final controller; pan; geometry pass">
+    <g clip-path="url(#p26e1e82aa0)">
+     <use ns4:href="#md400b9ccb9" x="969.12" y="760.381847" style="fill: #303d2c; stroke: #303d2c" />
+    </g>
+   <title>Trial 211: 610.51 ms; batch 12; Final controller; pan; geometry pass</title></g>
+   <g id="trial-212" data-trial="212" tabindex="0" role="button" aria-label="Trial 212: 605.15 ms; batch 12; Final controller; pan; geometry pass">
+    <g clip-path="url(#p26e1e82aa0)">
+     <use ns4:href="#md400b9ccb9" x="995.04" y="760.937779" style="fill: #303d2c; stroke: #303d2c" />
+    </g>
+   <title>Trial 212: 605.15 ms; batch 12; Final controller; pan; geometry pass</title></g>
+   <g id="trial-213" data-trial="213" tabindex="0" role="button" aria-label="Trial 213: 456.82 ms; batch 12; Final controller; tilt; geometry pass">
+    <g clip-path="url(#p26e1e82aa0)">
+     <use ns4:href="#md400b9ccb9" x="1020.96" y="776.317298" style="fill: #303d2c; stroke: #303d2c" />
+    </g>
+   <title>Trial 213: 456.82 ms; batch 12; Final controller; tilt; geometry pass</title></g>
+   <g id="trial-214" data-trial="214" tabindex="0" role="button" aria-label="Trial 214: 402.97 ms; batch 12; Final controller; tilt; geometry pass">
+    <g clip-path="url(#p26e1e82aa0)">
+     <use ns4:href="#md400b9ccb9" x="1046.88" y="781.900358" style="fill: #303d2c; stroke: #303d2c" />
+    </g>
+   <title>Trial 214: 402.97 ms; batch 12; Final controller; tilt; geometry pass</title></g>
+   <g id="trial-215" data-trial="215" tabindex="0" role="button" aria-label="Trial 215: 911.08 ms; batch 12; Final controller; diagonal; geometry pass">
+    <g clip-path="url(#p26e1e82aa0)">
+     <use ns4:href="#md400b9ccb9" x="1072.8" y="729.218816" style="fill: #303d2c; stroke: #303d2c" />
+    </g>
+   <title>Trial 215: 911.08 ms; batch 12; Final controller; diagonal; geometry pass</title></g>
+   <g id="trial-216" data-trial="216" tabindex="0" role="button" aria-label="Trial 216: 873.88 ms; batch 12; Final controller; diagonal; geometry pass">
+    <g clip-path="url(#p26e1e82aa0)">
+     <use ns4:href="#md400b9ccb9" x="1098.72" y="733.076607" style="fill: #303d2c; stroke: #303d2c" />
+    </g>
+   <title>Trial 216: 873.88 ms; batch 12; Final controller; diagonal; geometry pass</title></g>
+   <g id="text_52">
+    <text style="font-size: 15px; font-family: 'DejaVu Sans'; text-anchor: start; fill: #303d2c" x="645.12" y="656.16" transform="rotate(-0 645.12 656.16)">Final settings · median 614 ms</text>
+   </g>
+  </g>
+  <g id="text_53">
+   <text style="font-size: 15px; font-family: 'DejaVu Sans'; text-anchor: start; fill: #626959" x="57.6" y="48.384" transform="rotate(-0 57.6 48.384)">03 / THE WORK BEHIND THE RESULT</text>
+  </g>
+  <g id="text_54">
+   <text style="font-size: 31px; font-family: 'DejaVu Serif'; text-anchor: start; fill: #303d2c" x="57.6" y="112.896" transform="rotate(-0 57.6 112.896)">216 physical trials. Every one timed.</text>
+  </g>
+  <g id="text_55">
+   <text style="font-size: 16px; font-family: 'DejaVu Sans'; text-anchor: start; fill: #303d2c" x="57.6" y="165.888" transform="rotate(-0 57.6 165.888)">7 judged games · 10 timing settings × 18 moves · 18 + 18 final comparison moves</text>
+  </g>
+  <g id="text_56">
+   <text style="font-size: 15px; font-family: 'DejaVu Sans'; text-anchor: start; fill: #303d2c" x="86.4" y="616.32" transform="rotate(-0 86.4 616.32)">Separate validation: replaying old settings is a controlled comparison, not a regression.</text>
+  </g>
+  <g id="text_57">
+   <text style="font-size: 12px; font-family: 'DejaVu Sans'; text-anchor: start; fill: #626959" x="86.4" y="881.28" transform="rotate(-0 86.4 881.28)">Dots: measured calls. Short rules: medians. ×: geometry failure. Both validation groups share an origin.</text>
+  </g>
+  <g id="text_58">
+   <text style="font-size: 12.5px; font-family: 'DejaVu Sans'; text-anchor: start; fill: #303d2c" x="57.6" y="927.36" transform="rotate(-0 57.6 927.36)">01  300 ms settle / 60 ms poll / 2 checks</text>
+  </g>
+  <g id="text_59">
+   <text style="font-size: 10.5px; font-family: 'DejaVu Sans'; text-anchor: start; fill: #626959" x="57.6" y="941.184" transform="rotate(-0 57.6 941.184)">18 moves · median 927 ms · geometry 18/18</text>
+  </g>
+  <g id="text_60">
+   <text style="font-size: 12.5px; font-family: 'DejaVu Sans'; text-anchor: start; fill: #303d2c" x="57.6" y="957.312" transform="rotate(-0 57.6 957.312)">02  0 ms settle / 15 ms poll / 1 check</text>
+  </g>
+  <g id="text_61">
+   <text style="font-size: 10.5px; font-family: 'DejaVu Sans'; text-anchor: start; fill: #626959" x="57.6" y="971.136" transform="rotate(-0 57.6 971.136)">18 moves · median 556 ms · geometry 15/18</text>
+  </g>
+  <g id="text_62">
+   <text style="font-size: 12.5px; font-family: 'DejaVu Sans'; text-anchor: start; fill: #303d2c" x="57.6" y="987.264" transform="rotate(-0 57.6 987.264)">03  100 ms settle / 15 ms poll / 1 check</text>
+  </g>
+  <g id="text_63">
+   <text style="font-size: 10.5px; font-family: 'DejaVu Sans'; text-anchor: start; fill: #626959" x="57.6" y="1001.088" transform="rotate(-0 57.6 1001.088)">18 moves · median 641 ms · geometry 18/18</text>
+  </g>
+  <g id="text_64">
+   <text style="font-size: 12.5px; font-family: 'DejaVu Sans'; text-anchor: start; fill: #303d2c" x="57.6" y="1017.216" transform="rotate(-0 57.6 1017.216)">04  50 ms settle / 15 ms poll / 1 check</text>
+  </g>
+  <g id="text_65">
+   <text style="font-size: 10.5px; font-family: 'DejaVu Sans'; text-anchor: start; fill: #626959" x="57.6" y="1031.04" transform="rotate(-0 57.6 1031.04)">18 moves · median 622 ms · geometry 18/18</text>
+  </g>
+  <g id="text_66">
+   <text style="font-size: 12.5px; font-family: 'DejaVu Sans'; text-anchor: start; fill: #303d2c" x="57.6" y="1047.168" transform="rotate(-0 57.6 1047.168)">05  150 ms settle / 30 ms poll / 1 check</text>
+  </g>
+  <g id="text_67">
+   <text style="font-size: 10.5px; font-family: 'DejaVu Sans'; text-anchor: start; fill: #626959" x="57.6" y="1060.992" transform="rotate(-0 57.6 1060.992)">18 moves · median 709 ms · geometry 18/18</text>
+  </g>
+  <g id="text_68">
+   <text style="font-size: 12.5px; font-family: 'DejaVu Sans'; text-anchor: start; fill: #303d2c" x="57.6" y="1077.12" transform="rotate(-0 57.6 1077.12)">06  200 ms settle / 30 ms poll / 1 check</text>
+  </g>
+  <g id="text_69">
+   <text style="font-size: 10.5px; font-family: 'DejaVu Sans'; text-anchor: start; fill: #626959" x="57.6" y="1090.944" transform="rotate(-0 57.6 1090.944)">18 moves · median 753 ms · geometry 17/18</text>
+  </g>
+  <g id="text_70">
+   <text style="font-size: 12.5px; font-family: 'DejaVu Sans'; text-anchor: start; fill: #303d2c" x="622.08" y="927.36" transform="rotate(-0 622.08 927.36)">07  Main stream: 50 ms settle / 30 ms poll / 1 check</text>
+  </g>
+  <g id="text_71">
+   <text style="font-size: 10.5px; font-family: 'DejaVu Sans'; text-anchor: start; fill: #626959" x="622.08" y="941.184" transform="rotate(-0 622.08 941.184)">18 moves · median 619 ms · geometry 17/18</text>
+  </g>
+  <g id="text_72">
+   <text style="font-size: 12.5px; font-family: 'DejaVu Sans'; text-anchor: start; fill: #303d2c" x="622.08" y="957.312" transform="rotate(-0 622.08 957.312)">08  50 ms settle / 0 ms poll / 1 check</text>
+  </g>
+  <g id="text_73">
+   <text style="font-size: 10.5px; font-family: 'DejaVu Sans'; text-anchor: start; fill: #626959" x="622.08" y="971.136" transform="rotate(-0 622.08 971.136)">18 moves · median 627 ms · geometry 18/18</text>
+  </g>
+  <g id="text_74">
+   <text style="font-size: 12.5px; font-family: 'DejaVu Sans'; text-anchor: start; fill: #303d2c" x="622.08" y="987.264" transform="rotate(-0 622.08 987.264)">09  50 ms settle / 30 ms poll / 1 check</text>
+  </g>
+  <g id="text_75">
+   <text style="font-size: 10.5px; font-family: 'DejaVu Sans'; text-anchor: start; fill: #626959" x="622.08" y="1001.088" transform="rotate(-0 622.08 1001.088)">18 moves · median 630 ms · geometry 18/18</text>
+  </g>
+  <g id="text_76">
+   <text style="font-size: 12.5px; font-family: 'DejaVu Sans'; text-anchor: start; fill: #303d2c" x="622.08" y="1017.216" transform="rotate(-0 622.08 1017.216)">10  0 ms settle / 15 ms poll / 2 checks</text>
+  </g>
+  <g id="text_77">
+   <text style="font-size: 10.5px; font-family: 'DejaVu Sans'; text-anchor: start; fill: #626959" x="622.08" y="1031.04" transform="rotate(-0 622.08 1031.04)">18 moves · median 596 ms · geometry 18/18</text>
+  </g>
+  <g id="text_78">
+   <text style="font-size: 12.5px; font-family: 'DejaVu Sans'; text-anchor: start; fill: #303d2c" x="622.08" y="1047.168" transform="rotate(-0 622.08 1047.168)">11  Final matched baseline</text>
+  </g>
+  <g id="text_79">
+   <text style="font-size: 10.5px; font-family: 'DejaVu Sans'; text-anchor: start; fill: #626959" x="622.08" y="1060.992" transform="rotate(-0 622.08 1060.992)">18 moves · median 933 ms · geometry 18/18</text>
+  </g>
+  <g id="text_80">
+   <text style="font-size: 12.5px; font-family: 'DejaVu Sans'; text-anchor: start; fill: #303d2c" x="622.08" y="1077.12" transform="rotate(-0 622.08 1077.12)">12  Final controller</text>
+  </g>
+  <g id="text_81">
+   <text style="font-size: 10.5px; font-family: 'DejaVu Sans'; text-anchor: start; fill: #626959" x="622.08" y="1090.944" transform="rotate(-0 622.08 1090.944)">18 moves · median 614 ms · geometry 18/18</text>
+  </g>
+  <g id="text_82">
+   <text style="font-size: 12px; font-family: 'DejaVu Sans'; text-anchor: start; fill: #626959" x="57.6" y="1119.744" transform="rotate(-0 57.6 1119.744)">151.0 s of measured controller calls. Agent time and gaps excluded; UTC timestamps unavailable.</text>
+  </g>
+ </g>
+ <defs>
+  <clipPath id="p2be4f5e943">
+   <rect x="86.4" y="241.92" width="1025.28" height="276.48" />
+  </clipPath>
+  <clipPath id="p6115f8208f">
+   <rect x="86.4" y="668.16" width="466.56" height="155.52" />
+  </clipPath>
+  <clipPath id="p26e1e82aa0">
+   <rect x="645.12" y="668.16" width="466.56" height="155.52" />
+  </clipPath>
+ </defs>
+</svg>

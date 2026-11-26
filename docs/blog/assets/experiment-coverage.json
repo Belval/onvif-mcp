@@ -1,0 +1,9 @@
+{
+  "judged_games": 7,
+  "timing_configurations": 10,
+  "timing_sweep_trials": 180,
+  "final_comparison_trials": 36,
+  "total_motion_trials": 216,
+  "active_controller_seconds": 151.0098772700001,
+  "geometry_failures": 5
+}

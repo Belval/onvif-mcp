@@ -25,6 +25,20 @@ runtime improvements from learning where the printer lived.
 
 ![The RSI loop: Peek challenges, Seek searches, traces inform tool changes, and matched trials validate them](assets/improvement-loop.png)
 
+The archive contains **216 timed motion trials**: ten settings tested over
+18 moves each, then an 18-versus-18 final comparison. The game provided
+**seven independent evaluations**. These counts describe experimental coverage,
+not 216 successive code improvements.
+
+![180 motion tuning trials and a separate 36-trial matched validation, with individual durations and geometry failures](assets/motion-trials.png)
+
+[Inspect every trial and its timing](assets/motion-trials.html) ·
+[Download all 216 timings](assets/motion-trials.csv)
+
+*Each dot is a measured move-plus-image call. The sequence preserves order within
+each archived batch; absolute UTC timestamps were not stored. Agent time, gaps,
+restores, and delayed image evaluation are excluded.*
+
 ## Improve the eyes, then the control loop
 
 Reopening RTSP for each snapshot cost about **2.5 seconds**. We built a Rust
@@ -37,14 +51,21 @@ visual corrections. Batched scans removed reasoning round trips. Faster variants
 still had to pass: maximum-speed commands stalled, continuous motion overshot,
 and zero-wait settings blurred images or broke scan revisits.
 
-The final comparison cut median **movement-plus-image latency from 933 to 614 ms
-(34%)**, with 18/18 optical geometry passes in each block.
+Most gains came early: the stream architecture changed first, then conservative
+motion waits were shortened. The remaining trials explored a plateau and caught
+quality regressions. The motion study already used Rust and H.264, so it does not
+show the earlier architectural gain.
+
+The final check cut median **movement-plus-image latency from 933 to 614 ms
+(34%)**, with 18/18 optical geometry passes in each block. Replaying the old
+settings established that comparison; it was not a backwards step in progress.
 
 ![Latency history across camera runtime commits and tuning iterations, excluding all agent time](assets/latency-history.png)
 
-*Tool/controller time only; agent time excluded. Snapshot maximums cover 200
-calls. Crosses mark rejected motion variants. Only the final replay/candidate
-pair shares the final origin; its two 18-trial blocks ran baseline first.*
+*Summary only: four selected snapshot checkpoints above, and the final matched
+motion comparison below. These are not loop counts. Both motion settings require
+two arrival reports; settling is an extra pause, and polling is the position-query
+interval. The matched blocks ran baseline first.*
 
 An improvement survived only if independent challenges and replayed measurements
 supported it. That external feedback closed the RSI loop.
