@@ -63,3 +63,82 @@ observed maximum as a guarantee or conflating component gains with motor speed.
 Validation: 46 active tests passed (three model-dependent tests remain ignored),
 Clippy passed with warnings denied, and both releases passed the deterministic
 tracking workload's geometry assertions.
+
+## Iteration 2: SIMD payload encoding
+
+The next profile exposed base64 encoding of image/audio responses. These now use
+[`base64-simd`](https://docs.rs/base64-simd/0.8.0/base64_simd/) with the same standard
+alphabet and padding. Tests compare exact strings and round trips with the old
+encoder for all lengths 0–1023 and large payloads, including partial final groups.
+JPEG pixels, dimensions, quality, metadata and tool schemas are unchanged.
+
+`payload-results.json` is a same-binary scalar/SIMD control: six alternating
+blocks per size, 100 measured encodes after three warm-ups. String allocation is
+timed; complete byte equality is checked outside the timer on every result.
+Pooled medians across three blocks per encoder:
+
+| Raw payload | Scalar | SIMD | Reduction |
+| --- | ---: | ---: | ---: |
+| 32 KiB | 0.02128 ms | 0.00448 ms | 79.0% |
+| 128 KiB | 0.08554 ms | 0.01943 ms | 77.3% |
+| 512 KiB | 0.30401 ms | 0.06182 ms | 79.7% |
+
+Run `target/release/onvif-sight --benchmark-payload` to repeat. These are hot CPU
+microbenchmarks, not an equivalent percentage reduction in full MCP latency.
+
+The final live comparison adds `--intermediate /path/to/iteration-1` to the live
+runner. It uses nine blocks in balanced order: A/B/C, B/C/A, C/A/B. A is the
+unmodified `42b8450` release; B is iteration 1 (`28cb1a0`); C adds SIMD base64.
+Each variant receives 600 stationary previews across three blocks, with metrics
+enabled throughout. All three comparison builds use the same default feature
+set, native CPU flags and toolchain. GPU audio support is retained separately in
+the installed CUDA release.
+
+Results in `final-live-results.json` and `summary.json`:
+
+| Release | Requests | Median | p95 | Observed maximum |
+| --- | ---: | ---: | ---: | ---: |
+| Baseline | 600 | 1.697 ms | 2.065 ms | 2.439 ms |
+| Frame cache + transport | 600 | 1.634 ms | 1.938 ms | 286.342 ms |
+| + SIMD base64 | 600 | 1.539 ms | 1.863 ms | 2.869 ms |
+
+Final median and p95 improved by 9.3% and 9.8%. The intermediate outlier is
+retained; observed maxima are finite-window observations rather than guarantees.
+Frame ages remained similar (p95 about 82 ms in all variants), so the improvement
+does not come from serving older frames. The camera profile stayed unchanged.
+
+The final installed binary was rebuilt through `scripts/cuda-cargo.sh`, validated
+against an available CUDA device without starting microphone capture, and passed
+the full stationary MCP verification. Tests: 47 passed; three explicit local
+model/fixture tests remain ignored. Clippy passed with warnings denied.
+
+## Stacked timing by camera action
+
+`action-traces.json` contains 40 complete requests on the installed CUDA release:
+three per action, except the single cold snapshot. All default/precise centering
+trials reported centered; rough framing reported aimed. The temporary saved-view
+store was isolated from user views; the starting physical pose was restored and
+verified. Setup, restoration and diagnostic requests are excluded from action
+timings. These are small, declared test moves, not universal operation costs.
+
+`action-breakdown.json` selects the median-duration server trace per action.
+The stack partitions wall time at every span boundary and assigns each interval
+once to the deepest active categorized span. Equal-depth overlaps use the listed
+category order; unclassified time remains Other MCP. This avoids adding nested
+or parallel spans. ONVIF includes its client processing; controller waits include
+polling/settling/velocity sleeps, not pure motor time. Frame wait includes capture
+readiness; background decoder work is not added on top of that wait. Tracking
+includes its blocking-worker queue. Response includes encoding, preparation and
+completed pipe writes. Client parsing and agent time are outside the server bars.
+
+```sh
+.venv/bin/python benchmarks/mcp-optimization/measure_actions.py --host CAMERA_IP
+python3 benchmarks/mcp-optimization/render_actions.py
+python3 benchmarks/mcp-optimization/summarize.py
+```
+
+The action script physically exercises bounded centering, scanning and movement,
+then restores the initial pose in `finally`. It never clears the user's saved
+views. The chart offers absolute milliseconds and normalized shares; both use
+the same complete stack data. CPU comparison results and CUDA action timings have
+separate populations and timing boundaries.

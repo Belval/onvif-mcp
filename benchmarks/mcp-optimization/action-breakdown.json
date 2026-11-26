@@ -1,0 +1,232 @@
+{
+  "source": "action-traces.json",
+  "binary_sha256": "e82625d51a79d99d260cccae75438fa83ea6790e9089459eb08ce25bf923edfc",
+  "build_features": "cuda",
+  "method": "Representative median-duration server trace per action (three samples; cold one). Sweep all span boundaries; assign each interval once to its deepest active categorized span, breaking equal-depth overlaps in category order. Unclassified/uncovered time is Other MCP. Does not sum overlapping spans or background video work.",
+  "rows": [
+    {
+      "action": "Snapshot \u00b7 cold",
+      "n": 1,
+      "server_ms": 226.585978,
+      "client_wall_ms": 226.98214184492826,
+      "focus_status": null,
+      "request_id": "e58398fb4da952cf-1",
+      "breakdown_ms": {
+        "ONVIF": 123.078206,
+        "Controller waits": 0.0,
+        "Frame wait": 102.298638,
+        "Tracking": 0.0,
+        "Response": 0.172259,
+        "Other MCP": 1.036875
+      }
+    },
+    {
+      "action": "Snapshot \u00b7 warm",
+      "n": 3,
+      "server_ms": 1.128403,
+      "client_wall_ms": 2.0196884870529175,
+      "focus_status": null,
+      "request_id": "e58398fb4da952cf-8",
+      "breakdown_ms": {
+        "ONVIF": 0.00072,
+        "Controller waits": 0.0,
+        "Frame wait": 0.018226,
+        "Tracking": 0.0,
+        "Response": 0.4383,
+        "Other MCP": 0.671157
+      }
+    },
+    {
+      "action": "Detail image",
+      "n": 3,
+      "server_ms": 120.212399,
+      "client_wall_ms": 120.90308032929897,
+      "focus_status": null,
+      "request_id": "e58398fb4da952cf-10",
+      "breakdown_ms": {
+        "ONVIF": 9.68769,
+        "Controller waits": 0.0,
+        "Frame wait": 109.668237,
+        "Tracking": 0.0,
+        "Response": 0.698566,
+        "Other MCP": 0.157906
+      }
+    },
+    {
+      "action": "Status",
+      "n": 3,
+      "server_ms": 15.610541,
+      "client_wall_ms": 15.879425220191479,
+      "focus_status": null,
+      "request_id": "e58398fb4da952cf-15",
+      "breakdown_ms": {
+        "ONVIF": 15.024215,
+        "Controller waits": 0.0,
+        "Frame wait": 0.0,
+        "Tracking": 0.0,
+        "Response": 0.13851,
+        "Other MCP": 0.447816
+      }
+    },
+    {
+      "action": "Center \u00b7 rough",
+      "n": 3,
+      "server_ms": 555.718983,
+      "client_wall_ms": 556.2181668356061,
+      "focus_status": "aimed",
+      "request_id": "e58398fb4da952cf-1a",
+      "breakdown_ms": {
+        "ONVIF": 310.192954,
+        "Controller waits": 209.849479,
+        "Frame wait": 34.929867,
+        "Tracking": 0.0,
+        "Response": 0.192153,
+        "Other MCP": 0.55453
+      }
+    },
+    {
+      "action": "Center \u00b7 default",
+      "n": 3,
+      "server_ms": 650.832249,
+      "client_wall_ms": 651.222045533359,
+      "focus_status": "centered",
+      "request_id": "e58398fb4da952cf-26",
+      "breakdown_ms": {
+        "ONVIF": 253.234898,
+        "Controller waits": 261.623522,
+        "Frame wait": 44.800196,
+        "Tracking": 90.347232,
+        "Response": 0.088189,
+        "Other MCP": 0.738212
+      }
+    },
+    {
+      "action": "Center \u00b7 precise",
+      "n": 3,
+      "server_ms": 958.248483,
+      "client_wall_ms": 958.571532741189,
+      "focus_status": "centered",
+      "request_id": "e58398fb4da952cf-32",
+      "breakdown_ms": {
+        "ONVIF": 361.651176,
+        "Controller waits": 423.215638,
+        "Frame wait": 43.824976,
+        "Tracking": 128.753328,
+        "Response": 0.094518,
+        "Other MCP": 0.708847
+      }
+    },
+    {
+      "action": "Scan \u00b7 3 views",
+      "n": 3,
+      "server_ms": 947.85611,
+      "client_wall_ms": 949.3351876735687,
+      "focus_status": null,
+      "request_id": "e58398fb4da952cf-34",
+      "breakdown_ms": {
+        "ONVIF": 448.406027,
+        "Controller waits": 377.910841,
+        "Frame wait": 118.124318,
+        "Tracking": 0.0,
+        "Response": 1.209331,
+        "Other MCP": 2.205593
+      }
+    },
+    {
+      "action": "Save view",
+      "n": 3,
+      "server_ms": 8.365367,
+      "client_wall_ms": 8.779841475188732,
+      "focus_status": null,
+      "request_id": "e58398fb4da952cf-3a",
+      "breakdown_ms": {
+        "ONVIF": 7.329528,
+        "Controller waits": 0.0,
+        "Frame wait": 0.0,
+        "Tracking": 0.0,
+        "Response": 0.098641,
+        "Other MCP": 0.937198
+      }
+    },
+    {
+      "action": "Go to view \u00b7 .05 pan",
+      "n": 3,
+      "server_ms": 399.116966,
+      "client_wall_ms": 399.94972944259644,
+      "focus_status": null,
+      "request_id": "e58398fb4da952cf-40",
+      "breakdown_ms": {
+        "ONVIF": 209.139408,
+        "Controller waits": 165.87472,
+        "Frame wait": 22.530611,
+        "Tracking": 0.0,
+        "Response": 0.288597,
+        "Other MCP": 1.28363
+      }
+    },
+    {
+      "action": "Move \u00b7 150 ms",
+      "n": 3,
+      "server_ms": 189.134363,
+      "client_wall_ms": 189.45548217743635,
+      "focus_status": null,
+      "request_id": "e58398fb4da952cf-46",
+      "breakdown_ms": {
+        "ONVIF": 21.151474,
+        "Controller waits": 167.346554,
+        "Frame wait": 0.0,
+        "Tracking": 0.0,
+        "Response": 0.052886,
+        "Other MCP": 0.583449
+      }
+    },
+    {
+      "action": "Stop \u00b7 idle",
+      "n": 3,
+      "server_ms": 14.103486,
+      "client_wall_ms": 14.286769554018974,
+      "focus_status": null,
+      "request_id": "e58398fb4da952cf-4e",
+      "breakdown_ms": {
+        "ONVIF": 13.887028,
+        "Controller waits": 0.0,
+        "Frame wait": 0.0,
+        "Tracking": 0.0,
+        "Response": 0.02625,
+        "Other MCP": 0.190208
+      }
+    },
+    {
+      "action": "Delete view",
+      "n": 3,
+      "server_ms": 0.339004,
+      "client_wall_ms": 0.503193587064743,
+      "focus_status": null,
+      "request_id": "e58398fb4da952cf-56",
+      "breakdown_ms": {
+        "ONVIF": 0.0,
+        "Controller waits": 0.0,
+        "Frame wait": 0.0,
+        "Tracking": 0.0,
+        "Response": 0.027417,
+        "Other MCP": 0.311587
+      }
+    },
+    {
+      "action": "Clear views \u00b7 2",
+      "n": 3,
+      "server_ms": 0.478517,
+      "client_wall_ms": 0.6186980754137039,
+      "focus_status": null,
+      "request_id": "e58398fb4da952cf-61",
+      "breakdown_ms": {
+        "ONVIF": 0.0,
+        "Controller waits": 0.0,
+        "Frame wait": 0.0,
+        "Tracking": 0.0,
+        "Response": 0.039374,
+        "Other MCP": 0.439143
+      }
+    }
+  ]
+}

@@ -1,6 +1,5 @@
 use crate::camera::{Camera, ObservationResult};
 use anyhow::Result;
-use base64::{Engine, engine::general_purpose::STANDARD};
 use rmcp::{
     RoleServer, ServerHandler,
     handler::server::wrapper::Parameters,
@@ -179,7 +178,7 @@ fn content((mut metadata, frame): ObservationResult, started: Instant) -> Vec<Co
             })),
             ContentBlock::image(
                 crate::metrics::sync("response.image_base64", || {
-                    STANDARD.encode(frame.jpeg.as_slice())
+                    crate::payload::encode(frame.jpeg.as_slice())
                 }),
                 "image/jpeg",
             ),
@@ -315,7 +314,7 @@ impl CameraServer {
                     metadata.to_string()
                 })),
                 ContentBlock::audio(
-                    crate::metrics::sync("response.audio_base64", || STANDARD.encode(wav)),
+                    crate::metrics::sync("response.audio_base64", || crate::payload::encode(&wav)),
                     "audio/wav",
                 ),
             ]),

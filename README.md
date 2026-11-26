@@ -144,6 +144,10 @@ batched scans and remembered views remove many of those round trips.
 
 ## Measured performance
 
+The [26 November MCP optimization benchmarks](benchmarks/mcp-optimization/README.md)
+cover frame-feature reuse, transport tracing and SIMD payload encoding, with
+repeated release comparisons and separate component/full-request timings.
+
 Live measurements on this LAN, with the release binary and native CPU flags:
 
 | Operation | Measurement |

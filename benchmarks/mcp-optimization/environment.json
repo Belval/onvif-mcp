@@ -1,0 +1,62 @@
+{
+  "measured_on": "2026-11-26",
+  "baseline_revision": "42b8450",
+  "iteration_1_revision": "28cb1a0",
+  "iteration_2": "source accompanying this benchmark",
+  "system": "Linux",
+  "architecture": "x86_64",
+  "cpu": "Intel(R) Core(TM) i7-6700T CPU @ 2.80GHz",
+  "rustc": "rustc 1.99.1 (58cf8f9c3 2026-10-13)",
+  "camera": {
+    "manufacturer": "tp-link",
+    "model": "Tapo C210",
+    "firmware": "1.2.7 Build 260818 Rel.64715n",
+    "minor_stream": {
+      "width": 1280,
+      "height": 720,
+      "fps": 15
+    },
+    "configuration_changed": false,
+    "motion_commands_issued": false
+  },
+  "comparison_features": "default (CPU build), same native target flags for all variants",
+  "validation": {
+    "tests_passed": 47,
+    "tests_ignored": 3,
+    "clippy_warnings_denied": true,
+    "byte_exact_base64": true,
+    "cached_vs_uncached_tracking_coordinates_equal": true,
+    "cuda_release_built": true,
+    "cuda_device_validation_before_language_guard": true,
+    "live_mcp_verification_passed": true,
+    "all_default_and_precise_centering_samples_centered": true,
+    "action_profile_original_pose_restored": true
+  },
+  "installed_binary_sha256": "e82625d51a79d99d260cccae75438fa83ea6790e9089459eb08ce25bf923edfc",
+  "runtime_source_sha256": {
+    ".cargo/config.toml": "f6131c58e37ec63728030f75df0af7b289120dcda3cedde3d71878495c7da9b8",
+    "Cargo.lock": "d32afda9d0abad32976021eab8d4bd74cbbc8d17d4ea812cdef32db28f78e2d9",
+    "Cargo.toml": "d57ca7be6a5f9860d9f2cc2b93e826d105cb6d3a6d5f815d979e460573dbce93",
+    "build.rs": "5471dead1ca7ee63f2b32465f7dcf7f10ca10141b035d8117664fd2cf91f5f80",
+    "src/audio.rs": "311e6ee0c409c69e496a4e44bfaaae35ca7d1cecd789ce3c01ffa5a270b51761",
+    "src/audio_diagnostics.rs": "3b947a148dfb537f169eddee1d411a90d5fd50c1bf5a05fc09ac6c7b6fdd148e",
+    "src/camera.rs": "d1b0ff715a3b8811ab3de8cd9d8907d9aa9657d72edad61cc1b66928816204c8",
+    "src/codex_audio.rs": "b3e4b99f9b17d8f1405423b7ef0afc96103f7afea745f412a97768f469d04e6a",
+    "src/experiments.rs": "8a25636b0887b2c37b2a6d18a41821e17b50a36df1f1e23346c84428bdebfcda",
+    "src/hearing.rs": "6211656b91ca7d020a9e9798332dd28f6f1664fedab47f06ac466eb5f0380b29",
+    "src/jpeg.rs": "10b77b9c0e683d777cd6f6e24a7a04130cee4fd9d3f9f1eb7384aaf8351bc93d",
+    "src/main.rs": "aeddaa9e61f14aabcb8bdc024c1af639448cae579a94d023a4f27d41763d3c42",
+    "src/metrics.rs": "407b12956b39abd61274d6fbc6fadb99808d9c8aab05c9d4f16e3fc0f9aef4db",
+    "src/onvif.rs": "80cb74117742404a85e8c9f047ce1b07e9f01fe52fbfe7f23e03336eac3002ef",
+    "src/payload.rs": "a1554ac5de462eba7007b1c5be77d142ad92ae4babde2e8fcad5f9479ab906db",
+    "src/pipeline_bench.rs": "9a1ac2b6ae5f60b8c66b4aa69992653a3c823ce3063439e968cb5c922b78c618",
+    "src/server.rs": "8fe5295ae309c969b3a01fbbda59eca6db6d21cf8b31a761aead23e5be26e86f",
+    "src/stt.rs": "e43a568458f1ee9e80a0d715cc8475ecd4672e3a6dd257c15b7dc470d0e433d7",
+    "src/transport_metrics.rs": "0ead5b136a009da6e025b2469cb909e55922401343fdd6fd605376050eb944e4",
+    "src/verify.rs": "468e806f80829d3d97bda39e63ea3c7548f5d9bc832ee4e9008abcdb087d5baf",
+    "src/video.rs": "3c7ea418b8169783aba625113c1d520900bea7b5528b75c06ff705faf67efc02",
+    "src/views.rs": "9fd443ce3ee40981145487aa5d4ce7103b7541975d850056ff1c2fca2762bfac",
+    "src/vision.rs": "df1be8bd802dab20aaa73b642ad6aaea9408f231872a587cd5405bcaeb262d59",
+    "src/wake.rs": "d947f801024bc5bb77cd02773d0eadf3f9693e008dc3b3cf6a830e667aaebe8a"
+  }
+}

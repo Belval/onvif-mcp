@@ -14,11 +14,13 @@ history=importlib.util.module_from_spec(spec);spec.loader.exec_module(history)
 parser=argparse.ArgumentParser(description=__doc__)
 parser.add_argument('--baseline',required=True,type=Path)
 parser.add_argument('--candidate',required=True,type=Path)
+parser.add_argument('--intermediate',type=Path,help='Optional third release; use balanced three-variant blocks')
 parser.add_argument('--host',required=True)
 parser.add_argument('--output',required=True,type=Path)
 args=parser.parse_args()
 results=[]
-for index,variant in enumerate(('baseline','candidate','candidate','baseline','baseline','candidate')):
+order=('baseline','intermediate','candidate','intermediate','candidate','baseline','candidate','baseline','intermediate') if args.intermediate else ('baseline','candidate','candidate','baseline','baseline','candidate')
+for index,variant in enumerate(order):
     binary=getattr(args,variant).resolve()
     env=history.environment();env.update(CAMERA_CONFIG_DIR=str(ROOT),CAMERA_HOST=args.host,CAMERA_METRICS='1')
     client=history.Client([str(binary)],ROOT,env)
@@ -46,6 +48,6 @@ for index,variant in enumerate(('baseline','candidate','candidate','baseline','b
             'counters':metrics['counters'],'host_load':os.getloadavg()}
         results.append(record)
         args.output.parent.mkdir(parents=True,exist_ok=True)
-        args.output.write_text(json.dumps({'protocol':'200 preview calls per block; 50ms pause; A/B/B/A/A/B; tracing enabled in both; JPEG validation outside request timer; no camera configuration/motion changes','results':results},indent=2)+'\n')
+        args.output.write_text(json.dumps({'protocol':'200 preview calls per block; 50ms pause; tracing enabled in all variants; JPEG validation outside request timer; no camera configuration/motion changes','variant_order':order,'results':results},indent=2)+'\n')
         print('Median',round(record['median_ms'],3),'p95',round(record['p95_ms'],3),flush=True)
     finally:client.close()

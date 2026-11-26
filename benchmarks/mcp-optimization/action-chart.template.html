@@ -1,0 +1,31 @@
+<section id="camera-action-costs-20261126" data-viz-composition>
+  <style>
+    #camera-action-costs-20261126 { display: grid; gap: calc(var(--font-size-base) * 1); }
+    #camera-action-costs-20261126 .action-intro { display: grid; gap: calc(var(--font-size-base) * .5); }
+  </style>
+  <div class="action-intro">
+    <h3>Where camera actions spend time</h3>
+    <p class="text-small">Current CUDA release · median-duration trace of 3 per action; cold startup n=1 · agent and client parsing time excluded.</p>
+  </div>
+  <div class="viz-controls">
+    <label class="form-label" for="camera-cost-scale">Scale</label>
+    <select class="form-select" id="camera-cost-scale" disabled>
+      <option value="share" selected>Share of each action</option>
+      <option value="absolute">Milliseconds</option>
+    </select>
+  </div>
+  <div data-viz-container></div>
+  <p class="text-small">Controller waits include polling, settling and timed movement; they are not pure motor time. Frame wait includes waiting for capture readiness. Stacks assign each instant once; concurrent background codec work is excluded.</p>
+  <script type="application/json" data-viz-chart data-mode="share">__SHARE_CONFIG__</script>
+  <script type="application/json" data-viz-chart data-mode="absolute">__ABSOLUTE_CONFIG__</script>
+</section>
+<script type="module">
+  import { mountChart } from "https://persistent.oaistatic.com/plugins/visualize/charts/1.2.3/element.js";
+  const root = document.getElementById("camera-action-costs-20261126");
+  const configs = Object.fromEntries(Array.from(root.querySelectorAll("[data-viz-chart]"), node => [node.dataset.mode, JSON.parse(node.textContent)]));
+  const select = root.querySelector("#camera-cost-scale");
+  select.value = "share";
+  const chart = mountChart(root.querySelector("[data-viz-container]"), configs.share);
+  select.addEventListener("change", () => { chart.config = configs[select.value]; });
+  select.disabled = false;
+</script>

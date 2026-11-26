@@ -23,7 +23,7 @@
 @@ -81,6 +81,10 @@
      (a[0] - b[0]).hypot(a[1] - b[1])
  }
- 
+
 +pub fn track_frames(before: &crate::video::Frame, after: &crate::video::Frame, point: [f64; 2]) -> Option<[f64; 2]> {
 +    track(&before.jpeg, &after.jpeg, point)
 +}

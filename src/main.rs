@@ -7,6 +7,7 @@ mod hearing;
 mod jpeg;
 mod metrics;
 mod onvif;
+mod payload;
 mod pipeline_bench;
 mod server;
 mod stt;
@@ -38,6 +39,9 @@ async fn run() -> Result<()> {
     let root = root();
     let _ = dotenvy::from_path(root.join(".env"));
     metrics::init();
+    if std::env::args().any(|a| a == "--benchmark-payload") {
+        return payload::benchmark();
+    }
     if std::env::args().any(|a| a == "--benchmark-pipeline") {
         return pipeline_bench::run().await;
     }

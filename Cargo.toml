@@ -12,6 +12,7 @@ cuda = ["whisper-rs/cuda"]
 [dependencies]
 anyhow = "1"
 base64 = "0.22"
+base64-simd = "0.8.0"
 chrono = { version = "0.4", default-features = false, features = ["clock"] }
 dotenvy = "0.15"
 futures-util = "0.3"

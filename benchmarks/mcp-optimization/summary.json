@@ -1,0 +1,45 @@
+{
+  "source": "final-live-results.json",
+  "scope": "Complete MCP stationary preview; three default-feature CPU releases; six hundred requests per release. Installed CUDA action timings are separate in action-breakdown.json.",
+  "statistics": "Pooled median; nearest-rank p95; observed maximum retained, not a latency guarantee.",
+  "preview_median_reduction_percent": 9.290597089792318,
+  "preview_p95_reduction_percent": 9.814122069250375,
+  "variants": {
+    "baseline": {
+      "n": 600,
+      "median_ms": 1.6969982534646988,
+      "p95_ms": 2.06538662314415,
+      "max_ms": 2.4386877194046974,
+      "block_medians_ms": [
+        1.7319601029157639,
+        1.6932729631662369,
+        1.6841930337250233
+      ],
+      "binary_sha256": "c25ace0eb8ecfd4d681dd5b938165bd786df80ba6d92bab266b2271de46df772"
+    },
+    "intermediate": {
+      "n": 600,
+      "median_ms": 1.6343663446605206,
+      "p95_ms": 1.9380087032914162,
+      "max_ms": 286.341798491776,
+      "block_medians_ms": [
+        1.6343872994184494,
+        1.6246475279331207,
+        1.6420334577560425
+      ],
+      "binary_sha256": "850c93896ed5cfc10bf8da1f27831e560392161323efb1b4bcbb95bfd3b46925"
+    },
+    "candidate": {
+      "n": 600,
+      "median_ms": 1.539336983114481,
+      "p95_ms": 1.8626870587468147,
+      "max_ms": 2.869248390197754,
+      "block_medians_ms": [
+        1.5302025713026524,
+        1.5337355434894562,
+        1.5520104207098484
+      ],
+      "binary_sha256": "43d57ccf002a3c102838c612baf0a6afa274fa56cfcf08ca56845893bd0acf53"
+    }
+  }
+}
