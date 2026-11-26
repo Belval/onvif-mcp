@@ -1,0 +1,129 @@
+{
+  "title": "Native video. No frame backlog.",
+  "height": 850,
+  "description": "Persistent RTSP ingestion feeds CPU workers and a newest-frame-only shared buffer, with lazy camera initialization and separate on-demand detail capture.",
+  "nodes": [
+    {
+      "id": "camera",
+      "x": 48,
+      "y": 480,
+      "w": 264,
+      "h": 168,
+      "title": "Tapo C210",
+      "body": [
+        "RTSP / TCP",
+        "15 fps H.264"
+      ]
+    },
+    {
+      "id": "io",
+      "x": 338,
+      "y": 480,
+      "w": 264,
+      "h": 168,
+      "title": "Async I/O",
+      "body": [
+        "RTP ingestion"
+      ]
+    },
+    {
+      "id": "cpu",
+      "x": 628,
+      "y": 480,
+      "w": 264,
+      "h": 168,
+      "title": "CPU workers",
+      "body": [
+        "Decode/encode"
+      ]
+    },
+    {
+      "id": "buffer",
+      "x": 918,
+      "y": 480,
+      "w": 264,
+      "h": 168,
+      "title": "Latest frame",
+      "body": [
+        "Arc<Frame>"
+      ]
+    },
+    {
+      "id": "mcp",
+      "x": 1208,
+      "y": 480,
+      "w": 264,
+      "h": 168,
+      "title": "MCP",
+      "body": [
+        "Return preview"
+      ]
+    }
+  ],
+  "edges": [
+    {
+      "from": "camera",
+      "to": "io"
+    },
+    {
+      "from": "io",
+      "to": "cpu"
+    },
+    {
+      "from": "cpu",
+      "to": "buffer"
+    },
+    {
+      "from": "buffer",
+      "to": "mcp"
+    }
+  ],
+  "caption": "Lazy startup · separate short-lived detail stream · SIMD only when resizing is needed",
+  "kicker": "01 / RUST VIDEO PIPELINE",
+  "panels": [
+    {
+      "x": 48,
+      "y": 200,
+      "w": 1424,
+      "h": 220,
+      "color": "ink"
+    }
+  ],
+  "labels": [
+    {
+      "x": 100,
+      "y": 222,
+      "text": "~2 ms",
+      "role": "metric",
+      "color": "paper"
+    },
+    {
+      "x": 108,
+      "y": 356,
+      "text": "warm MCP preview",
+      "role": "body",
+      "color": "paper"
+    },
+    {
+      "x": 640,
+      "y": 247,
+      "text": "Connection cost, paid once.",
+      "role": "feature",
+      "color": "paper"
+    },
+    {
+      "x": 644,
+      "y": 313,
+      "text": "OpenH264 → TurboJPEG → shared frame bytes",
+      "role": "body",
+      "color": "paper"
+    },
+    {
+      "x": 644,
+      "y": 364,
+      "text": "CPU work stays off the asynchronous I/O threads.",
+      "role": "caption",
+      "color": "paper"
+    }
+  ]
+}

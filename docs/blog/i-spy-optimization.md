@@ -1,82 +1,87 @@
 # Peek, Seek, and recursive self-improvement
 
-*Two cheap cameras, a game of I spy, and an agent rewriting the tools it uses to see.*
+*From a Python ONVIF reader to a native Rust camera pipeline, guided by a game of I spy.*
 
 ![Peek and Seek, two Tapo cameras wearing googly eyes](assets/peek-and-seek.png)
 
 I asked a coding agent to find the printer in my office. It found it, slowly:
-snapshot, move, wait, correct. Because it could edit its camera runtime, every
-awkward interaction became a candidate improvement.
+snapshot, move, wait, correct. The agent could edit its camera tools, so each
+awkward interaction was also evidence for what to improve.
 
-The cameras are **Peek and Seek**, two Tapos costing about $25 each. Peek sets
-the challenge; Seek searches. Adding googly eyes made AI-controlled cameras
-looking around the room feel considerably less off-putting to me.
+Meet **Peek and Seek**, two roughly $25 Tapos. Peek's agent chooses an object and
+withholds its coordinates; Seek's agent searches. The googly eyes made the whole
+business of AI-controlled cameras looking around my room feel less off-putting.
 
-## Turn the task into the test
+## Rewrite the architecture, then optimize the runtime
 
-We made I spy a **recursive self-improvement (RSI) loop**. An independent agent
-behind Peek chose an object and withheld its coordinates. Seek's operator
-searched; the challenger judged recognition, centering, and motion smear.
-Timing traces identified bottlenecks, and the operator rewrote its own tools
-before playing again.
+The Python path reopened RTSP for every snapshot, costing about **2.5 seconds**.
+We moved ONVIF, video ingestion, MCP and tracking into Rust. A persistent stream
+published only the newest frame, shared through `Arc`, instead of reopening the
+connection or accumulating an image queue. Warm previews reached approximately
+**2 ms**. The camera still supplies 15 fps; this is buffered retrieval time.
+The architecture changed along with the language.
 
-Fresh targets checked usefulness. Repeated same-origin movements separated
-runtime improvements from learning where the printer lived.
+Then we worked on the Rust pipeline: keep codec work off Tokio's I/O workers,
+avoid leaving detail streams running, and open connections only when used.
+Tracing exposed reconnect stalls. Frame-local JPEG recovery helped, and switching
+the preview to H.264 removed the observed multi-second capture stalls.
 
-![The RSI loop: Peek challenges, Seek searches, traces inform tool changes, and matched trials validate them](assets/improvement-loop.png)
+The image path gained a reusable TurboJPEG compressor and SIMD resizing. One
+particularly useful discovery: installing NASM had not accelerated a previously
+cached OpenH264 build. We cleaned and rebuilt that release dependency, then
+verified the assembly symbols in the resulting archive.
 
-The archive contains **216 timed motion trials**: ten settings tested over
-18 moves each, then an 18-versus-18 final comparison. The game provided
-**seven independent evaluations**. These counts describe experimental coverage,
-not 216 successive code improvements.
+![Native Rust video pipeline: asynchronous RTSP ingestion, CPU codec workers, and a latest-frame-only buffer](assets/rust-pipeline.png)
 
-![180 motion tuning trials and a separate 36-trial matched validation, with individual durations and geometry failures](assets/motion-trials.png)
+## Eleven engineering checkpoints, ten commits
 
-[Inspect every trial and its timing](assets/motion-trials.html) ·
-[Download all 216 timings](assets/motion-trials.csv)
+These are the code and build changes, not repeated timing trials. Times below
+are commit times on **28 October 2026 (UTC)**; not every checkpoint has an isolated
+speedup measurement.
 
-*Each dot is a measured move-plus-image call. The sequence preserves order within
-each archived batch; absolute UTC timestamps were not stored. Agent time, gaps,
-restores, and delayed image evaluation are excluded.*
+<details markdown="1">
+<summary>Read the 11 commit-linked engineering checkpoints</summary>
 
-## Improve the eyes, then the control loop
+| UTC | Engineering checkpoint | Commit |
+| --- | --- | --- |
+| 00:45 | **Smaller Python previews**. Return 640 px previews; request full detail only when needed. | [d3eeaa7](https://github.com/Belval/onvif-mcp/commit/d3eeaa7d4cbc5e0edad00b7fed87ee31ad1352e8) |
+| 01:00 | **Native Rust ingestion**. Implement ONVIF and persistent RTSP with a latest-frame buffer. | [4eeaf12](https://github.com/Belval/onvif-mcp/commit/4eeaf12cdf52e195d7a993288b3d37cbb6ae0b41) |
+| 01:22 | **Complete the Rust tool path**. Port MCP, visual tracking, native JPEG assembly and background pose polling. | [aab1795](https://github.com/Belval/onvif-mcp/commit/aab1795007f4cda627f2aea488016039f08455e5) |
+| 01:41 | **Keep I/O nonblocking**. Move codec work onto blocking workers; isolate short-lived detail streams. | [c21420b](https://github.com/Belval/onvif-mcp/commit/c21420b48dca1022d7e2597e64b07331add04030) |
+| 01:50 | **Connect only on demand**. Lazily initialize camera connections and retire the Python runtime. | [5c4ce20](https://github.com/Belval/onvif-mcp/commit/5c4ce20ce3979367c26c8514d578b06bba7c3058) |
+| 02:43 | **Instrument the whole path**. Trace network, queueing, video, image processing and MCP output. | [93b6533](https://github.com/Belval/onvif-mcp/commit/93b653364a677cfe009c92443dffc6742e81675b) |
+| 02:59 | **Recover frames locally**. Drop malformed JPEG frames without restarting the RTSP session. | [3847e1b](https://github.com/Belval/onvif-mcp/commit/3847e1b6db35b02eb35442ac490ec34eae82abdf) |
+| 03:30 | **Change the preview source**. Use persistent H.264 at 640 × 360 / 15 fps. | [abef2b0](https://github.com/Belval/onvif-mcp/commit/abef2b09b583006d340796c16fb7a1d3ea092e96) |
+| 03:30 | **Reuse encoding state**. Cache the TurboJPEG compressor and skip unnecessary thumbnailing. | [abef2b0](https://github.com/Belval/onvif-mcp/commit/abef2b09b583006d340796c16fb7a1d3ea092e96) |
+| 04:26 | **SIMD image processing**. Use fast_image_resize with reusable state for images that need resizing. | [978d768](https://github.com/Belval/onvif-mcp/commit/978d7687cbf0636fc7d0757c5ea47cb1f54d1604) |
+| 04:32 | **Verify accelerated builds**. Rebuild cached OpenH264 with NASM; verify assembly symbols in the release archive. | [eca26f7](https://github.com/Belval/onvif-mcp/commit/eca26f7a2efa60fc14a663eadadb3e7c40561238) |
 
-Reopening RTSP for each snapshot cost about **2.5 seconds**. We built a Rust
-runtime with persistent H.264 ingestion, accelerated codecs, and a latest-frame
-buffer. Warm previews reached approximately **2 ms**. This compared capture
-architectures, rather than isolating language speed.
-
-One image-point centering call absorbed calibrated ONVIF movement and bounded
-visual corrections. Batched scans removed reasoning round trips. Faster variants
-still had to pass: maximum-speed commands stalled, continuous motion overshot,
-and zero-wait settings blurred images or broke scan revisits.
-
-Most gains came early: the stream architecture changed first, then conservative
-motion waits were shortened. The remaining trials explored a plateau and caught
-quality regressions. The motion study already used Rust and H.264, so it does not
-show the earlier architectural gain.
-
-The final check cut median **movement-plus-image latency from 933 to 614 ms
-(34%)**, with 18/18 optical geometry passes in each block. Replaying the old
-settings established that comparison; it was not a backwards step in progress.
-
-![Latency history across camera runtime commits and tuning iterations, excluding all agent time](assets/latency-history.png)
-
-*Summary only: four selected snapshot checkpoints above, and the final matched
-motion comparison below. These are not loop counts. Both motion settings require
-two arrival reports; settling is an extra pause, and polling is the position-query
-interval. The matched blocks ran baseline first.*
-
-An improvement survived only if independent challenges and replayed measurements
-supported it. That external feedback closed the RSI loop.
-
-<details>
-<summary>Inspect the video and control pipeline</summary>
-<p><img src="assets/camera-pipeline.png" alt="Persistent RTSP ingestion, native codecs, a latest-frame buffer, and calibrated ONVIF control"></p>
 </details>
 
-[Full-size chart](assets/latency-history.svg) ·
-[Measurements and rejected experiments](../../benchmarks/i-spy/README.md) ·
-[Chart data](assets/latency-history.csv) ·
-[Chart provenance](assets/latency-history.json) ·
-[Source code](https://github.com/Belval/onvif-mcp)
+## Close the RSI loop with external feedback
+
+I spy supplied the task; timing traces identified bottlenecks; the agent rewrote
+its tools; independent images and replayed measurements tested the result. That
+was our **recursive self-improvement loop**, operating on the agent's tooling.
+
+The archive contains **7 independently judged games and 216 timed motion trials**.
+Most gains came early. Later tests explored a performance floor and rejected
+faster settings that blurred images or broke revisits. Those trials establish
+coverage and reliability, not 216 successive code improvements.
+
+<details>
+<summary>Inspect the RSI loop and all 216 motion timings</summary>
+<p><img src="assets/improvement-loop.png" alt="Peek and Seek evaluate, rewrite and validate their tools"></p>
+<p><img src="assets/motion-trials.png" alt="180 tuning trials, with the 36 final validation trials shown separately"></p>
+<p><a href="assets/motion-trials.html">Inspect every trial interactively</a> · <a href="assets/motion-trials.csv">Download 216 exact timings</a></p>
+</details>
+
+<details>
+<summary>Selected latency measurements and final motion comparison</summary>
+<p><img src="assets/latency-history.png" alt="Four selected Rust snapshot checkpoints and the separate final motion comparison"></p>
+<p>These four snapshot benchmarks are selected measurement windows, not a count of improvements. The motion study already used Rust and H.264. Its final same-origin comparison was 933 → 614 ms median, with 18/18 geometry passes in both blocks. Agent time is excluded.</p>
+</details>
+
+[Source code](https://github.com/Belval/onvif-mcp) ·
+[Benchmark evidence](../../benchmarks/i-spy/README.md) ·
+[Engineering checkpoint sources](assets/software-checkpoints.json)

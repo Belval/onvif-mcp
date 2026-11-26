@@ -1,0 +1,104 @@
+{
+  "scope": "Engineering changes and build verification, excluding poll/settle sweeps and audio. Commit times are recording times, not isolated execution durations. Not every checkpoint has a separate performance measurement.",
+  "checkpoints": [
+    {
+      "step": 1,
+      "commit": "d3eeaa7d4cbc5e0edad00b7fed87ee31ad1352e8",
+      "recorded_at": "2026-10-28T00:45:31+00:00",
+      "title": "Smaller Python previews",
+      "detail": "Return 640 px previews; request full detail only when needed.",
+      "evidence": "https://github.com/Belval/onvif-mcp/blob/d3eeaa7d4cbc5e0edad00b7fed87ee31ad1352e8/camera_mcp.py",
+      "isolated_speedup_ms": null
+    },
+    {
+      "step": 2,
+      "commit": "4eeaf12cdf52e195d7a993288b3d37cbb6ae0b41",
+      "recorded_at": "2026-10-28T01:00:03+00:00",
+      "title": "Native Rust ingestion",
+      "detail": "Implement ONVIF and persistent RTSP with a latest-frame buffer.",
+      "evidence": "https://github.com/Belval/onvif-mcp/blob/4eeaf12cdf52e195d7a993288b3d37cbb6ae0b41/src/video.rs",
+      "isolated_speedup_ms": null
+    },
+    {
+      "step": 3,
+      "commit": "aab1795007f4cda627f2aea488016039f08455e5",
+      "recorded_at": "2026-10-28T01:22:23+00:00",
+      "title": "Complete the Rust tool path",
+      "detail": "Port MCP, visual tracking, native JPEG assembly and background pose polling.",
+      "evidence": "https://github.com/Belval/onvif-mcp/blob/aab1795007f4cda627f2aea488016039f08455e5/src/server.rs",
+      "isolated_speedup_ms": null
+    },
+    {
+      "step": 4,
+      "commit": "c21420b48dca1022d7e2597e64b07331add04030",
+      "recorded_at": "2026-10-28T01:41:41+00:00",
+      "title": "Keep I/O nonblocking",
+      "detail": "Move codec work onto blocking workers; isolate short-lived detail streams.",
+      "evidence": "https://github.com/Belval/onvif-mcp/blob/c21420b48dca1022d7e2597e64b07331add04030/src/video.rs",
+      "isolated_speedup_ms": null
+    },
+    {
+      "step": 5,
+      "commit": "5c4ce20ce3979367c26c8514d578b06bba7c3058",
+      "recorded_at": "2026-10-28T01:50:55+00:00",
+      "title": "Connect only on demand",
+      "detail": "Lazily initialize camera connections and retire the Python runtime.",
+      "evidence": "https://github.com/Belval/onvif-mcp/blob/5c4ce20ce3979367c26c8514d578b06bba7c3058/src/server.rs",
+      "isolated_speedup_ms": null
+    },
+    {
+      "step": 6,
+      "commit": "93b653364a677cfe009c92443dffc6742e81675b",
+      "recorded_at": "2026-10-28T02:43:16+00:00",
+      "title": "Instrument the whole path",
+      "detail": "Trace network, queueing, video, image processing and MCP output.",
+      "evidence": "https://github.com/Belval/onvif-mcp/blob/93b653364a677cfe009c92443dffc6742e81675b/src/metrics.rs",
+      "isolated_speedup_ms": null
+    },
+    {
+      "step": 7,
+      "commit": "3847e1b6db35b02eb35442ac490ec34eae82abdf",
+      "recorded_at": "2026-10-28T02:59:29+00:00",
+      "title": "Recover frames locally",
+      "detail": "Drop malformed JPEG frames without restarting the RTSP session.",
+      "evidence": "https://github.com/Belval/onvif-mcp/blob/3847e1b6db35b02eb35442ac490ec34eae82abdf/src/jpeg.rs",
+      "isolated_speedup_ms": null
+    },
+    {
+      "step": 8,
+      "commit": "abef2b09b583006d340796c16fb7a1d3ea092e96",
+      "recorded_at": "2026-10-28T03:30:57+00:00",
+      "title": "Change the preview source",
+      "detail": "Use persistent H.264 at 640 × 360 / 15 fps.",
+      "evidence": "https://github.com/Belval/onvif-mcp/blob/abef2b09b583006d340796c16fb7a1d3ea092e96/src/video.rs",
+      "isolated_speedup_ms": null
+    },
+    {
+      "step": 9,
+      "commit": "abef2b09b583006d340796c16fb7a1d3ea092e96",
+      "recorded_at": "2026-10-28T03:30:57+00:00",
+      "title": "Reuse encoding state",
+      "detail": "Cache the TurboJPEG compressor and skip unnecessary thumbnailing.",
+      "evidence": "https://github.com/Belval/onvif-mcp/blob/abef2b09b583006d340796c16fb7a1d3ea092e96/src/video.rs",
+      "isolated_speedup_ms": null
+    },
+    {
+      "step": 10,
+      "commit": "978d7687cbf0636fc7d0757c5ea47cb1f54d1604",
+      "recorded_at": "2026-10-28T04:26:35+00:00",
+      "title": "SIMD image processing",
+      "detail": "Use fast_image_resize with reusable state for images that need resizing.",
+      "evidence": "https://github.com/Belval/onvif-mcp/blob/978d7687cbf0636fc7d0757c5ea47cb1f54d1604/src/video.rs",
+      "isolated_speedup_ms": null
+    },
+    {
+      "step": 11,
+      "commit": "eca26f7a2efa60fc14a663eadadb3e7c40561238",
+      "recorded_at": "2026-10-28T04:32:32+00:00",
+      "title": "Verify accelerated builds",
+      "detail": "Rebuild cached OpenH264 with NASM; verify assembly symbols in the release archive.",
+      "evidence": "https://github.com/Belval/onvif-mcp/blob/eca26f7a2efa60fc14a663eadadb3e7c40561238/benchmarks/i-spy/build-assembly.json",
+      "isolated_speedup_ms": null
+    }
+  ]
+}

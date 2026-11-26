@@ -1,0 +1,38 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1520" height="850" viewBox="0 0 1520 850" role="img" aria-labelledby="title desc">
+<title id="title">Native video. No frame backlog.</title>
+<desc id="desc">Persistent RTSP ingestion feeds CPU workers and a newest-frame-only shared buffer, with lazy camera initialization and separate on-demand detail capture.</desc>
+<rect width="100%" height="100%" fill="#F5F3EC"/>
+<rect x="48" y="200" width="1424" height="220" rx="6" fill="#303D2C"/>
+<text x="48" y="32" dominant-baseline="text-before-edge" text-anchor="start" font-family="Arial, Helvetica, Liberation Sans, sans-serif" font-size="22" font-weight="400" fill="#626959">01 / RUST VIDEO PIPELINE</text>
+<text x="48" y="78" dominant-baseline="text-before-edge" text-anchor="start" font-family="Georgia, Times New Roman, DejaVu Serif, serif" font-size="64" font-weight="400" fill="#303D2C">Native video. No frame backlog.</text>
+<rect x="48" y="480" width="264" height="168" rx="6" fill="#F5F3EC" stroke="#D8DBCF" stroke-width="3"/>
+<text x="180.0" y="509.0" dominant-baseline="text-before-edge" text-anchor="middle" font-family="Arial, Helvetica, Liberation Sans, sans-serif" font-size="30" font-weight="700" fill="#303D2C">Tapo C210</text>
+<text x="180.0" y="549.0" dominant-baseline="text-before-edge" text-anchor="middle" font-family="Arial, Helvetica, Liberation Sans, sans-serif" font-size="30" font-weight="400" fill="#626959">RTSP / TCP</text>
+<text x="180.0" y="589.0" dominant-baseline="text-before-edge" text-anchor="middle" font-family="Arial, Helvetica, Liberation Sans, sans-serif" font-size="30" font-weight="400" fill="#626959">15 fps H.264</text>
+<rect x="338" y="480" width="264" height="168" rx="6" fill="#F5F3EC" stroke="#D8DBCF" stroke-width="3"/>
+<text x="470.0" y="529.0" dominant-baseline="text-before-edge" text-anchor="middle" font-family="Arial, Helvetica, Liberation Sans, sans-serif" font-size="30" font-weight="700" fill="#303D2C">Async I/O</text>
+<text x="470.0" y="569.0" dominant-baseline="text-before-edge" text-anchor="middle" font-family="Arial, Helvetica, Liberation Sans, sans-serif" font-size="30" font-weight="400" fill="#626959">RTP ingestion</text>
+<rect x="628" y="480" width="264" height="168" rx="6" fill="#F5F3EC" stroke="#D8DBCF" stroke-width="3"/>
+<text x="760.0" y="529.0" dominant-baseline="text-before-edge" text-anchor="middle" font-family="Arial, Helvetica, Liberation Sans, sans-serif" font-size="30" font-weight="700" fill="#303D2C">CPU workers</text>
+<text x="760.0" y="569.0" dominant-baseline="text-before-edge" text-anchor="middle" font-family="Arial, Helvetica, Liberation Sans, sans-serif" font-size="30" font-weight="400" fill="#626959">Decode/encode</text>
+<rect x="918" y="480" width="264" height="168" rx="6" fill="#F5F3EC" stroke="#D8DBCF" stroke-width="3"/>
+<text x="1050.0" y="529.0" dominant-baseline="text-before-edge" text-anchor="middle" font-family="Arial, Helvetica, Liberation Sans, sans-serif" font-size="30" font-weight="700" fill="#303D2C">Latest frame</text>
+<text x="1050.0" y="569.0" dominant-baseline="text-before-edge" text-anchor="middle" font-family="Arial, Helvetica, Liberation Sans, sans-serif" font-size="30" font-weight="400" fill="#626959">Arc&lt;Frame&gt;</text>
+<rect x="1208" y="480" width="264" height="168" rx="6" fill="#F5F3EC" stroke="#D8DBCF" stroke-width="3"/>
+<text x="1340.0" y="529.0" dominant-baseline="text-before-edge" text-anchor="middle" font-family="Arial, Helvetica, Liberation Sans, sans-serif" font-size="30" font-weight="700" fill="#303D2C">MCP</text>
+<text x="1340.0" y="569.0" dominant-baseline="text-before-edge" text-anchor="middle" font-family="Arial, Helvetica, Liberation Sans, sans-serif" font-size="30" font-weight="400" fill="#626959">Return preview</text>
+<polyline points="312,564.0 338,564.0" fill="none" stroke="#284944" stroke-width="3"/>
+<polygon points="338,564.0 324.143593539449,572.0 324.143593539449,556.0" fill="#284944"/>
+<polyline points="602,564.0 628,564.0" fill="none" stroke="#284944" stroke-width="3"/>
+<polygon points="628,564.0 614.143593539449,572.0 614.143593539449,556.0" fill="#284944"/>
+<polyline points="892,564.0 918,564.0" fill="none" stroke="#284944" stroke-width="3"/>
+<polygon points="918,564.0 904.143593539449,572.0 904.143593539449,556.0" fill="#284944"/>
+<polyline points="1182,564.0 1208,564.0" fill="none" stroke="#284944" stroke-width="3"/>
+<polygon points="1208,564.0 1194.143593539449,572.0 1194.143593539449,556.0" fill="#284944"/>
+<text x="760.0" y="800" dominant-baseline="text-before-edge" text-anchor="middle" font-family="Arial, Helvetica, Liberation Sans, sans-serif" font-size="28" font-weight="400" fill="#626959">Lazy startup · separate short-lived detail stream · SIMD only when resizing is needed</text>
+<text x="100" y="222" dominant-baseline="text-before-edge" text-anchor="start" font-family="Georgia, Times New Roman, DejaVu Serif, serif" font-size="108" font-weight="400" fill="#F5F3EC">~2 ms</text>
+<text x="108" y="356" dominant-baseline="text-before-edge" text-anchor="start" font-family="Arial, Helvetica, Liberation Sans, sans-serif" font-size="30" font-weight="400" fill="#F5F3EC">warm MCP preview</text>
+<text x="640" y="247" dominant-baseline="text-before-edge" text-anchor="start" font-family="Georgia, Times New Roman, DejaVu Serif, serif" font-size="40" font-weight="400" fill="#F5F3EC">Connection cost, paid once.</text>
+<text x="644" y="313" dominant-baseline="text-before-edge" text-anchor="start" font-family="Arial, Helvetica, Liberation Sans, sans-serif" font-size="30" font-weight="400" fill="#F5F3EC">OpenH264 → TurboJPEG → shared frame bytes</text>
+<text x="644" y="364" dominant-baseline="text-before-edge" text-anchor="start" font-family="Arial, Helvetica, Liberation Sans, sans-serif" font-size="28" font-weight="400" fill="#F5F3EC">CPU work stays off the asynchronous I/O threads.</text>
+</svg>
