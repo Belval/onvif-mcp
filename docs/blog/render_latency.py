@@ -59,13 +59,13 @@ data={'snapshot':snapshots,'motion':motion,'scope':['Tool/controller wall times 
 (OUT/'latency-history.json').write_text(json.dumps(data,indent=2)+'\n')
 with (OUT/'latency-history.csv').open('w',newline='') as stream:
     fields=['operation','revision','recorded_in','label','n','median_ms','p95_ms','max_ms','source']
-    writer=csv.DictWriter(stream,fields,extrasaction='ignore');writer.writeheader()
+    writer=csv.DictWriter(stream,fields,extrasaction='ignore',lineterminator='\n');writer.writeheader()
     writer.writerows(snapshots+motion)
 
 plt.rcParams.update({'font.family':'DejaVu Sans','font.size':16,'text.color':COLORS['ink'],
     'axes.labelcolor':COLORS['ink'],'xtick.color':COLORS['muted'],'ytick.color':COLORS['muted'],
     'figure.facecolor':COLORS['paper'],'axes.facecolor':COLORS['paper'],
-    'savefig.facecolor':COLORS['paper'],'svg.fonttype':'none'})
+    'savefig.facecolor':COLORS['paper'],'svg.fonttype':'none','svg.hashsalt':'peek-seek-rsi'})
 fig,axes=plt.subplots(2,1,figsize=(15.2,12.6),dpi=100)
 fig.subplots_adjust(left=.10,right=.96,top=.83,bottom=.10,hspace=.80)
 fig.text(.048,.955,'03 / LATENCY HISTORY',fontsize=15,color=COLORS['muted'])
@@ -102,5 +102,7 @@ ax.set_xticks(xs,[r['label'] for r in motion],fontsize=12)
 ax.legend(loc='upper right',frameon=False,fontsize=14)
 fig.text(.10,.045,'18 moves per motion setting · selected sweeps recorded in 978d768; final runtime 9c83345',fontsize=13,color=COLORS['muted'])
 fig.savefig(OUT/'latency-history.png',dpi=160)
-fig.savefig(OUT/'latency-history.svg')
+fig.savefig(OUT/'latency-history.svg',metadata={'Date':None})
+svg=OUT/'latency-history.svg'
+svg.write_text('\n'.join(line.rstrip() for line in svg.read_text().splitlines())+'\n')
 print('Wrote latency-history PNG / SVG / JSON / CSV; no agent timing fields used.')
