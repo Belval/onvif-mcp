@@ -1,0 +1,86 @@
+{
+  "scope": "Ten unique engineering checkpoint commits. H264 is explicitly selected once introduced. Prototype timing has a different native-only boundary and is never plotted as MCP.",
+  "commits": [
+    {
+      "commit": "d3eeaa7d4cbc5e0edad00b7fed87ee31ad1352e8",
+      "changes": [
+        "Smaller Python previews"
+      ],
+      "runtime": "python-mcp",
+      "preview": "jpeg"
+    },
+    {
+      "commit": "4eeaf12cdf52e195d7a993288b3d37cbb6ae0b41",
+      "changes": [
+        "Native Rust ingestion"
+      ],
+      "runtime": "rust-native-prototype",
+      "preview": "jpeg"
+    },
+    {
+      "commit": "aab1795007f4cda627f2aea488016039f08455e5",
+      "changes": [
+        "Complete the Rust tool path"
+      ],
+      "runtime": "rust-mcp",
+      "preview": "jpeg"
+    },
+    {
+      "commit": "c21420b48dca1022d7e2597e64b07331add04030",
+      "changes": [
+        "Keep I/O nonblocking"
+      ],
+      "runtime": "rust-mcp",
+      "preview": "jpeg"
+    },
+    {
+      "commit": "5c4ce20ce3979367c26c8514d578b06bba7c3058",
+      "changes": [
+        "Connect only on demand"
+      ],
+      "runtime": "rust-mcp",
+      "preview": "jpeg"
+    },
+    {
+      "commit": "93b653364a677cfe009c92443dffc6742e81675b",
+      "changes": [
+        "Instrument the whole path"
+      ],
+      "runtime": "rust-mcp",
+      "preview": "jpeg"
+    },
+    {
+      "commit": "3847e1b6db35b02eb35442ac490ec34eae82abdf",
+      "changes": [
+        "Recover frames locally"
+      ],
+      "runtime": "rust-mcp",
+      "preview": "jpeg"
+    },
+    {
+      "commit": "abef2b09b583006d340796c16fb7a1d3ea092e96",
+      "changes": [
+        "Change the preview source",
+        "Reuse encoding state"
+      ],
+      "runtime": "rust-mcp",
+      "preview": "h264"
+    },
+    {
+      "commit": "978d7687cbf0636fc7d0757c5ea47cb1f54d1604",
+      "changes": [
+        "SIMD image processing"
+      ],
+      "runtime": "rust-mcp",
+      "preview": "h264"
+    },
+    {
+      "commit": "eca26f7a2efa60fc14a663eadadb3e7c40561238",
+      "changes": [
+        "Verify accelerated builds"
+      ],
+      "runtime": "rust-mcp",
+      "preview": "h264"
+    }
+  ]
+}

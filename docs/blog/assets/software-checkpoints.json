@@ -8,7 +8,16 @@
       "title": "Smaller Python previews",
       "detail": "Return 640 px previews; request full detail only when needed.",
       "evidence": "https://github.com/Belval/onvif-mcp/blob/d3eeaa7d4cbc5e0edad00b7fed87ee31ad1352e8/camera_mcp.py",
-      "isolated_speedup_ms": null
+      "isolated_speedup_ms": null,
+      "rerun": {
+        "measured_on": "2026-11-26",
+        "source": "https://github.com/Belval/onvif-mcp/blob/main/benchmarks/commit-history/results-2026-11-26.json",
+        "mcp_comparable": true,
+        "median_ms": 2385.0399549119174,
+        "p95_ms": 2482.6466019731015,
+        "max_ms": 2586.201813071966,
+        "n": 100
+      }
     },
     {
       "step": 2,
@@ -17,7 +26,16 @@
       "title": "Native Rust ingestion",
       "detail": "Implement ONVIF and persistent RTSP with a latest-frame buffer.",
       "evidence": "https://github.com/Belval/onvif-mcp/blob/4eeaf12cdf52e195d7a993288b3d37cbb6ae0b41/src/video.rs",
-      "isolated_speedup_ms": null
+      "isolated_speedup_ms": null,
+      "rerun": {
+        "measured_on": "2026-11-26",
+        "source": "https://github.com/Belval/onvif-mcp/blob/main/benchmarks/commit-history/results-2026-11-26.json",
+        "mcp_comparable": false,
+        "median_ms": 0.001,
+        "p95_ms": 0.001,
+        "max_ms": 0.001,
+        "n": 5
+      }
     },
     {
       "step": 3,
@@ -26,7 +44,16 @@
       "title": "Complete the Rust tool path",
       "detail": "Port MCP, visual tracking, native JPEG assembly and background pose polling.",
       "evidence": "https://github.com/Belval/onvif-mcp/blob/aab1795007f4cda627f2aea488016039f08455e5/src/server.rs",
-      "isolated_speedup_ms": null
+      "isolated_speedup_ms": null,
+      "rerun": {
+        "measured_on": "2026-11-26",
+        "source": "https://github.com/Belval/onvif-mcp/blob/main/benchmarks/commit-history/results-2026-11-26.json",
+        "mcp_comparable": true,
+        "median_ms": 1.6300887800753117,
+        "p95_ms": 1.9017421640455723,
+        "max_ms": 2.333438955247402,
+        "n": 100
+      }
     },
     {
       "step": 4,
@@ -35,7 +62,16 @@
       "title": "Keep I/O nonblocking",
       "detail": "Move codec work onto blocking workers; isolate short-lived detail streams.",
       "evidence": "https://github.com/Belval/onvif-mcp/blob/c21420b48dca1022d7e2597e64b07331add04030/src/video.rs",
-      "isolated_speedup_ms": null
+      "isolated_speedup_ms": null,
+      "rerun": {
+        "measured_on": "2026-11-26",
+        "source": "https://github.com/Belval/onvif-mcp/blob/main/benchmarks/commit-history/results-2026-11-26.json",
+        "mcp_comparable": true,
+        "median_ms": 1.4560515992343426,
+        "p95_ms": 1.702206116169691,
+        "max_ms": 277.47002616524696,
+        "n": 100
+      }
     },
     {
       "step": 5,
@@ -44,7 +80,16 @@
       "title": "Connect only on demand",
       "detail": "Lazily initialize camera connections and retire the Python runtime.",
       "evidence": "https://github.com/Belval/onvif-mcp/blob/5c4ce20ce3979367c26c8514d578b06bba7c3058/src/server.rs",
-      "isolated_speedup_ms": null
+      "isolated_speedup_ms": null,
+      "rerun": {
+        "measured_on": "2026-11-26",
+        "source": "https://github.com/Belval/onvif-mcp/blob/main/benchmarks/commit-history/results-2026-11-26.json",
+        "mcp_comparable": true,
+        "median_ms": 1.4200396835803986,
+        "p95_ms": 1.8023760989308357,
+        "max_ms": 2.011616714298725,
+        "n": 100
+      }
     },
     {
       "step": 6,
@@ -53,7 +98,16 @@
       "title": "Instrument the whole path",
       "detail": "Trace network, queueing, video, image processing and MCP output.",
       "evidence": "https://github.com/Belval/onvif-mcp/blob/93b653364a677cfe009c92443dffc6742e81675b/src/metrics.rs",
-      "isolated_speedup_ms": null
+      "isolated_speedup_ms": null,
+      "rerun": {
+        "measured_on": "2026-11-26",
+        "source": "https://github.com/Belval/onvif-mcp/blob/main/benchmarks/commit-history/results-2026-11-26.json",
+        "mcp_comparable": true,
+        "median_ms": 1.6854256391525269,
+        "p95_ms": 2.0002248231321573,
+        "max_ms": 2.5443928316235542,
+        "n": 100
+      }
     },
     {
       "step": 7,
@@ -62,16 +116,34 @@
       "title": "Recover frames locally",
       "detail": "Drop malformed JPEG frames without restarting the RTSP session.",
       "evidence": "https://github.com/Belval/onvif-mcp/blob/3847e1b6db35b02eb35442ac490ec34eae82abdf/src/jpeg.rs",
-      "isolated_speedup_ms": null
+      "isolated_speedup_ms": null,
+      "rerun": {
+        "measured_on": "2026-11-26",
+        "source": "https://github.com/Belval/onvif-mcp/blob/main/benchmarks/commit-history/results-2026-11-26.json",
+        "mcp_comparable": true,
+        "median_ms": 1.6783005557954311,
+        "p95_ms": 2.101213810965419,
+        "max_ms": 195.80769818276167,
+        "n": 100
+      }
     },
     {
       "step": 8,
       "commit": "abef2b09b583006d340796c16fb7a1d3ea092e96",
       "recorded_at": "2026-10-28T03:30:57+00:00",
       "title": "Change the preview source",
-      "detail": "Use persistent H.264 at 640 × 360 / 15 fps.",
+      "detail": "Use persistent H.264 at 640 \u00d7 360 / 15 fps.",
       "evidence": "https://github.com/Belval/onvif-mcp/blob/abef2b09b583006d340796c16fb7a1d3ea092e96/src/video.rs",
-      "isolated_speedup_ms": null
+      "isolated_speedup_ms": null,
+      "rerun": {
+        "measured_on": "2026-11-26",
+        "source": "https://github.com/Belval/onvif-mcp/blob/main/benchmarks/commit-history/results-2026-11-26.json",
+        "mcp_comparable": true,
+        "median_ms": 1.7025875858962536,
+        "p95_ms": 2.055231248959899,
+        "max_ms": 2.5007305666804314,
+        "n": 100
+      }
     },
     {
       "step": 9,
@@ -80,7 +152,16 @@
       "title": "Reuse encoding state",
       "detail": "Cache the TurboJPEG compressor and skip unnecessary thumbnailing.",
       "evidence": "https://github.com/Belval/onvif-mcp/blob/abef2b09b583006d340796c16fb7a1d3ea092e96/src/video.rs",
-      "isolated_speedup_ms": null
+      "isolated_speedup_ms": null,
+      "rerun": {
+        "measured_on": "2026-11-26",
+        "source": "https://github.com/Belval/onvif-mcp/blob/main/benchmarks/commit-history/results-2026-11-26.json",
+        "mcp_comparable": true,
+        "median_ms": 1.7025875858962536,
+        "p95_ms": 2.055231248959899,
+        "max_ms": 2.5007305666804314,
+        "n": 100
+      }
     },
     {
       "step": 10,
@@ -89,7 +170,16 @@
       "title": "SIMD image processing",
       "detail": "Use fast_image_resize with reusable state for images that need resizing.",
       "evidence": "https://github.com/Belval/onvif-mcp/blob/978d7687cbf0636fc7d0757c5ea47cb1f54d1604/src/video.rs",
-      "isolated_speedup_ms": null
+      "isolated_speedup_ms": null,
+      "rerun": {
+        "measured_on": "2026-11-26",
+        "source": "https://github.com/Belval/onvif-mcp/blob/main/benchmarks/commit-history/results-2026-11-26.json",
+        "mcp_comparable": true,
+        "median_ms": 1.703494694083929,
+        "p95_ms": 1.8760343082249165,
+        "max_ms": 2.3444555699825287,
+        "n": 100
+      }
     },
     {
       "step": 11,
@@ -98,7 +188,16 @@
       "title": "Verify accelerated builds",
       "detail": "Rebuild cached OpenH264 with NASM; verify assembly symbols in the release archive.",
       "evidence": "https://github.com/Belval/onvif-mcp/blob/eca26f7a2efa60fc14a663eadadb3e7c40561238/benchmarks/i-spy/build-assembly.json",
-      "isolated_speedup_ms": null
+      "isolated_speedup_ms": null,
+      "rerun": {
+        "measured_on": "2026-11-26",
+        "source": "https://github.com/Belval/onvif-mcp/blob/main/benchmarks/commit-history/results-2026-11-26.json",
+        "mcp_comparable": true,
+        "median_ms": 1.7140880227088928,
+        "p95_ms": 2.0610637962818146,
+        "max_ms": 2.3345211520791054,
+        "n": 100
+      }
     }
   ]
 }
