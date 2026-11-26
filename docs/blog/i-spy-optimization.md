@@ -1,52 +1,61 @@
-# I spy: a recursive self-improvement loop
+# Peek, Seek, and recursive self-improvement
 
-I gave a coding agent a Tapo C210 and asked it to find things in my office.
-It could see and move, but finding the printer meant a slow sequence of snapshots,
-motor commands, waits, and corrections. The agent also had access to the source
-of its camera tools. That made a useful experiment possible: could using those
-tools generate the evidence needed to improve them?
+*Two cheap cameras, a game of I spy, and an agent rewriting the tools it uses to see.*
 
-We turned “I spy” into a **recursive self-improvement (RSI) loop**. A second agent,
-using another camera, chose objects and withheld their coordinates. The operator
-searched and centered each target; the challenger judged the final image.
-Failures and timing traces informed changes to the runtime, which the operator
-then used for the next round. The recursion ran through the agent's tools:
-**observe → measure → rewrite → validate → observe again**.
+![Peek and Seek, two Tapo cameras wearing googly eyes](assets/peek-and-seek.png)
 
-![The RSI loop: independent challenges, tool use, evaluation, runtime changes, and validation](assets/improvement-loop.png)
+I asked a coding agent to find the printer in my office. It found it, slowly:
+snapshot, move, wait, correct. Because it could edit its camera runtime, every
+awkward interaction became a candidate improvement.
 
-The first win came from video ingestion. The original Python path reopened RTSP
-for each snapshot, taking about **2.5 seconds**. We built a native Rust runtime
-with persistent H.264 ingestion, accelerated OpenH264, a cached TurboJPEG encoder,
-and a latest-frame buffer. Warm MCP previews reached approximately **2 ms**.
-Keeping the connection open drove the improvement; the measurements compare
-capture architectures rather than isolating programming-language speed.
+The cameras are **Peek and Seek**, two Tapos costing about $25 each. Peek sets
+the challenge; Seek searches. Adding googly eyes made AI-controlled cameras
+looking around the room feel considerably less off-putting to me.
 
-![Persistent video ingestion and the calibrated camera control loop](assets/camera-pipeline.png)
+## Turn the task into the test
 
-Next, we moved control work behind the tool boundary. One image-point centering
-call handled calibration, ONVIF motion, fresh-frame acquisition, and bounded
-visual correction. Batched scans reduced reasoning round trips. Traces separated
-network requests, position polling, settling, video waits, and image processing.
+We made I spy a **recursive self-improvement (RSI) loop**. An independent agent
+behind Peek chose an object and withheld its coordinates. Seek's operator
+searched; the challenger judged recognition, centering, and motion smear.
+Timing traces identified bottlenecks, and the operator rewrote its own tools
+before playing again.
 
-The loop also rejected seductive regressions. Maximum-speed commands stalled;
-continuous motion overshot. Removing waits produced blurred frames or broke scan
-revisits. The accepted controller used two arrival reports, 15 ms polling, 50 ms
-settling, and a fresh-frame barrier.
+Fresh targets checked usefulness. Repeated same-origin movements separated
+runtime improvements from learning where the printer lived.
 
-In two same-origin, 18-trial blocks, median movement-plus-image time fell from
-**933 to 614 ms: 34% faster**, with 18/18 optical geometry passes in both blocks.
-The blocks ran baseline then candidate. Fresh held-out targets checked usefulness;
-matched movements kept learning the room from counting as faster software.
+![The RSI loop: Peek challenges, Seek searches, traces inform tool changes, and matched trials validate them](assets/improvement-loop.png)
 
-One challenge still took **51 seconds** despite using only **919 ms of camera
-calls**. Reasoning and coordination remained expensive. That exposed the next
-optimization target: the agent's interaction loop itself.
+## Improve the eyes, then the control loop
 
-The useful property of this RSI experiment was its external feedback. The agent
-could change its tools, but independent challenges and repeatable measurements
-had to establish that the new version was better.
+Reopening RTSP for each snapshot cost about **2.5 seconds**. We built a Rust
+runtime with persistent H.264 ingestion, accelerated codecs, and a latest-frame
+buffer. Warm previews reached approximately **2 ms**. This compared capture
+architectures, rather than isolating language speed.
 
-[Experiment records](../../benchmarks/i-spy/README.md) ·
-[Runtime and instrumentation](../../README.md) ·
-[Diagram skill and branding kit](https://github.com/Belval/skills/tree/main/diagram-making)
+One image-point centering call absorbed calibrated ONVIF movement and bounded
+visual corrections. Batched scans removed reasoning round trips. Faster variants
+still had to pass: maximum-speed commands stalled, continuous motion overshot,
+and zero-wait settings blurred images or broke scan revisits.
+
+The final comparison cut median **movement-plus-image latency from 933 to 614 ms
+(34%)**, with 18/18 optical geometry passes in each block.
+
+![Latency history across camera runtime commits and tuning iterations, excluding all agent time](assets/latency-history.png)
+
+*Tool/controller time only; agent time excluded. Snapshot maximums cover 200
+calls. Crosses mark rejected motion variants. Only the final replay/candidate
+pair shares the final origin; its two 18-trial blocks ran baseline first.*
+
+An improvement survived only if independent challenges and replayed measurements
+supported it. That external feedback closed the RSI loop.
+
+<details>
+<summary>Inspect the video and control pipeline</summary>
+<p><img src="assets/camera-pipeline.png" alt="Persistent RTSP ingestion, native codecs, a latest-frame buffer, and calibrated ONVIF control"></p>
+</details>
+
+[Full-size chart](assets/latency-history.svg) ·
+[Measurements and rejected experiments](../../benchmarks/i-spy/README.md) ·
+[Chart data](assets/latency-history.csv) ·
+[Chart provenance](assets/latency-history.json) ·
+[Source code](https://github.com/Belval/onvif-mcp)

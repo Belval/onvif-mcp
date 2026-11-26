@@ -1,0 +1,232 @@
+{
+  "snapshot": [
+    {
+      "label": "JPEG baseline\n93b6533",
+      "median_ms": 2.468300284817815,
+      "p95_ms": 2.8512957505881786,
+      "max_ms": 2971.5232690796256,
+      "n": 200,
+      "source": "benchmarks/i-spy/stationary-baseline.json",
+      "revision": "93b6533",
+      "prototype": false,
+      "recorded_in": "58b9569",
+      "operation": "warm MCP snapshot, client wall"
+    },
+    {
+      "label": "Frame recovery\n3847e1b",
+      "median_ms": 1.0074246674776077,
+      "p95_ms": 1.8150488147512078,
+      "max_ms": 283.80935825407505,
+      "n": 200,
+      "source": "benchmarks/i-spy/stationary-stream-recovery.json",
+      "revision": "3847e1b",
+      "prototype": false,
+      "recorded_in": "abef2b0",
+      "operation": "warm MCP snapshot, client wall"
+    },
+    {
+      "label": "H.264 prototype\nuncommitted",
+      "median_ms": 1.2034955434501171,
+      "p95_ms": 2.9841082403436303,
+      "max_ms": 3.326765727251768,
+      "n": 200,
+      "source": "benchmarks/i-spy/stationary-h264-preview.json",
+      "revision": "3847e1b + prototype",
+      "prototype": true,
+      "recorded_in": "abef2b0",
+      "operation": "warm MCP snapshot, client wall"
+    },
+    {
+      "label": "SIMD + Stop fix\n978d768",
+      "median_ms": 2.7149743400514126,
+      "p95_ms": 3.0395671026781197,
+      "max_ms": 3.653639927506447,
+      "n": 200,
+      "source": "benchmarks/i-spy/stationary-h264-simd.json",
+      "revision": "978d768",
+      "prototype": false,
+      "recorded_in": "978d768",
+      "operation": "warm MCP snapshot, client wall"
+    }
+  ],
+  "motion": [
+    {
+      "label": "300 ms\n2 reports",
+      "median_ms": 926.9014085000001,
+      "p95_ms": 1220.4571491,
+      "max_ms": 1268.3849380000001,
+      "n": 18,
+      "source": "benchmarks/i-spy/framing-baseline.json",
+      "revision": "978d768 evidence",
+      "recorded_in": "978d768",
+      "status": "reference",
+      "geometry_passes": 18,
+      "operation": "native goto + observe, no late-reference evaluation",
+      "parameters": {
+        "CAMERA_POLL_MS": null,
+        "CAMERA_PREVIEW": "h264",
+        "CAMERA_ROUGH_SETTLE_MS": null,
+        "CAMERA_SETTLE_MS": null,
+        "CAMERA_STABLE_SAMPLES": null
+      },
+      "origin": [
+        0.104532,
+        -0.403987
+      ]
+    },
+    {
+      "label": "0 ms\n1 report",
+      "median_ms": 555.7297470000001,
+      "p95_ms": 809.7679338499998,
+      "max_ms": 843.4317580000001,
+      "n": 18,
+      "source": "benchmarks/i-spy/framing-fast-zero.json",
+      "revision": "978d768 evidence",
+      "recorded_in": "978d768",
+      "status": "rejected",
+      "geometry_passes": 15,
+      "operation": "native goto + observe, no late-reference evaluation",
+      "parameters": {
+        "CAMERA_POLL_MS": "15",
+        "CAMERA_PREVIEW": "h264",
+        "CAMERA_ROUGH_SETTLE_MS": null,
+        "CAMERA_SETTLE_MS": "0",
+        "CAMERA_STABLE_SAMPLES": "1"
+      },
+      "origin": [
+        0.104532,
+        -0.403987
+      ]
+    },
+    {
+      "label": "100 ms\n1 report",
+      "median_ms": 640.5415995,
+      "p95_ms": 905.5446317999998,
+      "max_ms": 986.941509,
+      "n": 18,
+      "source": "benchmarks/i-spy/framing-fast100.json",
+      "revision": "978d768 evidence",
+      "recorded_in": "978d768",
+      "status": "exploratory",
+      "geometry_passes": 18,
+      "operation": "native goto + observe, no late-reference evaluation",
+      "parameters": {
+        "CAMERA_POLL_MS": "15",
+        "CAMERA_PREVIEW": "h264",
+        "CAMERA_ROUGH_SETTLE_MS": null,
+        "CAMERA_SETTLE_MS": "100",
+        "CAMERA_STABLE_SAMPLES": "1"
+      },
+      "origin": [
+        0.104532,
+        -0.403987
+      ]
+    },
+    {
+      "label": "50 ms\n1 report",
+      "median_ms": 621.7055715,
+      "p95_ms": 886.76801525,
+      "max_ms": 888.059093,
+      "n": 18,
+      "source": "benchmarks/i-spy/framing-fast50.json",
+      "revision": "978d768 evidence",
+      "recorded_in": "978d768",
+      "status": "exploratory",
+      "geometry_passes": 18,
+      "operation": "native goto + observe, no late-reference evaluation",
+      "parameters": {
+        "CAMERA_POLL_MS": "15",
+        "CAMERA_PREVIEW": "h264",
+        "CAMERA_ROUGH_SETTLE_MS": null,
+        "CAMERA_SETTLE_MS": "50",
+        "CAMERA_STABLE_SAMPLES": "1"
+      },
+      "origin": [
+        0.104532,
+        -0.403987
+      ]
+    },
+    {
+      "label": "0 ms\n2 reports",
+      "median_ms": 595.781044,
+      "p95_ms": 847.74209615,
+      "max_ms": 884.489212,
+      "n": 18,
+      "source": "benchmarks/i-spy/framing-two-zero.json",
+      "revision": "978d768 evidence",
+      "recorded_in": "978d768",
+      "status": "rejected",
+      "geometry_passes": 18,
+      "operation": "native goto + observe, no late-reference evaluation",
+      "parameters": {
+        "CAMERA_POLL_MS": "15",
+        "CAMERA_PREVIEW": "h264",
+        "CAMERA_ROUGH_SETTLE_MS": null,
+        "CAMERA_SETTLE_MS": "0",
+        "CAMERA_STABLE_SAMPLES": "2"
+      },
+      "origin": [
+        0.104532,
+        -0.403987
+      ]
+    },
+    {
+      "label": "Baseline\nreplay",
+      "median_ms": 932.9957039999999,
+      "p95_ms": 1221.55860815,
+      "max_ms": 1239.042106,
+      "n": 18,
+      "source": "benchmarks/i-spy/framing-final-matched-baseline.json",
+      "revision": "9c83345",
+      "recorded_in": "678948e",
+      "status": "reference",
+      "geometry_passes": 18,
+      "operation": "native goto + observe, no late-reference evaluation",
+      "parameters": {
+        "CAMERA_POLL_MS": "60",
+        "CAMERA_PREVIEW": null,
+        "CAMERA_ROUGH_SETTLE_MS": null,
+        "CAMERA_SETTLE_MS": "300",
+        "CAMERA_STABLE_SAMPLES": "2"
+      },
+      "origin": [
+        -0.108506,
+        -0.508946
+      ]
+    },
+    {
+      "label": "Final\n50 ms / 2",
+      "median_ms": 613.8249525,
+      "p95_ms": 904.75357445,
+      "max_ms": 911.0839520000001,
+      "n": 18,
+      "source": "benchmarks/i-spy/framing-final-matched-candidate.json",
+      "revision": "9c83345",
+      "recorded_in": "678948e",
+      "status": "accepted",
+      "geometry_passes": 18,
+      "operation": "native goto + observe, no late-reference evaluation",
+      "parameters": {
+        "CAMERA_POLL_MS": null,
+        "CAMERA_PREVIEW": null,
+        "CAMERA_ROUGH_SETTLE_MS": null,
+        "CAMERA_SETTLE_MS": null,
+        "CAMERA_STABLE_SAMPLES": null
+      },
+      "origin": [
+        -0.108506,
+        -0.508946
+      ]
+    }
+  ],
+  "scope": [
+    "Tool/controller wall times only: no model, reasoning, challenge delivery or judging time.",
+    "Snapshot values are client wall times, not the smaller server-only summary values.",
+    "Snapshot median and observed maximum are distinct; maximum is over 200 calls, not a guarantee.",
+    "Motion shows selected chronological tuning iterations, not every experiment or one controlled cross-commit regression test.",
+    "Sweep origin differs from final replay origin; only the final baseline/candidate pair is a same-origin final comparison.",
+    "Evidence commit does not establish the exact runtime commit; those entries are explicitly labeled evidence.",
+    "Zero-wait single-report variant failed geometry and smear; two-report zero-wait later failed a real scan revisit.",
+    "H.264 prototype was uncommitted; it is not mislabeled as a released commit."
+  ]
+}

@@ -9,10 +9,10 @@
       "y": 460,
       "w": 360,
       "h": 168,
-      "title": "Challenge",
+      "title": "Peek",
       "body": [
-        "Independent agent",
-        "Second camera"
+        "Set the challenge",
+        "Withhold coordinates"
       ]
     },
     {
@@ -21,9 +21,9 @@
       "y": 460,
       "w": 360,
       "h": 168,
-      "title": "Search",
+      "title": "Seek",
       "body": [
-        "Scan and center"
+        "Search and center"
       ]
     },
     {
@@ -44,7 +44,7 @@
       "y": 710,
       "w": 360,
       "h": 168,
-      "title": "Change runtime",
+      "title": "Rewrite own tools",
       "body": [
         "Fix the bottleneck"
       ],
@@ -106,7 +106,7 @@
     }
   ],
   "caption": "Matched trials measure speed. Fresh targets test usefulness.",
-  "kicker": "02 / RECURSIVE IMPROVEMENT",
+  "kicker": "02 / RECURSIVE SELF-IMPROVEMENT",
   "panels": [
     {
       "x": 48,

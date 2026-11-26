@@ -1,0 +1,67 @@
+{
+  "name": "Floft-inspired engineering",
+  "version": 2,
+  "source": {
+    "repository": "https://github.com/Belval/floft",
+    "revision": "3c8ead0471ae48939561f31754bc96e7afa22db4",
+    "guide": "marketing/BRAND_GUIDE.md",
+    "stylesheet": "floft/style.css"
+  },
+  "colors": {
+    "paper": "#F5F3EC",
+    "surface": "#F5F3EC",
+    "ink": "#303D2C",
+    "muted": "#626959",
+    "secondary": "#626959",
+    "border": "#D8DBCF",
+    "flow": "#284944",
+    "measurement": "#303D2C",
+    "flow_tint": "#E6E9DC",
+    "measurement_tint": "#E4D0BB",
+    "sage": "#E6E9DC",
+    "warm": "#E4D0BB",
+    "surround": "#EEEAE3",
+    "cool": "#399EC3",
+    "return": "#BF956B",
+    "code": "#E6E9DC"
+  },
+  "type": {
+    "title": 64,
+    "node_title": 30,
+    "body": 30,
+    "caption": 28,
+    "kicker": 22,
+    "metric": 108,
+    "feature": 40
+  },
+  "geometry": {
+    "radius": 6,
+    "stroke": 3,
+    "padding": 24,
+    "line_height": 40
+  },
+  "fonts": {
+    "serif": {
+      "file": "Serif-Regular.ttf",
+      "family": "Georgia, Times New Roman, DejaVu Serif, serif"
+    },
+    "sans": {
+      "file": "Sans-Regular.ttf",
+      "family": "Arial, Helvetica, Liberation Sans, sans-serif"
+    },
+    "sans_bold": {
+      "file": "Sans-Bold.ttf",
+      "family": "Arial, Helvetica, Liberation Sans, sans-serif",
+      "weight": "700"
+    }
+  },
+  "typefaces": {
+    "title": "serif",
+    "node_title": "sans_bold",
+    "body": "sans",
+    "caption": "sans",
+    "kicker": "sans",
+    "metric": "serif",
+    "feature": "serif"
+  }
+}

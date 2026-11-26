@@ -4,6 +4,10 @@ An ONVIF camera MCP tuned and measured on a TP-Link Tapo C210. The runtime is a
 native Rust executable: ONVIF/WS-Security, persistent RTSP/TCP, frame assembly,
 MCP stdio, visual tracking and motor control. Python and FFmpeg are not required.
 
+[Peek, Seek, and recursive self-improvement](docs/blog/i-spy-optimization.md)
+describes the optimization loop, with diagrams and latency history from the
+recorded benchmarks.
+
 ## Build and configure
 
 Requires Rust 1.89+, a C/C++ compiler, CMake and NASM for bundled OpenH264/TurboJPEG codecs.

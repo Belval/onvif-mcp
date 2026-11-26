@@ -3,21 +3,21 @@
 <desc id="desc">An independent challenge drives object search, image judging and trace inspection, implementation changes, and matched validation before a new challenge.</desc>
 <rect width="100%" height="100%" fill="#F5F3EC"/>
 <rect x="48" y="200" width="1424" height="210" rx="6" fill="#E6E9DC"/>
-<text x="48" y="32" dominant-baseline="text-before-edge" text-anchor="start" font-family="Arial, Helvetica, Liberation Sans, sans-serif" font-size="22" font-weight="400" fill="#626959">02 / RECURSIVE IMPROVEMENT</text>
+<text x="48" y="32" dominant-baseline="text-before-edge" text-anchor="start" font-family="Arial, Helvetica, Liberation Sans, sans-serif" font-size="22" font-weight="400" fill="#626959">02 / RECURSIVE SELF-IMPROVEMENT</text>
 <text x="48" y="78" dominant-baseline="text-before-edge" text-anchor="start" font-family="Georgia, Times New Roman, DejaVu Serif, serif" font-size="64" font-weight="400" fill="#303D2C">Use. Measure. Rebuild.</text>
 <rect x="48" y="460" width="360" height="168" rx="6" fill="#F5F3EC" stroke="#D8DBCF" stroke-width="3"/>
-<text x="228.0" y="489.0" dominant-baseline="text-before-edge" text-anchor="middle" font-family="Arial, Helvetica, Liberation Sans, sans-serif" font-size="30" font-weight="700" fill="#303D2C">Challenge</text>
-<text x="228.0" y="529.0" dominant-baseline="text-before-edge" text-anchor="middle" font-family="Arial, Helvetica, Liberation Sans, sans-serif" font-size="30" font-weight="400" fill="#626959">Independent agent</text>
-<text x="228.0" y="569.0" dominant-baseline="text-before-edge" text-anchor="middle" font-family="Arial, Helvetica, Liberation Sans, sans-serif" font-size="30" font-weight="400" fill="#626959">Second camera</text>
+<text x="228.0" y="489.0" dominant-baseline="text-before-edge" text-anchor="middle" font-family="Arial, Helvetica, Liberation Sans, sans-serif" font-size="30" font-weight="700" fill="#303D2C">Peek</text>
+<text x="228.0" y="529.0" dominant-baseline="text-before-edge" text-anchor="middle" font-family="Arial, Helvetica, Liberation Sans, sans-serif" font-size="30" font-weight="400" fill="#626959">Set the challenge</text>
+<text x="228.0" y="569.0" dominant-baseline="text-before-edge" text-anchor="middle" font-family="Arial, Helvetica, Liberation Sans, sans-serif" font-size="30" font-weight="400" fill="#626959">Withhold coordinates</text>
 <rect x="580" y="460" width="360" height="168" rx="6" fill="#F5F3EC" stroke="#D8DBCF" stroke-width="3"/>
-<text x="760.0" y="509.0" dominant-baseline="text-before-edge" text-anchor="middle" font-family="Arial, Helvetica, Liberation Sans, sans-serif" font-size="30" font-weight="700" fill="#303D2C">Search</text>
-<text x="760.0" y="549.0" dominant-baseline="text-before-edge" text-anchor="middle" font-family="Arial, Helvetica, Liberation Sans, sans-serif" font-size="30" font-weight="400" fill="#626959">Scan and center</text>
+<text x="760.0" y="509.0" dominant-baseline="text-before-edge" text-anchor="middle" font-family="Arial, Helvetica, Liberation Sans, sans-serif" font-size="30" font-weight="700" fill="#303D2C">Seek</text>
+<text x="760.0" y="549.0" dominant-baseline="text-before-edge" text-anchor="middle" font-family="Arial, Helvetica, Liberation Sans, sans-serif" font-size="30" font-weight="400" fill="#626959">Search and center</text>
 <rect x="1112" y="460" width="360" height="168" rx="6" fill="#F5F3EC" stroke="#D8DBCF" stroke-width="3"/>
 <text x="1292.0" y="489.0" dominant-baseline="text-before-edge" text-anchor="middle" font-family="Arial, Helvetica, Liberation Sans, sans-serif" font-size="30" font-weight="700" fill="#303D2C">Evaluate</text>
 <text x="1292.0" y="529.0" dominant-baseline="text-before-edge" text-anchor="middle" font-family="Arial, Helvetica, Liberation Sans, sans-serif" font-size="30" font-weight="400" fill="#626959">Judge image</text>
 <text x="1292.0" y="569.0" dominant-baseline="text-before-edge" text-anchor="middle" font-family="Arial, Helvetica, Liberation Sans, sans-serif" font-size="30" font-weight="400" fill="#626959">Inspect traces</text>
 <rect x="846" y="710" width="360" height="168" rx="6" fill="#E4D0BB" stroke="#D8DBCF" stroke-width="3"/>
-<text x="1026.0" y="759.0" dominant-baseline="text-before-edge" text-anchor="middle" font-family="Arial, Helvetica, Liberation Sans, sans-serif" font-size="30" font-weight="700" fill="#303D2C">Change runtime</text>
+<text x="1026.0" y="759.0" dominant-baseline="text-before-edge" text-anchor="middle" font-family="Arial, Helvetica, Liberation Sans, sans-serif" font-size="30" font-weight="700" fill="#303D2C">Rewrite own tools</text>
 <text x="1026.0" y="799.0" dominant-baseline="text-before-edge" text-anchor="middle" font-family="Arial, Helvetica, Liberation Sans, sans-serif" font-size="30" font-weight="400" fill="#626959">Fix the bottleneck</text>
 <rect x="314" y="710" width="360" height="168" rx="6" fill="#E6E9DC" stroke="#D8DBCF" stroke-width="3"/>
 <text x="494.0" y="739.0" dominant-baseline="text-before-edge" text-anchor="middle" font-family="Arial, Helvetica, Liberation Sans, sans-serif" font-size="30" font-weight="700" fill="#303D2C">Validate</text>

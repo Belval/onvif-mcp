@@ -1,0 +1,23 @@
+operation,revision,recorded_in,label,n,median_ms,p95_ms,max_ms,source
+"warm MCP snapshot, client wall",93b6533,58b9569,"JPEG baseline
+93b6533",200,2.468300284817815,2.8512957505881786,2971.5232690796256,benchmarks/i-spy/stationary-baseline.json
+"warm MCP snapshot, client wall",3847e1b,abef2b0,"Frame recovery
+3847e1b",200,1.0074246674776077,1.8150488147512078,283.80935825407505,benchmarks/i-spy/stationary-stream-recovery.json
+"warm MCP snapshot, client wall",3847e1b + prototype,abef2b0,"H.264 prototype
+uncommitted",200,1.2034955434501171,2.9841082403436303,3.326765727251768,benchmarks/i-spy/stationary-h264-preview.json
+"warm MCP snapshot, client wall",978d768,978d768,"SIMD + Stop fix
+978d768",200,2.7149743400514126,3.0395671026781197,3.653639927506447,benchmarks/i-spy/stationary-h264-simd.json
+"native goto + observe, no late-reference evaluation",978d768 evidence,978d768,"300 ms
+2 reports",18,926.9014085000001,1220.4571491,1268.3849380000001,benchmarks/i-spy/framing-baseline.json
+"native goto + observe, no late-reference evaluation",978d768 evidence,978d768,"0 ms
+1 report",18,555.7297470000001,809.7679338499998,843.4317580000001,benchmarks/i-spy/framing-fast-zero.json
+"native goto + observe, no late-reference evaluation",978d768 evidence,978d768,"100 ms
+1 report",18,640.5415995,905.5446317999998,986.941509,benchmarks/i-spy/framing-fast100.json
+"native goto + observe, no late-reference evaluation",978d768 evidence,978d768,"50 ms
+1 report",18,621.7055715,886.76801525,888.059093,benchmarks/i-spy/framing-fast50.json
+"native goto + observe, no late-reference evaluation",978d768 evidence,978d768,"0 ms
+2 reports",18,595.781044,847.74209615,884.489212,benchmarks/i-spy/framing-two-zero.json
+"native goto + observe, no late-reference evaluation",9c83345,678948e,"Baseline
+replay",18,932.9957039999999,1221.55860815,1239.042106,benchmarks/i-spy/framing-final-matched-baseline.json
+"native goto + observe, no late-reference evaluation",9c83345,678948e,"Final
+50 ms / 2",18,613.8249525,904.75357445,911.0839520000001,benchmarks/i-spy/framing-final-matched-candidate.json
