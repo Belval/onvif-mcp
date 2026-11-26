@@ -1,0 +1,40 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1520" height="960" viewBox="0 0 1520 960" role="img" aria-labelledby="title desc">
+<title id="title">Use. Measure. Rebuild.</title>
+<desc id="desc">An independent challenge drives object search, image judging and trace inspection, implementation changes, and matched validation before a new challenge.</desc>
+<rect width="100%" height="100%" fill="#F5F3EC"/>
+<rect x="48" y="200" width="1424" height="210" rx="6" fill="#E6E9DC"/>
+<text x="48" y="32" dominant-baseline="text-before-edge" text-anchor="start" font-family="Arial, Helvetica, Liberation Sans, sans-serif" font-size="22" font-weight="400" fill="#626959">02 / RECURSIVE IMPROVEMENT</text>
+<text x="48" y="78" dominant-baseline="text-before-edge" text-anchor="start" font-family="Georgia, Times New Roman, DejaVu Serif, serif" font-size="64" font-weight="400" fill="#303D2C">Use. Measure. Rebuild.</text>
+<rect x="48" y="460" width="360" height="168" rx="6" fill="#F5F3EC" stroke="#D8DBCF" stroke-width="3"/>
+<text x="228.0" y="489.0" dominant-baseline="text-before-edge" text-anchor="middle" font-family="Arial, Helvetica, Liberation Sans, sans-serif" font-size="30" font-weight="700" fill="#303D2C">Challenge</text>
+<text x="228.0" y="529.0" dominant-baseline="text-before-edge" text-anchor="middle" font-family="Arial, Helvetica, Liberation Sans, sans-serif" font-size="30" font-weight="400" fill="#626959">Independent agent</text>
+<text x="228.0" y="569.0" dominant-baseline="text-before-edge" text-anchor="middle" font-family="Arial, Helvetica, Liberation Sans, sans-serif" font-size="30" font-weight="400" fill="#626959">Second camera</text>
+<rect x="580" y="460" width="360" height="168" rx="6" fill="#F5F3EC" stroke="#D8DBCF" stroke-width="3"/>
+<text x="760.0" y="509.0" dominant-baseline="text-before-edge" text-anchor="middle" font-family="Arial, Helvetica, Liberation Sans, sans-serif" font-size="30" font-weight="700" fill="#303D2C">Search</text>
+<text x="760.0" y="549.0" dominant-baseline="text-before-edge" text-anchor="middle" font-family="Arial, Helvetica, Liberation Sans, sans-serif" font-size="30" font-weight="400" fill="#626959">Scan and center</text>
+<rect x="1112" y="460" width="360" height="168" rx="6" fill="#F5F3EC" stroke="#D8DBCF" stroke-width="3"/>
+<text x="1292.0" y="489.0" dominant-baseline="text-before-edge" text-anchor="middle" font-family="Arial, Helvetica, Liberation Sans, sans-serif" font-size="30" font-weight="700" fill="#303D2C">Evaluate</text>
+<text x="1292.0" y="529.0" dominant-baseline="text-before-edge" text-anchor="middle" font-family="Arial, Helvetica, Liberation Sans, sans-serif" font-size="30" font-weight="400" fill="#626959">Judge image</text>
+<text x="1292.0" y="569.0" dominant-baseline="text-before-edge" text-anchor="middle" font-family="Arial, Helvetica, Liberation Sans, sans-serif" font-size="30" font-weight="400" fill="#626959">Inspect traces</text>
+<rect x="846" y="710" width="360" height="168" rx="6" fill="#E4D0BB" stroke="#D8DBCF" stroke-width="3"/>
+<text x="1026.0" y="759.0" dominant-baseline="text-before-edge" text-anchor="middle" font-family="Arial, Helvetica, Liberation Sans, sans-serif" font-size="30" font-weight="700" fill="#303D2C">Change runtime</text>
+<text x="1026.0" y="799.0" dominant-baseline="text-before-edge" text-anchor="middle" font-family="Arial, Helvetica, Liberation Sans, sans-serif" font-size="30" font-weight="400" fill="#626959">Fix the bottleneck</text>
+<rect x="314" y="710" width="360" height="168" rx="6" fill="#E6E9DC" stroke="#D8DBCF" stroke-width="3"/>
+<text x="494.0" y="739.0" dominant-baseline="text-before-edge" text-anchor="middle" font-family="Arial, Helvetica, Liberation Sans, sans-serif" font-size="30" font-weight="700" fill="#303D2C">Validate</text>
+<text x="494.0" y="779.0" dominant-baseline="text-before-edge" text-anchor="middle" font-family="Arial, Helvetica, Liberation Sans, sans-serif" font-size="30" font-weight="400" fill="#626959">Matched trials</text>
+<text x="494.0" y="819.0" dominant-baseline="text-before-edge" text-anchor="middle" font-family="Arial, Helvetica, Liberation Sans, sans-serif" font-size="30" font-weight="400" fill="#626959">Fresh targets</text>
+<polyline points="408,544.0 580,544.0" fill="none" stroke="#284944" stroke-width="3"/>
+<polygon points="580,544.0 566.143593539449,552.0 566.143593539449,536.0" fill="#284944"/>
+<polyline points="940,544.0 1112,544.0" fill="none" stroke="#284944" stroke-width="3"/>
+<polygon points="1112,544.0 1098.143593539449,552.0 1098.143593539449,536.0" fill="#284944"/>
+<polyline points="1292.0,628 1292,794 1206,794.0" fill="none" stroke="#284944" stroke-width="3"/>
+<polygon points="1206,794.0 1219.856406460551,786.0 1219.856406460551,802.0" fill="#284944"/>
+<polyline points="846,794.0 674,794.0" fill="none" stroke="#284944" stroke-width="3"/>
+<polygon points="674,794.0 687.856406460551,786.0 687.856406460551,802.0" fill="#284944"/>
+<polyline points="314,794.0 228,794 228.0,628" fill="none" stroke="#284944" stroke-width="3" stroke-dasharray="12 8"/>
+<polygon points="228.0,628 236.0,641.856406460551 220.0,641.856406460551" fill="#284944"/>
+<text x="760.0" y="910" dominant-baseline="text-before-edge" text-anchor="middle" font-family="Arial, Helvetica, Liberation Sans, sans-serif" font-size="28" font-weight="400" fill="#626959">Matched trials measure speed. Fresh targets test usefulness.</text>
+<text x="100" y="215" dominant-baseline="text-before-edge" text-anchor="start" font-family="Georgia, Times New Roman, DejaVu Serif, serif" font-size="108" font-weight="400" fill="#303D2C">34%</text>
+<text x="450" y="246" dominant-baseline="text-before-edge" text-anchor="start" font-family="Georgia, Times New Roman, DejaVu Serif, serif" font-size="40" font-weight="400" fill="#303D2C">Lower median move-plus-image time.</text>
+<text x="454" y="315" dominant-baseline="text-before-edge" text-anchor="start" font-family="Arial, Helvetica, Liberation Sans, sans-serif" font-size="30" font-weight="400" fill="#303D2C">933 → 614 ms · 18/18 geometry passes in each block</text>
+</svg>
