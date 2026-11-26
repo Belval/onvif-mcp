@@ -65,3 +65,17 @@ tracking, motion, concurrent clients or every resize geometry.
 
 Raw per-request timings and binary hashes accompany the published comparison.
 No images, credentials or authenticated stream URLs belong in the results.
+
+## Tracing overhead control
+
+`tracing-control-2026-11-26.json` holds six additional 100-request blocks from
+the same final binary, in on/off/off/on/on/off order with 50 ms between calls.
+Reproduce with `.venv/bin/python benchmarks/commit-history/trace_control.py
+--host CAMERA_IP`. This control does not reconfigure the camera: the minor
+stream was at its restored 1280 × 720 / 15 fps setting, so these absolute
+latencies should not be substituted into the main 640 × 360 rerun table.
+
+The enabled block medians were 1.796, 1.805 and 1.814 ms; disabled medians were
+1.668, 1.677 and 1.670 ms. The control establishes measurable tracing overhead.
+It does not attribute the entire difference between earlier JPEG implementations
+and the final H.264 implementation to tracing, nor establish a SIMD speedup.

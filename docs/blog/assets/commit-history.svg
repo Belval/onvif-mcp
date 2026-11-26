@@ -569,7 +569,7 @@ L 1117.44 364.635918
     <text style="font-weight: 700; font-size: 12px; font-family: 'DejaVu Sans'; text-anchor: middle; fill: #303d2c" x="1066.182472" y="333.547115" transform="rotate(-0 1066.182472 333.547115)">1.71</text>
    </g>
    <g id="text_24">
-    <text style="font-size: 18px; font-family: 'DejaVu Sans'; text-anchor: start; fill: #303d2c" x="103.68" y="189.04" transform="rotate(-0 103.68 189.04)">Warm image response · median and p95</text>
+    <text style="font-size: 17px; font-family: 'DejaVu Sans'; text-anchor: start; fill: #303d2c" x="103.68" y="189.04" transform="rotate(-0 103.68 189.04)">Warm image response · later commits do not consistently improve this metric</text>
    </g>
    <g id="legend_1">
     <g id="line2d_54">
@@ -907,7 +907,7 @@ L 1117.44 662.197959
     <text style="font-size: 12px; font-family: 'DejaVu Sans'; text-anchor: middle; fill: #303d2c" x="1066.182472" y="650.650263" transform="rotate(-0 1066.182472 650.650263)">0.21</text>
    </g>
    <g id="text_51">
-    <text style="font-size: 18px; font-family: 'DejaVu Sans'; text-anchor: start; fill: #303d2c" x="103.68" y="486.602041" transform="rotate(-0 103.68 486.602041)">Cold start · process launch to first complete image</text>
+    <text style="font-size: 18px; font-family: 'DejaVu Sans'; text-anchor: start; fill: #303d2c" x="103.68" y="486.602041" transform="rotate(-0 103.68 486.602041)">Cold start · one process launch to first image per commit</text>
    </g>
   </g>
   <g id="axes_3">
@@ -1332,7 +1332,7 @@ L 1117.44 959.76
    <text style="font-size: 14px; font-family: 'DejaVu Sans'; text-anchor: start; fill: #626959" x="63.36" y="55.8" transform="rotate(-0 63.36 55.8)">PYTHON → RUST / EXACT SOURCE CHECKPOINTS</text>
   </g>
   <g id="text_76">
-   <text style="font-size: 31px; font-family: 'DejaVu Serif'; text-anchor: start; fill: #303d2c" x="63.36" y="94.86" transform="rotate(-0 63.36 94.86)">Rebuilt. Measured. Every commit.</text>
+   <text style="font-size: 29px; font-family: 'DejaVu Serif'; text-anchor: start; fill: #303d2c" x="63.36" y="94.86" transform="rotate(-0 63.36 94.86)">A large rewrite gain. Then a latency floor.</text>
   </g>
   <g id="text_77">
    <text style="font-size: 14px; font-family: 'DejaVu Sans'; text-anchor: start; fill: #303d2c" x="63.36" y="133.92" transform="rotate(-0 63.36 133.92)">26 Nov 2026 rerun · same C210 · 100 warm MCP requests per commit · agent time excluded</text>

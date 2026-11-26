@@ -33,7 +33,7 @@ verified the assembly symbols in the resulting archive.
 
 ![Native Rust video pipeline: asynchronous RTSP ingestion, CPU codec workers, and a latest-frame-only buffer](assets/rust-pipeline.png)
 
-## Every engineering commit, measured
+## A large rewrite gain, then a latency floor
 
 We rebuilt **all ten source commits** on 26 November, then ran 100 stationary
 preview requests per complete MCP implementation on the same C210. These are
@@ -42,16 +42,30 @@ fresh reruns, not reconstructed October timings. The camera now runs firmware
 
 ![Per-commit measurements: warm MCP median and p95, cold startup, and preview stalls after a detail image](assets/commit-history.png)
 
-The initial rewrite moved the median from **2,385 ms to 1.63 ms**. Warm reads
-then stayed near 1.4–1.7 ms. Later improvements show up elsewhere: isolating codec
-work reduced the worst of 20 post-detail previews from **357 ms to 1.85 ms** in
-this run. JPEG still produced occasional stalls; the H.264 commit's worst warm
-request was **2.50 ms**, and its worst post-detail preview was **2.35 ms**.
+The initial rewrite moved the median from **2,385 ms to 1.63 ms**. The fastest
+later checkpoint reached **1.42 ms**; the final one measured **1.71 ms**, about
+**21% higher**. These measurements do **not** demonstrate continuous improvement
+in cached-response latency.
 
-That is a cache-read floor, not 1,000 camera frames per second. Python opens the
+The later work addressed other costs. Isolating codec work reduced the worst of
+20 post-detail previews from **357 ms to 1.85 ms** in this run. Stalls still
+appeared in subsequent JPEG runs; after switching to H.264, the observed worst
+warm request was **2.50 ms**, and the worst post-detail preview was **2.35 ms**.
+Those are sampled observations, not guaranteed bounds.
+
+Tracing also costs time. A separate control held the final binary and camera
+settings fixed across six alternating on/off blocks of 100 requests. With
+tracing, block medians were **1.80–1.81 ms**; without, **1.67–1.68 ms**. That
+establishes overhead in this control, not an explanation for the entire
+cross-commit increase. [Tracing control data](https://github.com/Belval/onvif-mcp/blob/main/benchmarks/commit-history/tracing-control-2026-11-26.json)
+
+A cached response does not measure the whole vision pipeline. Python opens the
 main stream and downsizes it; Rust maintains preview streams and returns the
-latest buffered image. H.264 adds a configured 15 fps preview source. This
-stationary test does not isolate SIMD's benefit on images that need resizing.
+latest buffered image. H.264 adds a configured 15 fps preview source. This test
+skips resizing at 640 px, so it cannot establish SIMD's benefit. All fresh builds
+use NASM, so it cannot recover the original assembly-build speedup either.
+The ten commits document engineering iterations; they are not ten demonstrated
+latency wins.
 
 <details markdown="1">
 <summary>Read every commit's timings and measurement boundaries</summary>

@@ -127,11 +127,12 @@ def image_info(result):
             except (ValueError,TypeError):pass
     return {key:meta.get(key) for key in ('width','height','frame_age_ms','sequence')}|{'jpeg_bytes':len(data),'decoded_width':actual_dimensions[0],'decoded_height':actual_dimensions[1]}
 
-def measure(row,command,samples,interval_ms,block,no_asm=False,host=None,post_detail_samples=20):
+def measure(row,command,samples,interval_ms,block,no_asm=False,host=None,post_detail_samples=20,metrics_enabled=None):
     # Check before starting old servers so an offline device is not timed as work.
     reachable(host)
     folder=checkout(row);env=environment();env['CAMERA_CONFIG_DIR']=str(folder)
     env['CAMERA_PREVIEW']=row['preview']
+    if metrics_enabled is not None:env['CAMERA_METRICS']='1' if metrics_enabled else '0'
     if host:env['CAMERA_HOST']=host
     start=datetime.now(timezone.utc).isoformat()
     if row['runtime']=='rust-native-prototype':
@@ -194,7 +195,7 @@ def measure(row,command,samples,interval_ms,block,no_asm=False,host=None,post_de
         i=(len(values)-1)*q;lo=int(i);hi=min(lo+1,len(values)-1)
         return values[lo]+(values[hi]-values[lo])*(i-lo)
     return dict(commit=row['commit'],changes=row['changes'],measured_at=start,
-        historical=False,block=block,preview=row['preview'],no_asm=no_asm,
+        historical=False,block=block,preview=row['preview'],no_asm=no_asm,metrics_override=metrics_enabled,
         binary_sha256=hashlib.sha256(Path(command[0]).read_bytes()).hexdigest(),
         source_clean=not bool(subprocess.check_output(['git','status','--porcelain','--untracked-files=no'],cwd=folder,text=True).strip()),
         host=dict(system=platform.system(),machine=platform.machine(),python=platform.python_version(),load_average=os.getloadavg()),

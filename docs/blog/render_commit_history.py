@@ -21,7 +21,7 @@ plt.rcParams.update({'font.family':'DejaVu Sans','font.size':13,'text.color':col
 fig,axes=plt.subplots(3,1,figsize=(16,15.5),dpi=120)
 fig.subplots_adjust(left=.09,right=.97,top=.81,bottom=.14,hspace=.95)
 fig.text(.055,.95,'PYTHON → RUST / EXACT SOURCE CHECKPOINTS',fontsize=14,color=colors['muted'])
-fig.text(.055,.915,'Rebuilt. Measured. Every commit.',fontsize=31,fontfamily='DejaVu Serif')
+fig.text(.055,.915,'A large rewrite gain. Then a latency floor.',fontsize=29,fontfamily='DejaVu Serif')
 fig.text(.055,.88,'26 Nov 2026 rerun · same C210 · 100 warm MCP requests per commit · agent time excluded',fontsize=14)
 xs=list(range(len(points)))
 labels=['Python\n640 px','Rust\nMCP','CPU worker\nisolation','Lazy\nconnections','Full-path\ntracing','Frame-local\nrecovery','H.264 +\nTurboJPEG','SIMD\nresize','ASM build\nverification']
@@ -32,7 +32,7 @@ for ax in axes:
     ax.set_xticks(xs,[label+'\n'+r['commit'][:7] for label,r in zip(labels,points)],fontsize=11)
     ax.set_xlim(-.45,len(points)-.55)
 ax=axes[0]
-ax.set_title('Warm image response · median and p95',loc='left',pad=23,fontsize=18)
+ax.set_title('Warm image response · later commits do not consistently improve this metric',loc='left',pad=23,fontsize=17)
 ax.plot(xs,[r['p95_ms'] for r in points],color=colors['muted'],marker='s',linestyle='--',label='p95')
 ax.plot(xs,[r['median_ms'] for r in points],color=colors['ink'],marker='o',linewidth=2.5,label='Median')
 ax.set_yscale('log');ax.set_ylabel('Milliseconds · log scale')
@@ -42,7 +42,7 @@ for x,r in zip(xs,points):
     ax.annotate(f'{r["median_ms"]:,.2f}',(x,r['median_ms']),xytext=(0,17),textcoords='offset points',ha='center',fontweight='bold',fontsize=12)
 ax.legend(frameon=False,loc='upper right')
 ax=axes[1]
-ax.set_title('Cold start · process launch to first complete image',loc='left',pad=23,fontsize=18)
+ax.set_title('Cold start · one process launch to first image per commit',loc='left',pad=23,fontsize=18)
 values=[r['cold_first_ms']/1000 for r in points]
 ax.bar(xs,values,color=colors['ink'],width=.5)
 ax.set_ylabel('Seconds');ax.set_ylim(0,max(values)*1.25)
