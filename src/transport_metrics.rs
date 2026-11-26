@@ -10,6 +10,19 @@ use std::{
 use tokio::io::{AsyncRead, AsyncWrite, ReadBuf};
 const INPUT_LIMIT: usize = 64 * 1024;
 const PREFIX_LIMIT: usize = 1024;
+
+/// Preserve line boundaries without a scalar pass over every base64 byte.
+fn lines(mut data: &[u8]) -> impl Iterator<Item = &[u8]> {
+    std::iter::from_fn(move || {
+        if data.is_empty() {
+            return None;
+        }
+        let end = memchr::memchr(b'\n', data).map_or(data.len(), |index| index + 1);
+        let (line, rest) = data.split_at(end);
+        data = rest;
+        Some(line)
+    })
+}
 pub struct Read<R> {
     inner: R,
     line: Vec<u8>,
@@ -56,7 +69,7 @@ impl<R: AsyncRead + Unpin> AsyncRead for Read<R> {
         metrics::observe("transport.read_poll", began.elapsed());
         if let Poll::Ready(Ok(())) = &result {
             let data = &buf.filled()[before..];
-            for chunk in data.split_inclusive(|b| *b == b'\n') {
+            for chunk in lines(data) {
                 let started = *this.started.get_or_insert_with(Instant::now);
                 if !this.oversize && this.line.len() + chunk.len() <= INPUT_LIMIT {
                     this.line.extend_from_slice(chunk);
@@ -116,7 +129,7 @@ impl<W: AsyncWrite + Unpin> AsyncWrite for Write<W> {
         let result = Pin::new(&mut this.inner).poll_write(cx, buf);
         metrics::observe("transport.write_poll", polled.elapsed());
         if let Poll::Ready(Ok(n)) = &result {
-            for chunk in buf[..*n].split_inclusive(|b| *b == b'\n') {
+            for chunk in lines(&buf[..*n]) {
                 let started = *this.started.get_or_insert(began);
                 this.bytes += chunk.len() as u64;
                 let remaining = PREFIX_LIMIT.saturating_sub(this.prefix.len());
@@ -152,6 +165,31 @@ impl<W: AsyncWrite + Unpin> AsyncWrite for Write<W> {
 mod tests {
     use super::*;
     use tokio::io::{AsyncReadExt, AsyncWriteExt};
+    #[test]
+    fn vector_line_scan_preserves_batches_and_partial_lines() {
+        for data in [
+            b"".as_slice(),
+            b"\n",
+            b"one\ntwo\n",
+            b"one\r\ntwo",
+            b"unterminated",
+        ] {
+            let expected: Vec<_> = data.split_inclusive(|b| *b == b'\n').collect();
+            assert_eq!(lines(data).collect::<Vec<_>>(), expected);
+        }
+        let mut data = vec![b'A'; 512 * 1024];
+        data[1023] = b'\n';
+        data[64 * 1024] = b'\n';
+        data.push(b'\n');
+        for fragment in data.chunks(8191) {
+            assert_eq!(
+                lines(fragment).collect::<Vec<_>>(),
+                fragment
+                    .split_inclusive(|b| *b == b'\n')
+                    .collect::<Vec<_>>()
+            );
+        }
+    }
     #[test]
     fn response_id_is_found_without_decoding_payload() {
         assert_eq!(

@@ -1,0 +1,122 @@
+//! Deterministic, camera-free workloads using the same tracker and wire adapter as MCP.
+use crate::{metrics, transport_metrics, video::Frame, vision};
+use anyhow::{Result, ensure};
+use image::{GrayImage, Luma, codecs::jpeg::JpegEncoder};
+use rand::{Rng, SeedableRng, rngs::StdRng};
+use serde_json::{Value, json};
+use std::{hint::black_box, sync::Arc, time::Instant};
+use tokio::io::AsyncWriteExt;
+
+fn summarize(name: &str, mut samples: Vec<f64>) -> Value {
+    samples.sort_by(f64::total_cmp);
+    json!({"workload":name,"n":samples.len(),"median_ms":samples[samples.len()/2],
+        "p95_ms":samples[((samples.len()-1) as f64*0.95).ceil() as usize],"samples_ms":samples})
+}
+fn frame(jpeg: Arc<Vec<u8>>, sequence: u64) -> Frame {
+    Frame {
+        tracking: std::sync::OnceLock::new(),
+        jpeg,
+        received: Instant::now(),
+        sequence,
+        source_id: 1,
+        rtp_timestamp: None,
+        clock_rate_hz: 90000,
+        width: 640,
+        height: 360,
+    }
+}
+pub async fn run() -> Result<()> {
+    let mut rng = StdRng::seed_from_u64(20261126);
+    let mut texture = GrayImage::from_pixel(640, 360, Luma([128]));
+    for _ in 0..2000 {
+        let (x, y, value) = (
+            rng.random_range(20..600),
+            rng.random_range(20..320),
+            rng.random_range(0..255),
+        );
+        for dx in 0..4 {
+            for dy in 0..4 {
+                texture.put_pixel(x + dx, y + dy, Luma([value]));
+            }
+        }
+    }
+    let images: Vec<Arc<Vec<u8>>> = (0..4)
+        .map(|step| {
+            let shifted = GrayImage::from_fn(640, 360, |x, y| {
+                if x >= step * 5 && y >= step * 3 {
+                    *texture.get_pixel(x - step * 5, y - step * 3)
+                } else {
+                    Luma([128])
+                }
+            });
+            let mut bytes = Vec::new();
+            JpegEncoder::new_with_quality(&mut bytes, 90)
+                .encode_image(&shifted)
+                .unwrap();
+            Arc::new(bytes)
+        })
+        .collect();
+    let mut results = Vec::new();
+    for (name, queries) in [
+        ("three consecutive correction tracks", 3),
+        ("nine points on one image pair", 9),
+    ] {
+        let mut samples = Vec::new();
+        for iteration in 0..33 {
+            // New frames each iteration: feature caches start cold, JPEG inputs stay identical.
+            let frames: Vec<_> = images
+                .iter()
+                .enumerate()
+                .map(|(i, v)| frame(v.clone(), i as u64))
+                .collect();
+            let began = Instant::now();
+            for query in 0..queries {
+                let (a, b, point) = if queries == 3 {
+                    (query, query + 1, [0.5, 0.5])
+                } else {
+                    (
+                        0,
+                        1,
+                        [
+                            0.3 + (query % 3) as f64 * 0.2,
+                            0.3 + (query / 3) as f64 * 0.2,
+                        ],
+                    )
+                };
+                let tracked = black_box(vision::track_frames(&frames[a], &frames[b], point));
+                let expected = [point[0] + 5. / 640., point[1] + 3. / 360.];
+                ensure!(
+                    tracked.is_some_and(|p| (p[0] - expected[0]).hypot(p[1] - expected[1]) < 0.01),
+                    "Tracking geometry failed"
+                );
+            }
+            let elapsed = began.elapsed().as_secs_f64() * 1000.;
+            if iteration >= 3 {
+                samples.push(elapsed);
+            }
+        }
+        results.push(summarize(name, samples));
+    }
+    // A camera-free adapter benchmark isolates tracing's scan of an image-sized response.
+    let (_, mut output) = transport_metrics::instrument((tokio::io::empty(), tokio::io::sink()));
+    let mut response = b"{\"id\":1,\"result\":{\"data\":\"".to_vec();
+    response.extend(std::iter::repeat_n(b'A', 512 * 1024));
+    response.extend_from_slice(b"\"}}\n");
+    let mut samples = Vec::new();
+    for iteration in 0..103 {
+        let began = Instant::now();
+        output.write_all(black_box(&response)).await?;
+        if iteration >= 3 {
+            samples.push(began.elapsed().as_secs_f64() * 1000.);
+        }
+    }
+    results.push(summarize(
+        "trace adapter: 512 KiB image response to sink",
+        samples,
+    ));
+    println!(
+        "{}",
+        json!({"metrics_enabled":metrics::enabled(),"fixture":"seed 20261126; 640x360; JPEG quality90; 5x3 pixel translation", "geometry_tolerance":0.01,"results":results})
+    );
+    Ok(())
+}

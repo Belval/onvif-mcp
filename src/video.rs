@@ -8,7 +8,7 @@ use retina::{
     codec::{CodecItem, FrameFormat},
 };
 use std::sync::{
-    Arc,
+    Arc, OnceLock,
     atomic::{AtomicBool, AtomicU64, Ordering},
 };
 use std::time::{Duration, Instant};
@@ -110,6 +110,7 @@ fn decode_picture(
     })
 }
 pub struct Frame {
+    pub(crate) tracking: OnceLock<Option<crate::vision::Prepared>>,
     pub jpeg: Arc<Vec<u8>>,
     pub received: Instant,
     pub sequence: u64,
@@ -118,6 +119,18 @@ pub struct Frame {
     pub clock_rate_hz: u32,
     pub width: u32,
     pub height: u32,
+}
+impl Frame {
+    pub fn tracking(&self) -> Option<&crate::vision::Prepared> {
+        if let Some(prepared) = self.tracking.get() {
+            crate::metrics::counter("vision.feature_cache_hits", 1);
+            return prepared.as_ref();
+        }
+        self.tracking.get_or_init(|| {
+            crate::metrics::counter("vision.feature_cache_misses", 1);
+            crate::metrics::sync("vision.prepare_frame", || crate::vision::prepare(&self.jpeg))
+        }).as_ref()
+    }
 }
 #[derive(Default)]
 pub struct Metrics {
@@ -361,6 +374,7 @@ impl Video {
                     crate::metrics::counter("video.jpeg_bytes", data.len() as u64);
                     crate::metrics::sync("video.publish", || {
                         tx.send_replace(Some(Arc::new(Frame {
+                            tracking: OnceLock::new(),
                             jpeg: Arc::new(data),
                             received,
                             sequence,
@@ -439,6 +453,7 @@ impl Video {
                     crate::metrics::counter("video.jpeg_bytes", data.len() as u64);
                     crate::metrics::sync("video.publish", || {
                         tx.send_replace(Some(Arc::new(Frame {
+                            tracking: OnceLock::new(),
                             jpeg: Arc::new(data),
                             received: Instant::now(),
                             sequence,
@@ -525,6 +540,7 @@ mod tests {
         let (tx, rx) = watch::channel(None);
         let make = |sequence| {
             Arc::new(Frame {
+                tracking: OnceLock::new(),
                 jpeg: Arc::new(vec![sequence as u8]),
                 received: Instant::now(),
                 sequence,
@@ -560,6 +576,7 @@ mod freshness_tests {
     #[tokio::test]
     async fn stale_frames_are_not_returned_as_current() {
         let (tx, rx) = watch::channel(Some(Arc::new(Frame {
+            tracking: OnceLock::new(),
             jpeg: Arc::new(vec![]),
             received: Instant::now() - Duration::from_secs(2),
             sequence: 1,
@@ -585,6 +602,7 @@ mod freshness_tests {
     async fn latest_buffer_releases_superseded_frames() {
         let (tx, rx) = watch::channel(None);
         let first = Arc::new(Frame {
+            tracking: OnceLock::new(),
             jpeg: Arc::new(vec![1; 100]),
             received: Instant::now(),
             sequence: 1,
@@ -598,6 +616,7 @@ mod freshness_tests {
         tx.send_replace(Some(first));
         for sequence in 2..100 {
             tx.send_replace(Some(Arc::new(Frame {
+                tracking: OnceLock::new(),
                 jpeg: Arc::new(vec![1; 100]),
                 received: Instant::now(),
                 sequence,

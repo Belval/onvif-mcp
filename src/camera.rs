@@ -486,7 +486,7 @@ impl Camera {
     }
     async fn track(a: Arc<Frame>, b: Arc<Frame>, point: [f64; 2]) -> Result<Option<[f64; 2]>> {
         crate::metrics::result("vision.dispatch", async {
-            crate::metrics::blocking(move || vision::track(&a.jpeg, &b.jpeg, point))
+            crate::metrics::blocking(move || vision::track_frames(&a, &b, point))
                 .await
                 .map_err(Into::into)
         })

@@ -132,7 +132,7 @@ pub async fn motor() -> Result<()> {
                         for (offset,actual,frame) in &frames {
                             let a=frame.clone();let b=reference.clone();
                             let shifts=tokio::task::spawn_blocking(move || {
-                                [[0.3,0.3],[0.5,0.3],[0.7,0.3],[0.3,0.5],[0.5,0.5],[0.7,0.5],[0.3,0.7],[0.5,0.7],[0.7,0.7]].into_iter().filter_map(|p|vision::track(&a.jpeg,&b.jpeg,p).map(|q|(q[0]-p[0]).hypot(q[1]-p[1]))).collect::<Vec<_>>()
+                                [[0.3,0.3],[0.5,0.3],[0.7,0.3],[0.3,0.5],[0.5,0.5],[0.7,0.5],[0.3,0.7],[0.5,0.7],[0.7,0.7]].into_iter().filter_map(|p|vision::track_frames(&a,&b,p).map(|q|(q[0]-p[0]).hypot(q[1]-p[1]))).collect::<Vec<_>>()
                             }).await?;
                             let path=format!("/tmp/spy-motor-{repeat}-{mode}-{amount}-{direction}-{offset}.jpg");
                             std::fs::write(&path,frame.jpeg.as_slice())?;
@@ -236,7 +236,7 @@ pub async fn framing() -> Result<()> {
                     let late_path=format!("/tmp/spy-{label}-{repeat}-{axis}-{direction}-late.jpg");
                     std::fs::write(&late_path,late.jpeg.as_slice())?;
                     let shifts=tokio::task::spawn_blocking(move || -> Result<_> {
-                        let shifts=[[0.3,0.3],[0.5,0.3],[0.7,0.3],[0.3,0.5],[0.5,0.5],[0.7,0.5],[0.3,0.7],[0.5,0.7],[0.7,0.7]].into_iter().filter_map(|p|vision::track(&early.jpeg,&late.jpeg,p).map(|q|(q[0]-p[0]).hypot(q[1]-p[1]))).collect::<Vec<_>>();
+                        let shifts=[[0.3,0.3],[0.5,0.3],[0.7,0.3],[0.3,0.5],[0.5,0.5],[0.7,0.5],[0.3,0.7],[0.5,0.7],[0.7,0.7]].into_iter().filter_map(|p|vision::track_frames(&early,&late,p).map(|q|(q[0]-p[0]).hypot(q[1]-p[1]))).collect::<Vec<_>>();
                         let ratio=sharpness(&early.jpeg)?/sharpness(&late.jpeg)?.max(1e-9);
                         Ok((shifts,ratio))
                     }).await??;

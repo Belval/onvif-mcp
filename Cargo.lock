@@ -1556,6 +1556,7 @@ dependencies = [
  "futures-util",
  "image",
  "imageproc",
+ "memchr",
  "nalgebra",
  "openh264",
  "rand 0.9.5",

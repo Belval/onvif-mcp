@@ -17,6 +17,7 @@ dotenvy = "0.15"
 futures-util = "0.3"
 image = { version = "0.25", default-features = false, features = ["jpeg"] }
 imageproc = { version = "0.27", default-features = false }
+memchr = "2"
 nalgebra = "0.35"
 openh264 = "0.9"
 rand = "0.9"
